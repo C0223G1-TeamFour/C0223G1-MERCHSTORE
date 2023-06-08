@@ -1,8 +1,5 @@
 package com.example.merch.controller;
 
-
-
-
 import com.example.merch.model.Product;
 import com.example.merch.model.ProductType;
 import com.example.merch.service.products.IProductService;
