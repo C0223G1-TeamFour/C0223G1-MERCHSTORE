@@ -1,0 +1,2263 @@
+Index: src/main/java/com/example/merch/controller/AccountServlet.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.team4.controller;\r\n\r\nimport com.example.team4.DAO.customers.CustomerDAO;\r\nimport com.example.team4.DAO.customers.ICustomerDAO;\r\nimport com.example.team4.model.Customer;\r\n\r\nimport javax.servlet.*;\r\nimport javax.servlet.http.*;\r\nimport javax.servlet.annotation.*;\r\nimport java.io.IOException;\r\n\r\n@WebServlet(name = \"AccountServlet\", value = \"/account\")\r\npublic class AccountServlet extends HttpServlet {\r\n    ICustomerDAO iCustomerDAO = new CustomerDAO();\r\n\r\n\r\n    @Override\r\n    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {\r\n\r\n        request.getRequestDispatcher(\"/view/account.jsp\").forward(request,response);\r\n    }\r\n\r\n    @Override\r\n    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {\r\n        String action = request.getParameter(\"action\");\r\n        if (action == null) action = \"\";\r\n\r\n        switch (action) {\r\n            case \"edit\":\r\n                editAccountInfo(request, response);break;\r\n            case \"delete\":\r\n                deleteAccount(request,response); break;\r\n        }\r\n    }\r\n\r\n    private void deleteAccount(HttpServletRequest request, HttpServletResponse response) {\r\n        int accountId = (int) request.getSession().getAttribute(\"accountId\");\r\n        System.out.println(\"delete\" + accountId);\r\n        iCustomerDAO.deleteAccount(accountId);\r\n        request.getSession().removeAttribute(\"accountId\");\r\n        request.getSession().removeAttribute(\"currentCustomer\");\r\n        try {\r\n            response.sendRedirect(\"/login\");\r\n        } catch (IOException e) {\r\n            e.printStackTrace();\r\n        }\r\n    }\r\n\r\n    private void editAccountInfo(HttpServletRequest request, HttpServletResponse response) {\r\n        HttpSession session = request.getSession();\r\n        Customer currentCustomer = (Customer) session.getAttribute(\"currentCustomer\");\r\n\r\n        String firstName = request.getParameter(\"firstName\");\r\n        String lastName = request.getParameter(\"lastName\");\r\n        String phone = request.getParameter(\"phone\");\r\n        String address = request.getParameter(\"address\");\r\n        iCustomerDAO.editAccount(currentCustomer.getId(), new Customer(firstName.concat(\" \" + lastName), phone, address));\r\n\r\n        Customer editedCustomer = iCustomerDAO.findCustomerByAccountId((Integer) session.getAttribute(\"accountId\"));\r\n        session.setAttribute(\"currentCustomer\", editedCustomer);\r\n        session.setAttribute(\"success\", \"Successfully updated account's info!\");\r\n        try {\r\n            response.sendRedirect(\"/account\");\r\n        } catch (IOException e) {\r\n            e.printStackTrace();\r\n        }\r\n\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/example/merch/controller/AccountServlet.java b/src/main/java/com/example/merch/controller/AccountServlet.java
+--- a/src/main/java/com/example/merch/controller/AccountServlet.java	(revision 9bd9dd0407cd19b4d200ca791a84063d53c048a1)
++++ b/src/main/java/com/example/merch/controller/AccountServlet.java	(date 1686193163908)
+@@ -1,8 +1,4 @@
+-package com.example.team4.controller;
+-
+-import com.example.team4.DAO.customers.CustomerDAO;
+-import com.example.team4.DAO.customers.ICustomerDAO;
+-import com.example.team4.model.Customer;
++package com.example.merch.controller;
+ 
+ import javax.servlet.*;
+ import javax.servlet.http.*;
+Index: src/main/java/com/example/merch/controller/CartServlet.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.team4.controller;\r\n\r\nimport com.example.team4.model.Cart;\r\nimport com.example.team4.model.Customer;\r\nimport com.example.team4.service.carts.CartService;\r\nimport com.example.team4.service.carts.ICartService;\r\n\r\nimport javax.servlet.*;\r\nimport javax.servlet.http.*;\r\nimport javax.servlet.annotation.*;\r\nimport java.io.IOException;\r\n\r\n@WebServlet(name = \"CartServlet\", value = \"/cart\")\r\npublic class CartServlet extends HttpServlet {\r\n    ICartService iCartService = new CartService();\r\n\r\n\r\n    @Override\r\n    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {\r\n\r\n        HttpSession session = request.getSession();\r\n\r\n        if (session.getAttribute(\"accountId\") == null) {\r\n            response.sendRedirect(\"/view/log-in.jsp\");\r\n        } else {\r\n            displayAllCarts(request,response);\r\n        }\r\n    }\r\n\r\n    private void deleteCart(HttpServletRequest request, HttpServletResponse response) {\r\n        HttpSession session = request.getSession();\r\n        Customer currentCustomer = (Customer) session.getAttribute(\"currentCustomer\");\r\n\r\n        int customerId = Integer.parseInt(request.getParameter(\"customerId\"));\r\n        int productId = Integer.parseInt(request.getParameter(\"productId\"));\r\n        System.out.println(\"cus\" + customerId);\r\n        System.out.println(\"pro\" + productId);\r\n        iCartService.deleteCart(customerId, productId);\r\n        session.setAttribute(\"cartList\", iCartService.getAllCarts(currentCustomer.getId()));\r\n        try {\r\n            response.sendRedirect(\"/cart\");\r\n        } catch (IOException e) {\r\n            e.printStackTrace();\r\n        }\r\n    }\r\n\r\n    private void displayAllCarts(HttpServletRequest request, HttpServletResponse response) {\r\n\r\n        HttpSession session = request.getSession();\r\n        Customer currentCustomer = (Customer) session.getAttribute(\"currentCustomer\");\r\n        request.setAttribute(\"carts\", iCartService.getAllCarts(currentCustomer.getId()));\r\n        try {\r\n            request.getRequestDispatcher(\"/view/cart.jsp\").forward(request, response);\r\n        } catch (ServletException | IOException e) {\r\n            e.printStackTrace();\r\n        }\r\n    }\r\n\r\n    @Override\r\n    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {\r\n        // in case users click on add-to-cart button but do not log in yet\r\n        HttpSession session = request.getSession();\r\n        if (session.getAttribute(\"accountId\") == null) {\r\n            response.sendRedirect(\"/view/log-in.jsp\");\r\n\r\n        } else {\r\n            String action = request.getParameter(\"action\");\r\n            if (action == null) action = \"\";\r\n\r\n            switch (action) {\r\n                case \"delete\":\r\n                    deleteCart(request, response);\r\n                    break;\r\n                case \"create\":\r\n                    createNewCart(request, response);\r\n                    break;\r\n                default:\r\n                    displayAllCarts(request, response);\r\n                    break;\r\n            }\r\n\r\n\r\n        }\r\n    }\r\n\r\n    private void createNewCart(HttpServletRequest request, HttpServletResponse response) {\r\n        HttpSession session = request.getSession();\r\n        int productId = Integer.parseInt(request.getParameter(\"productId\"));\r\n        String productName = request.getParameter(\"productName\");\r\n        int productTypeId = Integer.parseInt(request.getParameter(\"productTypeId\"));\r\n        double price = Double.parseDouble(request.getParameter(\"price\"));\r\n        String image = request.getParameter(\"image\");\r\n        int quantity = Integer.parseInt(request.getParameter(\"quantity\"));\r\n\r\n        Customer currentCustomer = (Customer) session.getAttribute(\"currentCustomer\");\r\n\r\n\r\n        if (iCartService.checkCartExistence(currentCustomer.getId(), productId)) {\r\n            // if the product is already in cart then update the quantity\r\n            iCartService.updateCart(currentCustomer.getId(), productId, quantity);\r\n        } else {\r\n            iCartService.addCart(new Cart(currentCustomer.getId(), productId, productName, productTypeId, price, image, quantity));\r\n        }\r\n\r\n        request.setAttribute(\"carts\", iCartService.getAllCarts(currentCustomer.getId()));\r\n        session.setAttribute(\"cartList\", iCartService.getAllCarts(currentCustomer.getId()));\r\n        try {\r\n            request.getRequestDispatcher(\"/view/cart.jsp\").forward(request, response);\r\n        } catch (ServletException | IOException e) {\r\n            e.printStackTrace();\r\n        }\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/example/merch/controller/CartServlet.java b/src/main/java/com/example/merch/controller/CartServlet.java
+--- a/src/main/java/com/example/merch/controller/CartServlet.java	(revision 9bd9dd0407cd19b4d200ca791a84063d53c048a1)
++++ b/src/main/java/com/example/merch/controller/CartServlet.java	(date 1686193163828)
+@@ -1,9 +1,7 @@
+-package com.example.team4.controller;
++package com.example.merch.controller;
+ 
+-import com.example.team4.model.Cart;
+-import com.example.team4.model.Customer;
+-import com.example.team4.service.carts.CartService;
+-import com.example.team4.service.carts.ICartService;
++import com.example.merch.service.carts.CartService;
++import com.example.merch.service.carts.ICartService;
+ 
+ import javax.servlet.*;
+ import javax.servlet.http.*;
+@@ -14,7 +12,6 @@
+ public class CartServlet extends HttpServlet {
+     ICartService iCartService = new CartService();
+ 
+-
+     @Override
+     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+ 
+Index: src/main/webapp/view/product/edit.jsp
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><%--\r\n  Created by IntelliJ IDEA.\r\n  User: TGDD\r\n  Date: 6/2/2023\r\n  Time: 9:00 AM\r\n  To change this template use File | Settings | File Templates.\r\n--%>\r\n<%@ page contentType=\"text/html;charset=UTF-8\" language=\"java\" %>\r\n<%@ taglib prefix=\"c\" uri=\"http://java.sun.com/jsp/jstl/core\" %>\r\n<html>\r\n<head>\r\n    <title>Title</title>\r\n</head>\r\n<body>\r\n<%@include file=\"/view/store-header.jsp\" %>\r\n<a href=\"/products\"><button type=\"submit\" class=\"btn btn-primary bg-black text-white\">Back</button></a><br>\r\n<h2>\r\n    <c:if test=\"${requestScope['message'] != null}\">\r\n    <span style=\"color: blue\"><i class=\"fa-solid fa-square-check\"></i>${requestScope['message']}</span>\r\n    </c:if>\r\n</h2>\r\n\r\n<div class=\"d-flex\" style=\"justify-content: space-between\">\r\n    <form method=\"post\" action=\"/products?action=edit\" class=\"row row-cols-lg-auto g-3 align-items-center\">\r\n        <div class=\"col-12 mb-3\">\r\n            <input value=\"${productById.id}\" name=\"id\" type=\"text\" class=\"form-control\" id=\"formGroupExampleInput\">\r\n        </div>\r\n        <div class=\"col-12 mb-3\">\r\n            <input value=\"${productById.name}\" name=\"name\" type=\"text\" class=\"form-control\"\r\n                   placeholder=\"Product's name\">\r\n        </div>\r\n        <div class=\"col-12 col-auto form-check mb-3\">\r\n            <input value=\"${productById.description}\" name=\"description\" type=\"text\" class=\"form-control\"\r\n                   placeholder=\"Product Description\">\r\n        </div>\r\n        <div class=\"col-12 mb-3\">\r\n            <div class=\"input-group \">\r\n                <input value=\"${productById.price}\" name=\"price\" type=\"text\" class=\"form-control\" placeholder=\"Product price\">\r\n                <span class=\"input-group-text\">€</span>\r\n            </div>\r\n        </div>\r\n        <div class=\"col-12 \">\r\n            <div class=\"input-group mb-3\">\r\n                <span class=\"input-group-text\" id=\"basic-addon3\">${productById.image}</span>\r\n                <input name=\"image\" type=\"text\" class=\"form-control\" >\r\n                <label class=\"input-group-text\" >Image</label>\r\n            </div>\r\n<%--            id=\"inputGroupFile02\"\r\nfor=\"inputGroupFile02\"--%>\r\n        </div>\r\n        <div class=\"col-12 col-auto form-check mb-3\">\r\n            <select name=\"productType\" class=\"form-select\" aria-label=\"Default select example\">\r\n                <c:forEach var=\"productType\" items=\"${productTypeList}\">\r\n                    <option value=\"${productType.productTypeId}\">${productType.productTypeName}</option>\r\n                </c:forEach>\r\n            </select>\r\n        </div>\r\n        <div class=\"col-12 mb-3\">\r\n            <button type=\"submit\" class=\"btn btn-primary bg-black text-white\">Update products</button>\r\n        </div>\r\n    </form>\r\n</div>\r\n<%--<%@include file=\"/view/footer.jsp\" %>--%>\r\n</body>\r\n</html>\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/webapp/view/product/edit.jsp b/src/main/webapp/view/product/edit.jsp
+--- a/src/main/webapp/view/product/edit.jsp	(revision 9bd9dd0407cd19b4d200ca791a84063d53c048a1)
++++ b/src/main/webapp/view/product/edit.jsp	(date 1686192104549)
+@@ -14,11 +14,11 @@
+ <body>
+ <%@include file="/view/store-header.jsp" %>
+ <a href="/products"><button type="submit" class="btn btn-primary bg-black text-white">Back</button></a><br>
+-<h2>
+-    <c:if test="${requestScope['message'] != null}">
+-    <span style="color: blue"><i class="fa-solid fa-square-check"></i>${requestScope['message']}</span>
+-    </c:if>
+-</h2>
++<%--<p>--%>
++<%--    <c:if test="${requestScope['message'] != null}">--%>
++<%--    <span style="color: blue"><i class="fa-solid fa-square-check"></i>${requestScope['message']}</span>--%>
++<%--    </c:if>--%>
++<%--</p>--%>
+ 
+ <div class="d-flex" style="justify-content: space-between">
+     <form method="post" action="/products?action=edit" class="row row-cols-lg-auto g-3 align-items-center">
+@@ -41,8 +41,8 @@
+         </div>
+         <div class="col-12 ">
+             <div class="input-group mb-3">
+-                <span class="input-group-text" id="basic-addon3">${productById.image}</span>
+-                <input name="image" type="text" class="form-control" >
++<%--                <span class="input-group-text" id="basic-addon3">${productById.image}</span>--%>
++                <input name="image" type="text" class="form-control" value="${productById.image}" >
+                 <label class="input-group-text" >Image</label>
+             </div>
+ <%--            id="inputGroupFile02"
+Index: src/main/webapp/view/product/create.jsp
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><%--\r\n  Created by IntelliJ IDEA.\r\n  User: TGDD\r\n  Date: 6/2/2023\r\n  Time: 9:00 AM\r\n  To change this template use File | Settings | File Templates.\r\n--%>\r\n<%@ page contentType=\"text/html;charset=UTF-8\" language=\"java\" %>\r\n<%@ taglib prefix=\"c\" uri=\"http://java.sun.com/jsp/jstl/core\" %>\r\n<html>\r\n<head>\r\n    <title>Title</title>\r\n\r\n</head>\r\n<body>\r\n<%@include file=\"/view/store-header.jsp\" %>\r\n<a href=\"/product\"><button type=\"submit\" class=\"btn btn-primary bg-black text-white\">Back</button></a><br>\r\n<h2 id=\"success\">\r\n    <c:if test=\"${requestScope['message'] != null}\">\r\n        <span style=\"color: blue\"><i class=\"fa-solid fa-square-check\"></i>${requestScope['message']}</span>\r\n    </c:if>\r\n</h2>\r\n<div class=\"d-flex\" style=\"justify-content: space-between\">\r\n    <form method=\"post\" action=\"/products?action=create\" class=\"row row-cols-lg-auto g-3 align-items-center\">\r\n        <div class=\"col-12 mb-3\">\r\n            <input name=\"name\" type=\"text\" class=\"form-control\" id=\"formGroupExampleInput\"\r\n                   placeholder=\"Product's name\">\r\n        </div>\r\n        <div class=\"col-12 col-auto form-check mb-3\">\r\n            <input name=\"description\" type=\"text\" class=\"form-control\"\r\n                   placeholder=\"Product Description\">\r\n        </div>\r\n        <div class=\"col-12 mb-3\">\r\n            <div class=\"input-group \">\r\n                <input name=\"price\" type=\"text\" class=\"form-control\" placeholder=\"Product price\">\r\n                <span class=\"input-group-text\">€</span>\r\n            </div>\r\n        </div>\r\n        <div class=\"col-12 \">\r\n            <div class=\"input-group mb-3\">\r\n                <input name=\"image\" type=\"text\" class=\"form-control\" id=\"inputGroupFile02\">\r\n                <label class=\"input-group-text\" for=\"inputGroupFile02\">Image</label>\r\n            </div>\r\n        </div>\r\n        <div class=\"col-12 col-auto form-check mb-3\">\r\n            <select name=\"productType\" class=\"form-select\" aria-label=\"Default select example\">\r\n                <option value=\"0\">Product Type</option>\r\n                <c:forEach var=\"productType\" items=\"${productTypeList}\">\r\n                    <option value=\"${productType.productTypeId}\">${productType.productTypeName}</option>\r\n                </c:forEach>\r\n            </select>\r\n        </div>\r\n        <div class=\"col-12 mb-3\">\r\n            <button type=\"submit\" class=\"btn btn-primary bg-black text-white\">Add new products</button>\r\n        </div>\r\n    </form>\r\n</div>\r\n<script>\r\n    setTimeout(function () {\r\n        document.getElementById(\"success\").style.display = \"none\";\r\n    },1000)\r\n</script>\r\n</body>\r\n</html>\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/webapp/view/product/create.jsp b/src/main/webapp/view/product/create.jsp
+--- a/src/main/webapp/view/product/create.jsp	(revision 9bd9dd0407cd19b4d200ca791a84063d53c048a1)
++++ b/src/main/webapp/view/product/create.jsp	(date 1686192079124)
+@@ -14,7 +14,7 @@
+ </head>
+ <body>
+ <%@include file="/view/store-header.jsp" %>
+-<a href="/product"><button type="submit" class="btn btn-primary bg-black text-white">Back</button></a><br>
++<a href="/products"><button type="submit" class="btn btn-primary bg-black text-white">Back</button></a><br>
+ <h2 id="success">
+     <c:if test="${requestScope['message'] != null}">
+         <span style="color: blue"><i class="fa-solid fa-square-check"></i>${requestScope['message']}</span>
+@@ -32,7 +32,7 @@
+         </div>
+         <div class="col-12 mb-3">
+             <div class="input-group ">
+-                <input name="price" type="text" class="form-control" placeholder="Product price">
++                <input name="price" type="text" class="form-control" placeholder="Product price" >
+                 <span class="input-group-text">€</span>
+             </div>
+         </div>
+Index: src/main/java/com/example/merch/repository/carts/CartRepository.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.team4.repository.carts;\r\n\r\nimport com.example.team4.base.BaseConnection;\r\nimport com.example.team4.model.Cart;\r\n\r\nimport java.sql.Connection;\r\nimport java.sql.PreparedStatement;\r\nimport java.sql.ResultSet;\r\nimport java.sql.SQLException;\r\nimport java.util.ArrayList;\r\nimport java.util.List;\r\n\r\npublic class CartRepository implements ICartRepository{\r\n    Connection connection = BaseConnection.getConnection();\r\n\r\n    @Override\r\n    public void addCart(Cart cart) {\r\n        try {\r\n            PreparedStatement preparedStatement = connection.prepareStatement(BaseConnection.ADD_CART);\r\n            preparedStatement.setInt(1, cart.getCustomerId());\r\n            preparedStatement.setInt(2, cart.getProductId());\r\n            preparedStatement.setString(3, cart.getProductName());\r\n            preparedStatement.setInt(4, cart.getProductTypeId());\r\n            preparedStatement.setDouble(5, cart.getPrice());\r\n            preparedStatement.setString(6, cart.getImage());\r\n            preparedStatement.setInt(7, cart.getQuantity());\r\n            preparedStatement.executeUpdate();\r\n        } catch (SQLException e) {\r\n            e.printStackTrace();\r\n        }\r\n    }\r\n\r\n    @Override\r\n    public boolean checkCartExistence(int customerId, int productId) {\r\n        try {\r\n            PreparedStatement preparedStatement = connection.prepareStatement(BaseConnection.CHECK_CART_EXISTENCE);\r\n            preparedStatement.setInt(1, customerId);\r\n            preparedStatement.setInt(2, productId);\r\n            ResultSet rs = preparedStatement.executeQuery();\r\n            if (rs.next()) return true;\r\n        } catch (SQLException e) {\r\n            e.printStackTrace();\r\n        }\r\n        return false;\r\n    }\r\n\r\n    @Override\r\n    public boolean updateCart(int customerId, int productId, int newQuantity) {\r\n        boolean rowUpdated = false;\r\n        try {\r\n            PreparedStatement preparedStatement = connection.prepareStatement(BaseConnection.UPDATE_CART);\r\n            preparedStatement.setInt(1, customerId);\r\n            preparedStatement.setInt(2, productId);\r\n            preparedStatement.setInt(3, newQuantity);\r\n            rowUpdated = preparedStatement.executeUpdate() > 0;\r\n\r\n        } catch (SQLException e) {\r\n            e.printStackTrace();\r\n        }\r\n        return rowUpdated;\r\n    }\r\n\r\n    @Override\r\n    public boolean deleteCart(int customerId, int productId) {\r\n        boolean rowDeleted = false;\r\n        try {\r\n            PreparedStatement preparedStatement = connection.prepareStatement(BaseConnection.DELETE_CART);\r\n            preparedStatement.setInt(1, customerId);\r\n            preparedStatement.setInt(2, productId);\r\n            rowDeleted = preparedStatement.executeUpdate() > 0;\r\n        } catch (SQLException e) {\r\n            e.printStackTrace();\r\n        }\r\n        return rowDeleted;\r\n    }\r\n\r\n    @Override\r\n    public boolean deleteAllCartsAfterOrder(int customerId) {\r\n        boolean rowDeleted = false;\r\n        try {\r\n            PreparedStatement preparedStatement = connection.prepareStatement(BaseConnection.DELETE_ALL_CARTS_AFTER_ORDER);\r\n            preparedStatement.setInt(1, customerId);\r\n            rowDeleted = preparedStatement.executeUpdate() > 0;\r\n        } catch (SQLException e) {\r\n            e.printStackTrace();\r\n        }\r\n        return rowDeleted;\r\n    }\r\n\r\n    @Override\r\n    public List<Cart> getAllCarts(int customerId) {\r\n        List<Cart> carts = new ArrayList<>();\r\n\r\n        try {\r\n            PreparedStatement preparedStatement = connection.prepareStatement(BaseConnection.SELECT_ALL_CARTS);\r\n            preparedStatement.setInt(1, customerId);\r\n            ResultSet rs = preparedStatement.executeQuery();\r\n            while (rs.next()) {\r\n                int customerId1 = rs.getInt(\"customer_id\");\r\n                int productId1 = rs.getInt(\"product_id\");\r\n                int quantity = rs.getInt(\"quantity\");\r\n                int productTypeId = rs.getInt(\"product_type_id\");\r\n                String name = rs.getString(\"product_name\");\r\n                double price = rs.getDouble(\"price\");\r\n                String image = rs.getString(\"image\");\r\n                double total = rs.getDouble(\"total\");\r\n                carts.add(new Cart(customerId1, productId1, name, productTypeId, price, image, quantity, total));\r\n            }\r\n        } catch (SQLException e) {\r\n            e.printStackTrace();\r\n        }\r\n\r\n        return carts;\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/example/merch/repository/carts/CartRepository.java b/src/main/java/com/example/merch/repository/carts/CartRepository.java
+--- a/src/main/java/com/example/merch/repository/carts/CartRepository.java	(revision 9bd9dd0407cd19b4d200ca791a84063d53c048a1)
++++ b/src/main/java/com/example/merch/repository/carts/CartRepository.java	(date 1686193163783)
+@@ -1,7 +1,7 @@
+-package com.example.team4.repository.carts;
++package com.example.merch.repository.carts;
+ 
+-import com.example.team4.base.BaseConnection;
+-import com.example.team4.model.Cart;
++import com.example.merch.base.BaseConnection;
++import com.example.merch.model.Cart;
+ 
+ import java.sql.Connection;
+ import java.sql.PreparedStatement;
+Index: src/main/webapp/view/product/list.jsp
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><%--\r\n  Created by IntelliJ IDEA.\r\n  User: TGDD\r\n  Date: 6/2/2023\r\n  Time: 8:52 AM\r\n  To change this template use File | Settings | File Templates.\r\n--%>\r\n<%@ page contentType=\"text/html;charset=UTF-8\" language=\"java\" %>\r\n<%@ taglib prefix=\"c\" uri=\"http://java.sun.com/jsp/jstl/core\" %>\r\n<html>\r\n<head>\r\n    <meta charset=\"UTF-8\">\r\n    <title>Home</title>\r\n    <link\r\n            href=\"https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css\"\r\n            rel=\"stylesheet\"\r\n            integrity=\"sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ\"\r\n            crossorigin=\"anonymous\"\r\n    />\r\n    <link rel=\"stylesheet\" href=\"../../bootstrap-5.1.3-dist/css/bootstrap.min.css\">\r\n\r\n</head>\r\n<body>\r\n<%@include file=\"/view/store-header.jsp\" %>\r\n<div class=\"container-fluid\">\r\n    <div>\r\n            <div class=\"col-12 mb-3\">\r\n                <a href=\"/products?action=create\"><button type=\"submit\" class=\"btn btn-primary bg-black text-white\">\r\n                    Add new products</button></a>\r\n            </div>\r\n    </div>\r\n    <div>\r\n        <h2>\r\n            <c:if test=\"${requestScope['message'] != null}\">\r\n                <span style=\"color: blue\">${requestScope['message']}</span>\r\n            </c:if>\r\n        </h2>\r\n    </div>\r\n    <%--    table--%>\r\n    <div class=\"d-flex\">\r\n        <h2>List of products </h2>\r\n        <form class=\"d-flex \" role=\"search\">\r\n            <input class=\"form-control me-2\" type=\"search\" placeholder=\"Search\" aria-label=\"Search\">\r\n            <button class=\"btn btn-outline-success bg-black text-white\" type=\"submit\">Search</button>\r\n        </form>\r\n    </div>\r\n    <table class=\"table table-bordered mt-5\" id=\"tableStudent\">\r\n        <thead class=\"table-dark \">\r\n        <tr>\r\n            <th scope=\"col\">STT</th>\r\n            <th scope=\"col\">Id Product</th>\r\n            <th scope=\"col\">Product's name</th>\r\n            <th scope=\"col\">Product price</th>\r\n            <th scope=\"col\">Product Description</th>\r\n            <th scope=\"col\">Image</th>\r\n            <th scope=\"col\">Product Type Name</th>\r\n            <th scope=\"col\">Edit</th>\r\n            <th scope=\"col\">Delete</th>\r\n        </tr>\r\n        </thead>\r\n        <tbody>\r\n        <c:forEach items=\"${productList}\" var=\"product\" varStatus=\"status\">\r\n            <tr>\r\n                <td>\r\n                    <c:out value=\"${status.count}\"></c:out>\r\n                </td>\r\n                <td>\r\n                    <c:out value=\"${product.id}\"></c:out>\r\n                </td>\r\n                <td>\r\n                    <c:out value=\"${product.name}\"></c:out>\r\n                </td>\r\n                <td>\r\n                    <c:out value=\"${product.description}\"></c:out>\r\n                </td>\r\n                <td>\r\n                    <c:out value=\"${product.price}\"></c:out>\r\n                </td>\r\n                <td>\r\n                    <img src=\"<c:out value=\"${product.image}\"></c:out>\" width=\"50px\">\r\n                </td>\r\n                <td>\r\n                    <c:out value=\"${product.productTypeId.productTypeName}\"></c:out>\r\n                </td>\r\n                <td>\r\n                    <a href=\"/products?action=edit&id=${product.id}\">\r\n                        <button type=\"button\" class=\"btn btn-primary\">\r\n                            <i class=\"fa-solid fa-pen-to-square\"></i></button></a>\r\n                </td>\r\n                <td>\r\n                    <button type=\"button\" class=\"btn btn-primary\" style=\"background-color: red\"\r\n                            data-bs-toggle=\"modal\" data-bs-target=\"#exampleModal\"\r\n                            onclick=\"remove(${product.id},'${product.name}')\">\r\n                        <i class=\"fa-solid fa-trash-can\"></i>\r\n                    </button>\r\n                </td>\r\n            </tr\r\n        </c:forEach>\r\n\r\n        </tbody>\r\n    </table>\r\n</div>\r\n<div class=\"d-flex\" style=\"justify-content: center\">\r\n    <img src=\"/view/images/cards.png\" height=\"82\" width=\"684\"/></tr>\r\n</div>\r\n</div>\r\n</div>\r\n<script\r\n        defer\r\n        src=\"https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js\"\r\n        integrity=\"sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ\"\r\n        crossorigin=\"anonymous\"\r\n></script>\r\n<script\r\n        src=\"https://kit.fontawesome.com/4bf93b0ca4.js\"\r\n        crossorigin=\"anonymous\"\r\n\r\n></script>\r\n<script src=\"../../bootstrap-5.1.3-dist/js/bootstrap.bundle.js\"></script>\r\n<script>\r\n    document.getElementById()\r\n</script>\r\n<!-- Modal -->\r\n<div class=\"modal fade\" id=\"exampleModal\" tabindex=\"-1\" aria-labelledby=\"exampleModalLabel\" aria-hidden=\"true\">\r\n    <div class=\"modal-dialog\">\r\n        <div class=\"modal-content\">\r\n            <div class=\"modal-header\">\r\n                <h1 class=\"modal-title fs-5\" id=\"exampleModalLabel\">Delete Product</h1>\r\n                <button type=\"button\" class=\"btn-close\" data-bs-dismiss=\"modal\" aria-label=\"Close\"></button>\r\n            </div>\r\n            <div class=\"modal-body\">\r\n                <h3>Confirm Delete\r\n                    <span style=\"color:red\" id=\"nameDelete\"></span>\r\n                </h3>\r\n            </div>\r\n            <div class=\"modal-footer\">\r\n                <form action=\"/products?action=delete\" method=\"post\">\r\n                    <input type=\"hidden\" name=\"idDelete\" id=\"idDelete\">\r\n                    <button type=\"button\" class=\"btn btn-secondary\" data-bs-dismiss=\"modal\">No</button>\r\n                    <button type=\"submit\" class=\"btn btn-primary\">Yes</button>\r\n                </form>\r\n            </div>\r\n        </div>\r\n    </div>\r\n</div>\r\n\r\n<script src=\"jquery/jquery-3.5.1.min.js\"></script>\r\n<script src=\"datatables/js/jquery.dataTables.min.js\"></script>\r\n<script src=\"datatables/js/dataTables.bootstrap5.min.js\"></script>\r\n<script src=\"bootstrap520/js/bootstrap.bundle.js\"></script>\r\n<script>\r\n    $(document).ready(function () {\r\n        $('#tableStudent').dataTable({\r\n            \"dom\": 'lrtip',\r\n            \"lengthChange\": false,\r\n            \"pageLength\": 2\r\n        });\r\n    });\r\n\r\n    function remove(productId, productName) {\r\n        document.getElementById(\"nameDelete\").innerText = productName;\r\n        document.getElementById(\"idDelete\").value = productId;\r\n    }\r\n</script>\r\n<%--<%@include file=\"/view/footer.jsp\" %>--%>\r\n</body>\r\n</html>\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/webapp/view/product/list.jsp b/src/main/webapp/view/product/list.jsp
+--- a/src/main/webapp/view/product/list.jsp	(revision 9bd9dd0407cd19b4d200ca791a84063d53c048a1)
++++ b/src/main/webapp/view/product/list.jsp	(date 1686192284521)
+@@ -28,6 +28,12 @@
+                 <a href="/products?action=create"><button type="submit" class="btn btn-primary bg-black text-white">
+                     Add new products</button></a>
+             </div>
++        <p>
++            <c:if test="${requestScope['message'] != null}">
++                <span style="color: blue"><i class="fa-solid fa-square-check"></i>${requestScope['message']}</span>
++            </c:if>
++        </p>
++    </div>
+     </div>
+     <div>
+         <h2>
+@@ -124,8 +130,8 @@
+ <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+     <div class="modal-dialog">
+         <div class="modal-content">
+-            <div class="modal-header">
+-                <h1 class="modal-title fs-5" id="exampleModalLabel">Delete Product</h1>
++            <div class="modal-header" STYLE="background-color: black">
++                <h1 class="modal-title fs-5" id="exampleModalLabel" >Delete Product</h1>
+                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+             </div>
+             <div class="modal-body">
+Index: src/main/java/com/example/merch/controller/team4/controller/HiServlet.java
+===================================================================
+diff --git a/src/main/java/com/example/merch/controller/team4/controller/HiServlet.java b/src/main/java/com/example/merch/controller/team4/controller/HiServlet.java
+deleted file mode 100644
+--- a/src/main/java/com/example/merch/controller/team4/controller/HiServlet.java	(revision 9bd9dd0407cd19b4d200ca791a84063d53c048a1)
++++ /dev/null	(revision 9bd9dd0407cd19b4d200ca791a84063d53c048a1)
+@@ -1,19 +0,0 @@
+-package com.example.team4.controller;
+-
+-import javax.servlet.*;
+-import javax.servlet.http.*;
+-import javax.servlet.annotation.*;
+-import java.io.IOException;
+-
+-@WebServlet(name = "HiServlet", value = "")
+-public class HiServlet extends HttpServlet {
+-    @Override
+-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+-        response.sendRedirect("/home");
+-    }
+-
+-    @Override
+-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+-
+-    }
+-}
+Index: src/main/java/com/example/merch/controller/team4/model/Customer.java
+===================================================================
+diff --git a/src/main/java/com/example/merch/controller/team4/model/Customer.java b/src/main/java/com/example/merch/controller/team4/model/Customer.java
+deleted file mode 100644
+--- a/src/main/java/com/example/merch/controller/team4/model/Customer.java	(revision 9bd9dd0407cd19b4d200ca791a84063d53c048a1)
++++ /dev/null	(revision 9bd9dd0407cd19b4d200ca791a84063d53c048a1)
+@@ -1,113 +0,0 @@
+-package com.example.team4.model;
+-
+-public class Customer {
+-    private int id;
+-    private String firstName;
+-    private String lastName;
+-    private String fullName;
+-    private String email;
+-    private String phone;
+-    private String address;
+-    private String password;
+-    private int accountId;
+-
+-    public Customer(){
+-
+-    }
+-
+-    public Customer(String firstName, String lastName, String email, String password) {
+-        this.firstName = firstName;
+-        this.lastName = lastName;
+-        this.email = email;
+-        this.password = password;
+-    }
+-
+-    public Customer(int id, String fullName, String email, String phone, String address, int accountId) {
+-        this.id = id;
+-        this.fullName = fullName;
+-        this.email = email;
+-        this.phone = phone;
+-        this.address = address;
+-        this.accountId = accountId;
+-    }
+-
+-    public Customer(String fullName, String phone, String address) {
+-        this.fullName = fullName;
+-        this.phone = phone;
+-        this.address = address;
+-    }
+-
+-    public int getId() {
+-        return id;
+-    }
+-
+-    public void setId(int id) {
+-        this.id = id;
+-    }
+-
+-    public String getFirstName() {
+-        return firstName;
+-    }
+-
+-    public void setFirstName(String firstName) {
+-        this.firstName = firstName;
+-    }
+-
+-    public String getLastName() {
+-        return lastName;
+-    }
+-
+-    public void setLastName(String lastName) {
+-        this.lastName = lastName;
+-    }
+-
+-    public String getEmail() {
+-        return email;
+-    }
+-
+-    public void setEmail(String email) {
+-        this.email = email;
+-    }
+-
+-    public String getPhone() {
+-        return phone;
+-    }
+-
+-    public void setPhone(String phone) {
+-        this.phone = phone;
+-    }
+-
+-    public String getAddress() {
+-        return address;
+-    }
+-
+-    public void setAddress(String address) {
+-        this.address = address;
+-    }
+-
+-    public String getPassword() {
+-        return password;
+-    }
+-
+-    public void setPassword(String password) {
+-        this.password = password;
+-    }
+-
+-    public int getAccountId() {
+-        return accountId;
+-    }
+-
+-    public void setAccountId(int accountId) {
+-        this.accountId = accountId;
+-    }
+-
+-    public String getFullName() {
+-        return fullName;
+-    }
+-
+-    public void setFullName(String fullName) {
+-        this.fullName = fullName;
+-    }
+-
+-
+-}
+Index: src/main/java/com/example/merch/controller/team4/DAO/orders/IOrderDAO.java
+===================================================================
+diff --git a/src/main/java/com/example/merch/controller/team4/DAO/orders/IOrderDAO.java b/src/main/java/com/example/merch/controller/team4/DAO/orders/IOrderDAO.java
+deleted file mode 100644
+--- a/src/main/java/com/example/merch/controller/team4/DAO/orders/IOrderDAO.java	(revision 9bd9dd0407cd19b4d200ca791a84063d53c048a1)
++++ /dev/null	(revision 9bd9dd0407cd19b4d200ca791a84063d53c048a1)
+@@ -1,19 +0,0 @@
+-package com.example.team4.DAO.orders;
+-
+-import com.example.team4.model.Order;
+-
+-import java.util.List;
+-
+-public interface IOrderDAO {
+-    void addNewOrder(int customerId);
+-
+-    int getLatestOrderId();
+-    List<Order> getAllOrders(int customerId);
+-
+-    boolean deleteOrder(int orderId, int customerId);
+-
+-    boolean checkOrderId(int orderId, int customerId);
+-
+-    List<Order> getOrderManagement();
+-
+-}
+Index: src/main/java/com/example/merch/controller/team4/model/Cart.java
+===================================================================
+diff --git a/src/main/java/com/example/merch/controller/team4/model/Cart.java b/src/main/java/com/example/merch/controller/team4/model/Cart.java
+deleted file mode 100644
+--- a/src/main/java/com/example/merch/controller/team4/model/Cart.java	(revision 9bd9dd0407cd19b4d200ca791a84063d53c048a1)
++++ /dev/null	(revision 9bd9dd0407cd19b4d200ca791a84063d53c048a1)
+@@ -1,128 +0,0 @@
+-package com.example.team4.model;
+-
+-public class Cart {
+-    private int id;
+-    private int customerId;
+-    private int productId;
+-    private String productName;
+-    private int productTypeId;
+-    private String image;
+-    private double price;
+-
+-    private int quantity;
+-    private double total;
+-
+-
+-    public Cart() {
+-
+-    }
+-
+-    public Cart(int customerId, int productId, String productName, int productTypeId, double price, String image, int quantity) {
+-        this.customerId = customerId;
+-        this.productId = productId;
+-        this.productName = productName;
+-        this.productTypeId = productTypeId;
+-        this.price = price;
+-        this.image = image;
+-        this.quantity = quantity;
+-
+-    }
+-
+-    public Cart(int customerId, int productId, String productName,int productTypeId, double price, String image, int quantity, double total) {
+-        this.customerId = customerId;
+-        this.productId = productId;
+-        this.productName = productName;
+-        this.price = price;
+-        this.image = image;
+-        this.quantity = quantity;
+-        this.total = total;
+-        this.productTypeId = productTypeId;
+-    }
+-
+-    public int getId() {
+-        return id;
+-    }
+-
+-    public void setId(int id) {
+-        this.id = id;
+-    }
+-
+-    public int getCustomerId() {
+-        return customerId;
+-    }
+-
+-    public void setCustomerId(int customerId) {
+-        this.customerId = customerId;
+-    }
+-
+-    public int getProductId() {
+-        return productId;
+-    }
+-
+-    public void setProductId(int productId) {
+-        this.productId = productId;
+-    }
+-
+-    public int getQuantity() {
+-        return quantity;
+-    }
+-
+-    public void setQuantity(int quantity) {
+-        this.quantity = quantity;
+-    }
+-
+-    public String getProductName() {
+-        return productName;
+-    }
+-
+-    public void setProductName(String productName) {
+-        this.productName = productName;
+-    }
+-
+-    public String getImage() {
+-        return image;
+-    }
+-
+-    public void setImage(String image) {
+-        this.image = image;
+-    }
+-
+-    public double getPrice() {
+-        return price;
+-    }
+-
+-    public void setPrice(double price) {
+-        this.price = price;
+-    }
+-
+-    public double getTotal() {
+-        return total;
+-    }
+-
+-    public void setTotal(double total) {
+-        this.total = total;
+-    }
+-
+-    public int getProductTypeId() {
+-        return productTypeId;
+-    }
+-
+-    public void setProductTypeId(int productTypeId) {
+-        this.productTypeId = productTypeId;
+-    }
+-
+-    @Override
+-    public String toString() {
+-        return "Cart{" +
+-                "id=" + id +
+-                ", customerId=" + customerId +
+-                ", productId=" + productId +
+-                ", productName='" + productName + '\'' +
+-                ", productTypeId=" + productTypeId +
+-                ", image='" + image + '\'' +
+-                ", price=" + price +
+-                ", quantity=" + quantity +
+-                ", total=" + total +
+-                '}';
+-    }
+-}
+Index: src/main/java/com/example/merch/controller/team4/controller/StoreOrderServlet.java
+===================================================================
+diff --git a/src/main/java/com/example/merch/controller/team4/controller/StoreOrderServlet.java b/src/main/java/com/example/merch/controller/team4/controller/StoreOrderServlet.java
+deleted file mode 100644
+--- a/src/main/java/com/example/merch/controller/team4/controller/StoreOrderServlet.java	(revision 9bd9dd0407cd19b4d200ca791a84063d53c048a1)
++++ /dev/null	(revision 9bd9dd0407cd19b4d200ca791a84063d53c048a1)
+@@ -1,28 +0,0 @@
+-package com.example.team4.controller;
+-
+-import com.example.team4.DAO.orders.IOrderDAO;
+-import com.example.team4.DAO.orders.OrderDAO;
+-import com.example.team4.model.Order;
+-
+-import javax.servlet.*;
+-import javax.servlet.http.*;
+-import javax.servlet.annotation.*;
+-import java.io.IOException;
+-import java.util.List;
+-
+-@WebServlet(name = "StoreOrderServlet", value = "/store-orders")
+-public class StoreOrderServlet extends HttpServlet {
+-    IOrderDAO iOrderDAO = new OrderDAO();
+-
+-    @Override
+-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+-        List<Order> orderManagement = iOrderDAO.getOrderManagement();
+-        request.setAttribute("orders", orderManagement);
+-        request.getRequestDispatcher("/view/store-orders.jsp").forward(request, response);
+-    }
+-
+-    @Override
+-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+-
+-    }
+-}
+Index: src/main/java/com/example/merch/controller/team4/DAO/customers/CustomerDAO.java
+===================================================================
+diff --git a/src/main/java/com/example/merch/controller/team4/DAO/customers/CustomerDAO.java b/src/main/java/com/example/merch/controller/team4/DAO/customers/CustomerDAO.java
+deleted file mode 100644
+--- a/src/main/java/com/example/merch/controller/team4/DAO/customers/CustomerDAO.java	(revision 9bd9dd0407cd19b4d200ca791a84063d53c048a1)
++++ /dev/null	(revision 9bd9dd0407cd19b4d200ca791a84063d53c048a1)
+@@ -1,132 +0,0 @@
+-package com.example.team4.DAO.customers;
+-
+-import com.example.team4.base.BaseConnection;
+-import com.example.team4.model.Customer;
+-
+-import java.sql.Connection;
+-import java.sql.PreparedStatement;
+-import java.sql.ResultSet;
+-import java.sql.SQLException;
+-import java.util.ArrayList;
+-import java.util.List;
+-
+-public class CustomerDAO implements ICustomerDAO {
+-    public static Connection connection = BaseConnection.getConnection();
+-
+-
+-    @Override
+-    public void addNewCustomerAccount(Customer newCustomer) {
+-        try {
+-            PreparedStatement preparedStatement = connection.prepareStatement(BaseConnection.ADD_CUSTOMER_ACCOUNT);
+-            preparedStatement.setString(1, newCustomer.getFirstName());
+-            preparedStatement.setString(2, newCustomer.getLastName());
+-            preparedStatement.setString(3, newCustomer.getEmail());
+-            preparedStatement.setString(4, newCustomer.getPassword());
+-            preparedStatement.executeUpdate();
+-        } catch (SQLException e) {
+-            e.printStackTrace();
+-        }
+-    }
+-
+-    @Override
+-    public List<Customer> getAllCustomers() {
+-        List<Customer> customers = new ArrayList<>();
+-        try {
+-            PreparedStatement preparedStatement = connection.prepareStatement(BaseConnection.SELECT_ALL_CUSTOMERS);
+-            ResultSet rs = preparedStatement.executeQuery();
+-            while (rs.next()) {
+-                int customerId = rs.getInt("customer_id");
+-                int accountId = rs.getInt("account_id");
+-                String name = rs.getString("customer_name");
+-                String email = rs.getString("email");
+-                String phone = rs.getString("phone_number");
+-                String address = rs.getString("address");
+-                customers.add(new Customer(customerId, name, email, phone, address, accountId));
+-            }
+-        } catch (SQLException e) {
+-            e.printStackTrace();
+-        }
+-        return customers;
+-    }
+-
+-    @Override
+-    public Customer findCustomerByAccountId(int accountId) {
+-        System.out.println("hhihihi acc id" + accountId);
+-        Customer customer = null;
+-        try {
+-            PreparedStatement preparedStatement = connection.prepareStatement(BaseConnection.FIND_CUSTOMER_BY_ACCOUNT_ID);
+-            preparedStatement.setInt(1, accountId);
+-            ResultSet rs = preparedStatement.executeQuery();
+-            while (rs.next()) {
+-                int customerId = rs.getInt("customer_id");
+-                String name = rs.getString("customer_name");
+-                String email = rs.getString("email");
+-                String phone = rs.getString("phone_number");
+-                String address = rs.getString("address");
+-                int accountId1 = rs.getInt("account_id");
+-                customer = new Customer(customerId, name, email, phone, address, accountId1);
+-            }
+-        } catch (SQLException e) {
+-            e.printStackTrace();
+-        }
+-
+-        return customer;
+-    }
+-
+-    @Override
+-    public boolean checkAccountExistence(String email) {
+-        try {
+-            PreparedStatement preparedStatement = connection.prepareStatement(BaseConnection.CHECK_ACCOUNT_EXISTENCE);
+-            preparedStatement.setString(1, email);
+-            ResultSet rs = preparedStatement.executeQuery();
+-            if (rs.next()) return true;
+-        } catch (SQLException e) {
+-            e.printStackTrace();
+-        }
+-        return false;
+-    }
+-
+-    @Override
+-    public boolean editAccount(int customerId, Customer newCustomer) {
+-        boolean rowEdited = false;
+-        try {
+-            PreparedStatement preparedStatement = connection.prepareStatement(BaseConnection.UPDATE_ACCOUNT_INFO);
+-            preparedStatement.setString(1, newCustomer.getFullName());
+-            preparedStatement.setString(2, newCustomer.getPhone());
+-            preparedStatement.setString(3, newCustomer.getAddress());
+-            preparedStatement.setInt(4, customerId);
+-            rowEdited = preparedStatement.executeUpdate() > 0;
+-        } catch (SQLException e) {
+-            e.printStackTrace();
+-        }
+-        return rowEdited;
+-    }
+-
+-    @Override
+-    public boolean deleteAccount(int accountId) {
+-        boolean rowDeleted = false;
+-        try {
+-            PreparedStatement preparedStatement = connection.prepareStatement(BaseConnection.DELETE_ACCOUNT);
+-            preparedStatement.setInt(1, accountId);
+-            rowDeleted = preparedStatement.executeUpdate() > 0;
+-        } catch (SQLException e) {
+-            e.printStackTrace();
+-        }
+-        return rowDeleted;
+-    }
+-
+-    @Override
+-    public boolean updateShippingInfo(int customerId, String phoneNumber, String address) {
+-        boolean rowEdited = false;
+-        try {
+-            PreparedStatement preparedStatement = connection.prepareStatement(BaseConnection.UPDATE_SHIPPING_INFO);
+-            preparedStatement.setString(1, phoneNumber);
+-            preparedStatement.setString(2, address);
+-            preparedStatement.setInt(3, customerId);
+-            rowEdited = preparedStatement.executeUpdate() > 0;
+-        } catch (SQLException e) {
+-            e.printStackTrace();
+-        }
+-        return rowEdited;
+-    }
+-}
+Index: src/main/java/com/example/merch/controller/team4/model/Order.java
+===================================================================
+diff --git a/src/main/java/com/example/merch/controller/team4/model/Order.java b/src/main/java/com/example/merch/controller/team4/model/Order.java
+deleted file mode 100644
+--- a/src/main/java/com/example/merch/controller/team4/model/Order.java	(revision 9bd9dd0407cd19b4d200ca791a84063d53c048a1)
++++ /dev/null	(revision 9bd9dd0407cd19b4d200ca791a84063d53c048a1)
+@@ -1,109 +0,0 @@
+-package com.example.team4.model;
+-
+-
+-public class Order {
+-    private int id;
+-
+-    private String orderTime;
+-    private int customerId;
+-
+-    private String status;
+-    private String customerName;
+-    private String email;
+-    private String phone;
+-    private String address;
+-
+-    public Order(){
+-
+-    }
+-    public Order(int customerId){
+-        this.customerId = customerId;
+-    }
+-    public Order(int id, String orderTime, int customerId) {
+-        this.id = id;
+-        this.orderTime = orderTime;
+-        this.customerId = customerId;
+-    }
+-
+-    public Order(int id, String orderTime, String status) {
+-        this.id = id;
+-        this.orderTime = orderTime;
+-        this.status = status;
+-    }
+-
+-
+-    public Order(int id, String orderTime, String status, int customerId, String customerName, String email, String phone, String address) {
+-        this.id = id;
+-        this.orderTime = orderTime;
+-        this.status = status;
+-        this.customerId = customerId;
+-        this.customerName = customerName;
+-        this.email = email;
+-        this.phone = phone;
+-        this.address = address;
+-    }
+-
+-    public int getId() {
+-        return id;
+-    }
+-
+-    public void setId(int id) {
+-        this.id = id;
+-    }
+-
+-    public String getOrderTime() {
+-        return orderTime;
+-    }
+-
+-    public void setOrderTime(String orderTime) {
+-        this.orderTime = orderTime;
+-    }
+-
+-    public int getCustomerId() {
+-        return customerId;
+-    }
+-
+-    public void setCustomerId(int customerId) {
+-        this.customerId = customerId;
+-    }
+-
+-    public String getStatus() {
+-        return status;
+-    }
+-
+-    public void setStatus(String status) {
+-        this.status = status;
+-    }
+-
+-    public String getCustomerName() {
+-        return customerName;
+-    }
+-
+-    public void setCustomerName(String customerName) {
+-        this.customerName = customerName;
+-    }
+-
+-    public String getEmail() {
+-        return email;
+-    }
+-
+-    public void setEmail(String email) {
+-        this.email = email;
+-    }
+-
+-    public String getPhone() {
+-        return phone;
+-    }
+-
+-    public void setPhone(String phone) {
+-        this.phone = phone;
+-    }
+-
+-    public String getAddress() {
+-        return address;
+-    }
+-
+-    public void setAddress(String address) {
+-        this.address = address;
+-    }
+-}
+Index: src/main/java/com/example/merch/controller/team4/repository/products/ProductTypeRepository.java
+===================================================================
+diff --git a/src/main/java/com/example/merch/controller/team4/repository/products/ProductTypeRepository.java b/src/main/java/com/example/merch/controller/team4/repository/products/ProductTypeRepository.java
+deleted file mode 100644
+--- a/src/main/java/com/example/merch/controller/team4/repository/products/ProductTypeRepository.java	(revision 9bd9dd0407cd19b4d200ca791a84063d53c048a1)
++++ /dev/null	(revision 9bd9dd0407cd19b4d200ca791a84063d53c048a1)
+@@ -1,39 +0,0 @@
+-package com.example.team4.repository.products;
+-
+-
+-import com.example.team4.base.BaseConnection;
+-import com.example.team4.model.ProductType;
+-
+-import java.sql.Connection;
+-import java.sql.PreparedStatement;
+-import java.sql.ResultSet;
+-import java.sql.SQLException;
+-import java.util.ArrayList;
+-import java.util.List;
+-
+-public class ProductTypeRepository implements IProductTypeRepository {
+-    @Override
+-    public List<ProductType> getAll() {
+-        List<ProductType> productTypeList = new ArrayList<>();
+-        Connection connection = BaseConnection.getConnection();
+-        try {
+-            PreparedStatement preparedStatement = connection.prepareStatement("select  * from product_type");
+-            ResultSet resultSet = preparedStatement.executeQuery();
+-            while (resultSet.next()){
+-                int id= resultSet.getInt("product_type_id");
+-                String name = resultSet.getString("product_type_name");
+-                ProductType productType = new ProductType(id, name);
+-                productTypeList.add(productType);
+-            }
+-        } catch (SQLException throwables) {
+-            throwables.printStackTrace();
+-        }finally {
+-            try {
+-                connection.close();
+-            } catch (SQLException e) {
+-                e.printStackTrace();
+-            }
+-        }
+-        return productTypeList;
+-    }
+-}
+Index: src/main/java/com/example/merch/controller/team4/DAO/order_details/OrderDetailsDAO.java
+===================================================================
+diff --git a/src/main/java/com/example/merch/controller/team4/DAO/order_details/OrderDetailsDAO.java b/src/main/java/com/example/merch/controller/team4/DAO/order_details/OrderDetailsDAO.java
+deleted file mode 100644
+--- a/src/main/java/com/example/merch/controller/team4/DAO/order_details/OrderDetailsDAO.java	(revision 9bd9dd0407cd19b4d200ca791a84063d53c048a1)
++++ /dev/null	(revision 9bd9dd0407cd19b4d200ca791a84063d53c048a1)
+@@ -1,27 +0,0 @@
+-package com.example.team4.DAO.order_details;
+-
+-import com.example.team4.base.BaseConnection;
+-import com.example.team4.model.OrderDetails;
+-
+-import java.sql.Connection;
+-import java.sql.PreparedStatement;
+-import java.sql.SQLException;
+-
+-public class OrderDetailsDAO implements IOrderDetailsDAO {
+-    @Override
+-    public void addNewOrderDetails(int orderId, OrderDetails orderDetails) {
+-        Connection connection = BaseConnection.getConnection();
+-        try {
+-            PreparedStatement preparedStatement = connection.prepareStatement(BaseConnection.ADD_ORDER_DETAILS);
+-            preparedStatement.setInt(1, orderId);
+-            preparedStatement.setInt(2, orderDetails.getProductId());
+-            preparedStatement.setInt(3, orderDetails.getProductTypeId());
+-            preparedStatement.setInt(4, orderDetails.getQuantity());
+-            preparedStatement.setDouble(5, orderDetails.getPrice());
+-            preparedStatement.executeUpdate();
+-
+-        } catch (SQLException e) {
+-            e.printStackTrace();
+-        }
+-    }
+-}
+Index: src/main/java/com/example/merch/controller/team4/service/products/ProductService.java
+===================================================================
+diff --git a/src/main/java/com/example/merch/controller/team4/service/products/ProductService.java b/src/main/java/com/example/merch/controller/team4/service/products/ProductService.java
+deleted file mode 100644
+--- a/src/main/java/com/example/merch/controller/team4/service/products/ProductService.java	(revision 9bd9dd0407cd19b4d200ca791a84063d53c048a1)
++++ /dev/null	(revision 9bd9dd0407cd19b4d200ca791a84063d53c048a1)
+@@ -1,52 +0,0 @@
+-package com.example.team4.service.products;
+-
+-
+-import com.example.team4.model.Product;
+-import com.example.team4.repository.products.IProductRepository;
+-import com.example.team4.repository.products.ProductRepository;
+-
+-import java.util.List;
+-
+-public class ProductService implements IProductService {
+-    private IProductRepository iProductRepository = new ProductRepository();
+-
+-    @Override
+-    public List<Product> showAll() {
+-        return iProductRepository.showAll();
+-    }
+-
+-    @Override
+-    public void createNewProduct(Product product) {
+-        iProductRepository.createNewProduct(product);
+-    }
+-
+-    @Override
+-    public void updateProduct(Product product) {
+-        iProductRepository.updateProduct(product);
+-    }
+-
+-    @Override
+-    public void deleteProduct(int id) {
+-        iProductRepository.deleteProduct(id);
+-    }
+-
+-    @Override
+-    public Product selectProductById(int id) {
+-        return iProductRepository.selectProductById(id);
+-    }
+-
+-    @Override
+-    public Product findById(int id) {
+-        return iProductRepository.findById(id);
+-    }
+-
+-    @Override
+-    public List<Product> showAllMerch() {
+-        return iProductRepository.showAllMerch();
+-    }
+-
+-    @Override
+-    public List<Product> showAllMusic() {
+-        return iProductRepository.showAllMusic();
+-    }
+-}
+Index: src/main/java/com/example/merch/controller/team4/model/Product.java
+===================================================================
+diff --git a/src/main/java/com/example/merch/controller/team4/model/Product.java b/src/main/java/com/example/merch/controller/team4/model/Product.java
+deleted file mode 100644
+--- a/src/main/java/com/example/merch/controller/team4/model/Product.java	(revision 9bd9dd0407cd19b4d200ca791a84063d53c048a1)
++++ /dev/null	(revision 9bd9dd0407cd19b4d200ca791a84063d53c048a1)
+@@ -1,87 +0,0 @@
+-package com.example.team4.model;
+-
+-public class Product {
+-//    product_id int primary key auto_increment,
+-//product_name varchar(100) not null,
+-//product_description text not null,
+-//price double not null,
+-//image text not null,
+-//product_type_id int,
+-    private int id;
+-    private String name;
+-    private String description;
+-    private double price;
+-    private String image;
+-    private ProductType productType;
+-
+-    public Product() {
+-    }
+-
+-    public Product(String productName, String productDescription, double price, String image, ProductType productType) {
+-        this.name = productName;
+-        this.description = productDescription;
+-        this.price = price;
+-        this.image = image;
+-        this.productType = productType;
+-    }
+-
+-    public Product(int productId, String productName, String productDescription, double price, String image,
+-                   ProductType productType) {
+-        this.id = productId;
+-        this.name = productName;
+-        this.description = productDescription;
+-        this.price = price;
+-        this.image = image;
+-        this.productType = productType;
+-    }
+-
+-
+-
+-    public int getId() {
+-        return id;
+-    }
+-
+-    public void setId(int productId) {
+-        this.id = productId;
+-    }
+-
+-    public String getName() {
+-        return name;
+-    }
+-
+-    public void setName(String productName) {
+-        this.name = productName;
+-    }
+-
+-    public String getDescription() {
+-        return description;
+-    }
+-
+-    public void setDescription(String productDescription) {
+-        this.description = productDescription;
+-    }
+-
+-    public double getPrice() {
+-        return price;
+-    }
+-
+-    public void setPrice(double price) {
+-        this.price = price;
+-    }
+-
+-    public String getImage() {
+-        return image;
+-    }
+-
+-    public void setImage(String image) {
+-        this.image = image;
+-    }
+-
+-    public ProductType getProductTypeId() {
+-        return productType;
+-    }
+-
+-    public void setProductTypeId(ProductType productTypeId) {
+-        this.productType = productTypeId;
+-    }
+-}
+Index: src/main/java/com/example/merch/controller/team4/model/OrderDetails.java
+===================================================================
+diff --git a/src/main/java/com/example/merch/controller/team4/model/OrderDetails.java b/src/main/java/com/example/merch/controller/team4/model/OrderDetails.java
+deleted file mode 100644
+--- a/src/main/java/com/example/merch/controller/team4/model/OrderDetails.java	(revision 9bd9dd0407cd19b4d200ca791a84063d53c048a1)
++++ /dev/null	(revision 9bd9dd0407cd19b4d200ca791a84063d53c048a1)
+@@ -1,76 +0,0 @@
+-package com.example.team4.model;
+-
+-public class OrderDetails {
+-    private int id;
+-    private int orderId;
+-    private int productId;
+-    private int productTypeId;
+-    private int quantity;
+-    private double price;
+-    public OrderDetails(){
+-
+-    }
+-    public OrderDetails(int id, int orderId, int productId, int productTypeId, int quantity, double price) {
+-        this.id = id;
+-        this.orderId = orderId;
+-        this.productId = productId;
+-        this.productTypeId = productTypeId;
+-        this.quantity = quantity;
+-        this.price = price;
+-    }
+-
+-    public OrderDetails(int productId, int productTypeId, int quantity, double price) {
+-        this.productId = productId;
+-        this.productTypeId = productTypeId;
+-        this.quantity = quantity;
+-        this.price = price;
+-    }
+-
+-    public int getId() {
+-        return id;
+-    }
+-
+-    public void setId(int id) {
+-        this.id = id;
+-    }
+-
+-    public int getOrderId() {
+-        return orderId;
+-    }
+-
+-    public void setOrderId(int orderId) {
+-        this.orderId = orderId;
+-    }
+-
+-    public int getProductId() {
+-        return productId;
+-    }
+-
+-    public void setProductId(int productId) {
+-        this.productId = productId;
+-    }
+-
+-    public int getProductTypeId() {
+-        return productTypeId;
+-    }
+-
+-    public void setProductTypeId(int productTypeId) {
+-        this.productTypeId = productTypeId;
+-    }
+-
+-    public int getQuantity() {
+-        return quantity;
+-    }
+-
+-    public void setQuantity(int quantity) {
+-        this.quantity = quantity;
+-    }
+-
+-    public double getPrice() {
+-        return price;
+-    }
+-
+-    public void setPrice(double price) {
+-        this.price = price;
+-    }
+-}
+Index: src/main/java/com/example/merch/controller/team4/base/BaseConnection.java
+===================================================================
+diff --git a/src/main/java/com/example/merch/controller/team4/base/BaseConnection.java b/src/main/java/com/example/merch/controller/team4/base/BaseConnection.java
+deleted file mode 100644
+--- a/src/main/java/com/example/merch/controller/team4/base/BaseConnection.java	(revision 9bd9dd0407cd19b4d200ca791a84063d53c048a1)
++++ /dev/null	(revision 9bd9dd0407cd19b4d200ca791a84063d53c048a1)
+@@ -1,61 +0,0 @@
+-package com.example.team4.base;
+-
+-import java.sql.Connection;
+-import java.sql.DriverManager;
+-import java.sql.SQLException;
+-
+-public class BaseConnection {
+-    static String jdbcURL = "jdbc:mysql://localhost:3306/team4";
+-    static String jdbcUsername = "root";
+-    static String jdbcPassword = "bigbang23";
+-
+-    public static final String CHECK_ACCOUNT = "call check_account(?, ?);";
+-    public static final String CHECK_ROLE = "call check_role(?); ";
+-    public static final String SELECT_ALL_PRODUCTS = "select * from products;";
+-    public static final String FIND_PRODUCT = "select * from products where product_id = ?;";
+-    public static final String DELETE_PRODUCT = "delete from products where product_id = ?;";
+-    public static final String ADD_PRODUCT = "call add_product(?,?,?,?,?);";
+-    public static final String UPDATE_PRODUCT = "call update_product(?,?,?,?,?,?);";
+-    public static final String SELECT_MERCH = "call select_merch();";
+-    public static final String SELECT_MUSIC = "call select_music();";
+-    public static final String ADD_CUSTOMER_ACCOUNT = "call create_customer_account(?,?,?,?);";
+-
+-    public static final String FIND_CUSTOMER_BY_ACCOUNT_ID = "select * from customers where account_id = ?;";
+-    public static final String CHECK_ACCOUNT_EXISTENCE = "select * from account_users where user_email = ?;";
+-
+-    public static final String ADD_CART = "insert into cart_details(customer_id, product_id, product_name, product_type_id, price, image, quantity) values (?,?,?,?,?,?,?);";
+-    public static final String CHECK_CART_EXISTENCE = "select * from cart_details where customer_id = ? and product_id = ?;";
+-    public static final String UPDATE_CART = "call update_cart(?,?,?);";
+-    public static final String SELECT_ALL_CARTS = "call view_cart(?);";
+-
+-    public static final String DELETE_CART = "delete from cart_details where customer_id = ? and product_id = ?;";
+-
+-    public static final String ADD_ORDER = "insert into orders(customer_id) values (?);";
+-    public static final String GET_LATEST_ORDER_ID = "call get_latest_order_id();";
+-    public static final String ADD_ORDER_DETAILS = "insert into order_details(order_id, product_id, product_type_id, quantity, price) values (?,?,?,?,?);";
+-
+-    public static final String DELETE_ALL_CARTS_AFTER_ORDER = "delete from cart_details where customer_id = ? ;";
+-
+-    public static final String SELECT_ALL_CUSTOMERS = "select * from customers;";
+-    public static final String UPDATE_ACCOUNT_INFO = "update customers set customer_name = ?, phone_number = ?, address = ? where customer_id = ?;";
+-    public static final String DELETE_ACCOUNT = "call delete_account_user(?);";
+-
+-    public static final String SELECT_ALL_ORDERS = "select * from orders where customer_id = ?;";
+-    public static final String DELETE_ORDER = "call delete_order(?,?);";
+-    public static final String CHECK_ORDER_ID = "select * from orders where order_id = ? and customer_id = ?;";
+-
+-    public static final String SELECT_ORDER_MANAGEMENT = "call show_order_management();";
+-
+-    public static final String UPDATE_SHIPPING_INFO = "update customers set phone_number = ?, address = ? where customer_id = ? ;";
+-
+-    public static Connection getConnection() {
+-        Connection connection = null;
+-        try {
+-            Class.forName("com.mysql.jdbc.Driver");
+-            connection = DriverManager.getConnection(jdbcURL, jdbcUsername, jdbcPassword);
+-        } catch (SQLException | ClassNotFoundException e) {
+-            e.printStackTrace();
+-        }
+-        return connection;
+-    }
+-}
+Index: src/main/java/com/example/merch/controller/team4/service/products/ProductTypeService.java
+===================================================================
+diff --git a/src/main/java/com/example/merch/controller/team4/service/products/ProductTypeService.java b/src/main/java/com/example/merch/controller/team4/service/products/ProductTypeService.java
+deleted file mode 100644
+--- a/src/main/java/com/example/merch/controller/team4/service/products/ProductTypeService.java	(revision 9bd9dd0407cd19b4d200ca791a84063d53c048a1)
++++ /dev/null	(revision 9bd9dd0407cd19b4d200ca791a84063d53c048a1)
+@@ -1,14 +0,0 @@
+-package com.example.team4.service.products;
+-import com.example.team4.model.ProductType;
+-import com.example.team4.repository.products.IProductTypeRepository;
+-import com.example.team4.repository.products.ProductTypeRepository;
+-
+-import java.util.List;
+-
+-public class ProductTypeService implements IProductTypeService {
+-    private IProductTypeRepository productTypeRepository = new ProductTypeRepository();
+-    @Override
+-    public List<ProductType> getAll() {
+-        return productTypeRepository.getAll();
+-    }
+-}
+Index: src/main/java/com/example/merch/controller/team4/repository/products/ProductRepository.java
+===================================================================
+diff --git a/src/main/java/com/example/merch/controller/team4/repository/products/ProductRepository.java b/src/main/java/com/example/merch/controller/team4/repository/products/ProductRepository.java
+deleted file mode 100644
+--- a/src/main/java/com/example/merch/controller/team4/repository/products/ProductRepository.java	(revision 9bd9dd0407cd19b4d200ca791a84063d53c048a1)
++++ /dev/null	(revision 9bd9dd0407cd19b4d200ca791a84063d53c048a1)
+@@ -1,205 +0,0 @@
+-package com.example.team4.repository.products;
+-
+-import com.example.team4.base.BaseConnection;
+-import com.example.team4.model.Product;
+-import com.example.team4.model.ProductType;
+-
+-import java.sql.*;
+-import java.util.ArrayList;
+-import java.util.List;
+-
+-public class ProductRepository implements IProductRepository {
+-    private static final String INSERT = "insert into products(product_name, product_description, price, image, product_type_id) values(?, ?, ?, ?, ?);";
+-    private static final String SELECT = "select p.*, pt.product_type_name from products p join product_type pt on pt.product_type_id = p.product_type_id;";
+-    private static final String DELETE = "delete from products where product_id = ?;";
+-    private static final String UPDATE = "update products set product_name = ?, product_description = ?, price = ?, image = ?, product_type_id = ? where product_id = ?;";
+-    private static final String SELECT_PRODUCT_BY_ID = "select p.*, pt.product_type_name from products p join product_type pt on pt.product_type_id = p.product_type_id where product_id = ?;";
+-
+-    private static final String SELECT_MERCH = "select p.*, pt.product_type_name from products p join product_type pt on pt.product_type_id = p.product_type_id where p.product_type_id = '1';";
+-    private static final String SELECT_MUSIC = "select p.*, pt.product_type_name from products p join product_type pt on pt.product_type_id = p.product_type_id where p.product_type_id = '2';";
+-    @Override
+-    public List<Product> showAll() {
+-        Connection connection = BaseConnection.getConnection();
+-        List<Product> productList = new ArrayList<>();
+-        try {
+-            Statement statement = connection.createStatement();
+-            ResultSet resultSet = statement.executeQuery(SELECT);
+-            while (resultSet.next()) {
+-                int id = resultSet.getInt("product_id");
+-                String productName = resultSet.getString("product_name");
+-                String productDescription = resultSet.getString("product_description");
+-                double price = resultSet.getDouble("price");
+-                String image = resultSet.getString("image");
+-                int productTypeId = resultSet.getInt("product_type_id");
+-                String productTypeName = resultSet.getString("product_type_name");
+-                ProductType productType = new ProductType(productTypeId, productTypeName);
+-                productList.add(new Product(id, productName, productDescription, price, image, productType));
+-            }
+-        } catch (SQLException throwables) {
+-            throwables.printStackTrace();
+-        } finally {
+-            try {
+-                connection.close();
+-            } catch (SQLException e) {
+-                e.printStackTrace();
+-            }
+-        }
+-        return productList;
+-    }
+-
+-    @Override
+-    public void createNewProduct(Product product) {
+-        Connection connection = BaseConnection.getConnection();
+-        try {
+-            PreparedStatement preparedStatement = connection.prepareStatement(INSERT);
+-            preparedStatement.setString(1, product.getName());
+-            preparedStatement.setString(2, product.getDescription());
+-            preparedStatement.setDouble(3, product.getPrice());
+-            preparedStatement.setString(4, product.getImage());
+-            preparedStatement.setInt(5, product.getProductTypeId().getProductTypeId());
+-            preparedStatement.executeUpdate();
+-        } catch (SQLException throwables) {
+-            throwables.printStackTrace();
+-        }
+-    }
+-
+-
+-    @Override
+-    public void updateProduct(Product product) {
+-        Connection connection = BaseConnection.getConnection();
+-        try {
+-            PreparedStatement preparedStatement = connection.prepareStatement(UPDATE);
+-            preparedStatement.setInt(6, product.getId());
+-            preparedStatement.setString(1, product.getName());
+-            preparedStatement.setString(2, product.getDescription());
+-            preparedStatement.setDouble(3, product.getPrice());
+-            preparedStatement.setString(4, product.getImage());
+-            preparedStatement.setInt(5, product.getProductTypeId().getProductTypeId());
+-            preparedStatement.executeUpdate();
+-        } catch (SQLException throwables) {
+-            throwables.printStackTrace();
+-        }
+-    }
+-
+-    @Override
+-    public void deleteProduct(int id) {
+-        Connection connection = BaseConnection.getConnection();
+-        try {
+-            PreparedStatement preparedStatement = connection.prepareStatement(DELETE);
+-            preparedStatement.setInt(1, id);
+-            preparedStatement.executeUpdate();
+-        } catch (SQLException throwables) {
+-            throwables.printStackTrace();
+-        }
+-    }
+-
+-    @Override
+-    public Product selectProductById(int id) {
+-        Product product = null;
+-        Connection connection = BaseConnection.getConnection();
+-        try {
+-            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_PRODUCT_BY_ID);
+-            preparedStatement.setInt(1, id);
+-            ResultSet resultSet = preparedStatement.executeQuery();
+-            while (resultSet.next()) {
+-                String productName = resultSet.getString("product_name");
+-                String productDescription = resultSet.getString("product_description");
+-                double price = resultSet.getDouble("price");
+-                String image = resultSet.getString("image");
+-                int productTypeId = resultSet.getInt("product_type_id");
+-                String productTypeName = resultSet.getString("product_type_name");
+-                ProductType productType = new ProductType(productTypeId, productTypeName);
+-                product = new Product(id, productName, productDescription, price, image, productType);
+-            }
+-        } catch (SQLException throwables) {
+-            throwables.printStackTrace();
+-        }
+-        return product;
+-    }
+-
+-    @Override
+-    public Product findById(int id) {
+-        Product product = null;
+-        try {
+-            PreparedStatement preparedStatement = BaseConnection.getConnection().prepareStatement(BaseConnection.FIND_PRODUCT);
+-            preparedStatement.setInt(1,id);
+-            ResultSet rs = preparedStatement.executeQuery();
+-            while (rs.next()){
+-                int productId = rs.getInt("product_id");
+-                String name = rs.getString("product_name");
+-                String description = rs.getString("product_description");
+-                String image = rs.getString("image");
+-                double price = rs.getDouble("price");
+-                int productTypeId = rs.getInt("product_type_id");
+-                ProductType productType = new ProductType(productTypeId);
+-                product = new Product(productId,name,description,price,image,productType);
+-            }
+-        } catch (SQLException e) {
+-            e.printStackTrace();
+-        }
+-
+-        return product;
+-    }
+-
+-    @Override
+-    public List<Product> showAllMerch() {
+-        Connection connection = BaseConnection.getConnection();
+-        List<Product> productList = new ArrayList<>();
+-        try {
+-            Statement statement = connection.createStatement();
+-            ResultSet resultSet = statement.executeQuery(SELECT_MERCH);
+-            while (resultSet.next()) {
+-                int id = resultSet.getInt("product_id");
+-                String productName = resultSet.getString("product_name");
+-                String productDescription = resultSet.getString("product_description");
+-                double price = resultSet.getDouble("price");
+-                String image = resultSet.getString("image");
+-                int productTypeId = resultSet.getInt("product_type_id");
+-                String productTypeName = resultSet.getString("product_type_name");
+-                ProductType productType = new ProductType(productTypeId, productTypeName);
+-                productList.add(new Product(id, productName, productDescription, price, image, productType));
+-            }
+-        } catch (SQLException throwables) {
+-            throwables.printStackTrace();
+-        } finally {
+-            try {
+-                connection.close();
+-            } catch (SQLException e) {
+-                e.printStackTrace();
+-            }
+-        }
+-        return productList;
+-    }
+-
+-
+-    @Override
+-    public List<Product> showAllMusic() {
+-        Connection connection = BaseConnection.getConnection();
+-        List<Product> productList = new ArrayList<>();
+-        try {
+-            Statement statement = connection.createStatement();
+-            ResultSet resultSet = statement.executeQuery(SELECT_MUSIC);
+-            while (resultSet.next()) {
+-                int id = resultSet.getInt("product_id");
+-                String productName = resultSet.getString("product_name");
+-                String productDescription = resultSet.getString("product_description");
+-                double price = resultSet.getDouble("price");
+-                String image = resultSet.getString("image");
+-                int productTypeId = resultSet.getInt("product_type_id");
+-                String productTypeName = resultSet.getString("product_type_name");
+-                ProductType productType = new ProductType(productTypeId, productTypeName);
+-                productList.add(new Product(id, productName, productDescription, price, image, productType));
+-            }
+-        } catch (SQLException throwables) {
+-            throwables.printStackTrace();
+-        } finally {
+-            try {
+-                connection.close();
+-            } catch (SQLException e) {
+-                e.printStackTrace();
+-            }
+-        }
+-        return productList;
+-    }
+-}
+-
+Index: src/main/java/com/example/merch/controller/team4/service/products/IProductTypeService.java
+===================================================================
+diff --git a/src/main/java/com/example/merch/controller/team4/service/products/IProductTypeService.java b/src/main/java/com/example/merch/controller/team4/service/products/IProductTypeService.java
+deleted file mode 100644
+--- a/src/main/java/com/example/merch/controller/team4/service/products/IProductTypeService.java	(revision 9bd9dd0407cd19b4d200ca791a84063d53c048a1)
++++ /dev/null	(revision 9bd9dd0407cd19b4d200ca791a84063d53c048a1)
+@@ -1,9 +0,0 @@
+-package com.example.team4.service.products;
+-
+-import com.example.team4.model.ProductType;
+-
+-import java.util.List;
+-
+-public interface IProductTypeService {
+-    List<ProductType> getAll();
+-}
+Index: src/main/java/com/example/merch/controller/team4/DAO/customers/ICustomerDAO.java
+===================================================================
+diff --git a/src/main/java/com/example/merch/controller/team4/DAO/customers/ICustomerDAO.java b/src/main/java/com/example/merch/controller/team4/DAO/customers/ICustomerDAO.java
+deleted file mode 100644
+--- a/src/main/java/com/example/merch/controller/team4/DAO/customers/ICustomerDAO.java	(revision 9bd9dd0407cd19b4d200ca791a84063d53c048a1)
++++ /dev/null	(revision 9bd9dd0407cd19b4d200ca791a84063d53c048a1)
+@@ -1,21 +0,0 @@
+-package com.example.team4.DAO.customers;
+-
+-import com.example.team4.model.Customer;
+-
+-import java.util.List;
+-
+-public interface ICustomerDAO {
+-    void addNewCustomerAccount(Customer newCustomer);
+-
+-    List<Customer> getAllCustomers();
+-
+-    Customer findCustomerByAccountId(int accountId);
+-
+-    boolean checkAccountExistence(String email);
+-
+-    boolean editAccount(int customerId, Customer newCustomer);
+-
+-    boolean deleteAccount(int accountId);
+-
+-    boolean updateShippingInfo(int customerId, String phoneNumber, String address);
+-}
+Index: src/main/java/com/example/merch/controller/team4/controller/OrderServlet.java
+===================================================================
+diff --git a/src/main/java/com/example/merch/controller/team4/controller/OrderServlet.java b/src/main/java/com/example/merch/controller/team4/controller/OrderServlet.java
+deleted file mode 100644
+--- a/src/main/java/com/example/merch/controller/team4/controller/OrderServlet.java	(revision 9bd9dd0407cd19b4d200ca791a84063d53c048a1)
++++ /dev/null	(revision 9bd9dd0407cd19b4d200ca791a84063d53c048a1)
+@@ -1,145 +0,0 @@
+-package com.example.team4.controller;
+-
+-import com.example.team4.DAO.customers.CustomerDAO;
+-import com.example.team4.DAO.customers.ICustomerDAO;
+-import com.example.team4.DAO.order_details.IOrderDetailsDAO;
+-import com.example.team4.DAO.order_details.OrderDetailsDAO;
+-import com.example.team4.DAO.orders.IOrderDAO;
+-import com.example.team4.DAO.orders.OrderDAO;
+-import com.example.team4.model.Cart;
+-import com.example.team4.model.Customer;
+-import com.example.team4.model.Order;
+-import com.example.team4.model.OrderDetails;
+-import com.example.team4.service.carts.CartService;
+-import com.example.team4.service.carts.ICartService;
+-
+-import javax.servlet.*;
+-import javax.servlet.http.*;
+-import javax.servlet.annotation.*;
+-import java.io.IOException;
+-import java.util.List;
+-
+-@WebServlet(name = "OrderServlet", value = "/orders")
+-public class OrderServlet extends HttpServlet {
+-    IOrderDAO iOrderDAO = new OrderDAO();
+-    IOrderDetailsDAO iOrderDetailsDAO = new OrderDetailsDAO();
+-    ICustomerDAO iCustomerDAO = new CustomerDAO();
+-    ICartService iCartService = new CartService();
+-
+-    @Override
+-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+-
+-        HttpSession session = request.getSession();
+-        Customer currentCustomer = (Customer) request.getSession().getAttribute("currentCustomer");
+-
+-
+-        if (session.getAttribute("accountId") == null) {
+-            // in case a user does not log in but click on cart button
+-            request.getRequestDispatcher("/view/account.jsp").forward(request, response);
+-        } else {
+-            request.setAttribute("carts", iCartService.getAllCarts(currentCustomer.getId()));
+-            request.getRequestDispatcher("/view/cart.jsp").forward(request, response);
+-        }
+-
+-    }
+-
+-    @Override
+-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+-        String action = request.getParameter("action");
+-        if (action == null) action = "";
+-
+-        switch (action) {
+-            case "create":
+-                createOrder(request, response);
+-                break;
+-            case "delete":
+-                deleteOrder(request, response);
+-                break;
+-            case "update-info":
+-                updateShippingInfo(request, response);
+-                break;
+-        }
+-    }
+-
+-    private void updateShippingInfo(HttpServletRequest request, HttpServletResponse response) {
+-        HttpSession session = request.getSession();
+-        Customer currentCustomer = (Customer) request.getSession().getAttribute("currentCustomer");
+-
+-        session.removeAttribute("alertMessage");
+-
+-        String phoneNumber = request.getParameter("phoneNumber");
+-        String address = request.getParameter("address");
+-
+-        iCustomerDAO.updateShippingInfo(currentCustomer.getId(), phoneNumber, address);
+-        // remove old currentCustomer after update
+-        session.removeAttribute("currentCustomer");
+-        // get the updated currentCustomer
+-        Customer updatedCustomer = iCustomerDAO.findCustomerByAccountId((Integer) session.getAttribute("accountId"));
+-        session.setAttribute("currentCustomer", updatedCustomer);
+-
+-        createOrder(request, response);
+-    }
+-
+-    private void deleteOrder(HttpServletRequest request, HttpServletResponse response) {
+-        HttpSession session = request.getSession();
+-        Customer currentCustomer = (Customer) request.getSession().getAttribute("currentCustomer");
+-
+-        int orderId = Integer.parseInt(request.getParameter("orderId"));
+-        System.out.println("orderId" + orderId);
+-
+-
+-        if (!iOrderDAO.checkOrderId(orderId, currentCustomer.getId())) {
+-            request.setAttribute("message", "Order ID is not correct. Please try again!");
+-            try {
+-                request.getRequestDispatcher("/view/account.jsp").forward(request, response);
+-            } catch (ServletException | IOException e) {
+-                e.printStackTrace();
+-            }
+-        } else {
+-            iOrderDAO.deleteOrder(orderId, currentCustomer.getId());
+-            List<Order> orders = iOrderDAO.getAllOrders(currentCustomer.getId());
+-            session.setAttribute("orders", orders);
+-            session.setAttribute("success", "An order has been deleted!");
+-            try {
+-                response.sendRedirect("/account");
+-            } catch (IOException e) {
+-                e.printStackTrace();
+-            }
+-        }
+-    }
+-
+-    private void createOrder(HttpServletRequest request, HttpServletResponse response) {
+-        HttpSession session = request.getSession();
+-
+-        Customer currentCustomer = (Customer) request.getSession().getAttribute("currentCustomer");
+-        if (currentCustomer.getAddress() == null || currentCustomer.getPhone() == null) {
+-            session.setAttribute("alertMessage", "Please fill in this form to complete your shipping details:");
+-        } else {
+-            // create new order
+-            iOrderDAO.addNewOrder(currentCustomer.getId());
+-
+-            // get order_id to create order_details
+-            int orderId = iOrderDAO.getLatestOrderId();
+-            List<Cart> carts = iCartService.getAllCarts(currentCustomer.getId());
+-            System.out.println(carts);
+-            // add order_details with order_id which is just created
+-            for (int i = 0; i < carts.size(); i++) {
+-                iOrderDetailsDAO.addNewOrderDetails(orderId, new OrderDetails(carts.get(i).getProductId(), carts.get(i).getProductTypeId(), carts.get(i).getQuantity(), carts.get(i).getPrice()));
+-            }
+-            // clear cart after order
+-            iCartService.deleteAllCartsAfterOrder(currentCustomer.getId());
+-
+-            // update orders
+-            session.removeAttribute("orders");
+-            session.setAttribute("orders", iOrderDAO.getAllOrders(currentCustomer.getId()));
+-            session.setAttribute("success", "Successfully placed an order :)");
+-            session.removeAttribute("cartList");
+-        }
+-        // after all :)
+-        try {
+-            response.sendRedirect("/orders");
+-        } catch (IOException e) {
+-            e.printStackTrace();
+-        }
+-    }
+-}
+Index: src/main/java/com/example/merch/controller/team4/repository/products/IProductRepository.java
+===================================================================
+diff --git a/src/main/java/com/example/merch/controller/team4/repository/products/IProductRepository.java b/src/main/java/com/example/merch/controller/team4/repository/products/IProductRepository.java
+deleted file mode 100644
+--- a/src/main/java/com/example/merch/controller/team4/repository/products/IProductRepository.java	(revision 9bd9dd0407cd19b4d200ca791a84063d53c048a1)
++++ /dev/null	(revision 9bd9dd0407cd19b4d200ca791a84063d53c048a1)
+@@ -1,19 +0,0 @@
+-package com.example.team4.repository.products;
+-
+-
+-
+-import com.example.team4.model.Product;
+-
+-import java.util.List;
+-
+-public interface IProductRepository {
+-    List<Product> showAll();
+-    void createNewProduct(Product product);
+-    void updateProduct(Product product);
+-    void deleteProduct(int id);
+-    Product selectProductById(int id);
+-    Product findById(int id);
+-
+-    List<Product> showAllMerch();
+-    List<Product> showAllMusic();
+-}
+Index: src/main/java/com/example/merch/controller/team4/model/ProductType.java
+===================================================================
+diff --git a/src/main/java/com/example/merch/controller/team4/model/ProductType.java b/src/main/java/com/example/merch/controller/team4/model/ProductType.java
+deleted file mode 100644
+--- a/src/main/java/com/example/merch/controller/team4/model/ProductType.java	(revision 9bd9dd0407cd19b4d200ca791a84063d53c048a1)
++++ /dev/null	(revision 9bd9dd0407cd19b4d200ca791a84063d53c048a1)
+@@ -1,34 +0,0 @@
+-package com.example.team4.model;
+-
+-public class ProductType {
+-    private int productTypeId;
+-    private String  productTypeName;
+-
+-    public ProductType() {
+-    }
+-
+-    public ProductType(int productTypeId) {
+-        this.productTypeId = productTypeId;
+-    }
+-
+-    public ProductType(int productTypeId, String productTypeName) {
+-        this.productTypeId = productTypeId;
+-        this.productTypeName = productTypeName;
+-    }
+-
+-    public int getProductTypeId() {
+-        return productTypeId;
+-    }
+-
+-    public void setProductTypeId(int productTypeId) {
+-        this.productTypeId = productTypeId;
+-    }
+-
+-    public String getProductTypeName() {
+-        return productTypeName;
+-    }
+-
+-    public void setProductTypeName(String productTypeName) {
+-        this.productTypeName = productTypeName;
+-    }
+-}
+Index: src/main/java/com/example/merch/controller/team4/DAO/order_details/IOrderDetailsDAO.java
+===================================================================
+diff --git a/src/main/java/com/example/merch/controller/team4/DAO/order_details/IOrderDetailsDAO.java b/src/main/java/com/example/merch/controller/team4/DAO/order_details/IOrderDetailsDAO.java
+deleted file mode 100644
+--- a/src/main/java/com/example/merch/controller/team4/DAO/order_details/IOrderDetailsDAO.java	(revision 9bd9dd0407cd19b4d200ca791a84063d53c048a1)
++++ /dev/null	(revision 9bd9dd0407cd19b4d200ca791a84063d53c048a1)
+@@ -1,7 +0,0 @@
+-package com.example.team4.DAO.order_details;
+-
+-import com.example.team4.model.OrderDetails;
+-
+-public interface IOrderDetailsDAO {
+-    void addNewOrderDetails(int orderId, OrderDetails orderDetails);
+-}
+Index: src/main/java/com/example/merch/controller/team4/controller/ProductServlet.java
+===================================================================
+diff --git a/src/main/java/com/example/merch/controller/team4/controller/ProductServlet.java b/src/main/java/com/example/merch/controller/team4/controller/ProductServlet.java
+deleted file mode 100644
+--- a/src/main/java/com/example/merch/controller/team4/controller/ProductServlet.java	(revision 9bd9dd0407cd19b4d200ca791a84063d53c048a1)
++++ /dev/null	(revision 9bd9dd0407cd19b4d200ca791a84063d53c048a1)
+@@ -1,149 +0,0 @@
+-package com.example.team4.controller;
+-
+-
+-
+-import com.example.team4.model.Product;
+-import com.example.team4.model.ProductType;
+-import com.example.team4.service.products.IProductService;
+-import com.example.team4.service.products.IProductTypeService;
+-import com.example.team4.service.products.ProductService;
+-import com.example.team4.service.products.ProductTypeService;
+-
+-import javax.servlet.*;
+-import javax.servlet.http.*;
+-import javax.servlet.annotation.*;
+-import java.io.IOException;
+-import java.util.List;
+-
+-@WebServlet(name = "ProductServlet", value = "/products")
+-public class ProductServlet extends HttpServlet {
+-    private IProductService productService = new ProductService();
+-    private IProductTypeService productTypeService = new ProductTypeService();
+-
+-    @Override
+-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+-        String action = request.getParameter("action");
+-        if (action == null) {
+-            action = "";
+-        }
+-        switch (action) {
+-            case "create":
+-                showCreateForm(request, response);
+-                break;
+-            case "edit":
+-                showEditForm(request, response);
+-                break;
+-            case "details":
+-                showDetails(request, response);
+-                break;
+-            default:
+-                showlist(request, response);
+-                break;
+-        }
+-    }
+-
+-    private void showDetails(HttpServletRequest request, HttpServletResponse response) {
+-        int id = Integer.parseInt(request.getParameter("id"));
+-        System.out.println(id);
+-        Product product = productService.findById(id);
+-        request.setAttribute("product", product);
+-        try {
+-            request.getRequestDispatcher("/view/product-details.jsp").forward(request, response);
+-        } catch (ServletException | IOException e) {
+-            e.printStackTrace();
+-        }
+-    }
+-
+-    private void showEditForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+-        int id = Integer.parseInt(request.getParameter("id"));
+-        List<ProductType> productTypeList = productTypeService.getAll();
+-        request.setAttribute("productTypeList", productTypeList);
+-        Product productById = productService.selectProductById(id);
+-        request.setAttribute("productById", productById);
+-        RequestDispatcher requestDispatcher = request.getRequestDispatcher("view/product/edit.jsp");
+-        requestDispatcher.forward(request, response);
+-    }
+-
+-    private void showCreateForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+-        List<ProductType> productTypeList = productTypeService.getAll();
+-        request.setAttribute("productTypeList", productTypeList);
+-        RequestDispatcher requestDispatcher = request.getRequestDispatcher("view/product/create.jsp");
+-        requestDispatcher.forward(request, response);
+-    }
+-
+-    private void showlist(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+-        List<Product> productList = productService.showAll();
+-        request.setAttribute("productList", productList);
+-        RequestDispatcher requestDispatcher = request.getRequestDispatcher("view/product/list.jsp");
+-        requestDispatcher.forward(request, response);
+-    }
+-
+-    @Override
+-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+-        String action = request.getParameter("action");
+-        if (action == null) {
+-            action = "";
+-        }
+-        switch (action) {
+-            case "create":
+-                save(request, response);
+-                break;
+-            case "edit":
+-                edit(request, response);
+-                break;
+-            case "delete":
+-                delete(request, response);
+-                break;
+-            case "details":
+-                showDetails(request, response);
+-                break;
+-            default:
+-                showlist(request, response);
+-                break;
+-        }
+-    }
+-
+-    private void delete(HttpServletRequest request, HttpServletResponse response) {
+-        int id = Integer.parseInt(request.getParameter("idDelete"));
+-        System.out.println(id);
+-        productService.deleteProduct(id);
+-        try {
+-            response.sendRedirect("/products");
+-        } catch (IOException e) {
+-            e.printStackTrace();
+-        }
+-    }
+-
+-    private void edit(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+-        int id = Integer.parseInt(request.getParameter("id"));
+-        String name = request.getParameter("name");
+-        String description = request.getParameter("description");
+-        double price = Double.parseDouble(request.getParameter("price"));
+-        String image = request.getParameter("image");
+-        int productTypeId = Integer.parseInt(request.getParameter("productType"));
+-        ProductType productType = new ProductType(productTypeId);
+-        Product product = new Product(id, name, description, price, image, productType);
+-        productService.updateProduct(product);
+-        RequestDispatcher requestDispatcher = request.getRequestDispatcher("view/product/edit.jsp");
+-        requestDispatcher.forward(request, response);
+-
+-    }
+-
+-    private void save(HttpServletRequest request, HttpServletResponse response) {
+-        String name = request.getParameter("name");
+-        String description = request.getParameter("description");
+-        double price = Double.parseDouble(request.getParameter("price"));
+-        String image = request.getParameter("image");
+-        int productTypeId = Integer.parseInt(request.getParameter("productType"));
+-        ProductType productType = new ProductType(productTypeId);
+-        Product product = new Product(name, description, price, image, productType);
+-        productService.createNewProduct(product);
+-
+-        try {
+-            response.sendRedirect("/products");
+-        } catch (IOException e) {
+-            e.printStackTrace();
+-        }
+-
+-    }
+-}
+Index: src/main/java/com/example/merch/controller/team4/controller/MerchServlet.java
+===================================================================
+diff --git a/src/main/java/com/example/merch/controller/team4/controller/MerchServlet.java b/src/main/java/com/example/merch/controller/team4/controller/MerchServlet.java
+deleted file mode 100644
+--- a/src/main/java/com/example/merch/controller/team4/controller/MerchServlet.java	(revision 9bd9dd0407cd19b4d200ca791a84063d53c048a1)
++++ /dev/null	(revision 9bd9dd0407cd19b4d200ca791a84063d53c048a1)
+@@ -1,28 +0,0 @@
+-package com.example.team4.controller;
+-
+-import com.example.team4.service.products.IProductService;
+-import com.example.team4.service.products.ProductService;
+-
+-import javax.servlet.*;
+-import javax.servlet.http.*;
+-import javax.servlet.annotation.*;
+-import java.io.IOException;
+-
+-@WebServlet(name = "MerchServlet", value = "/merch")
+-public class MerchServlet extends HttpServlet {
+-    public static IProductService iProductService = new ProductService();
+-    @Override
+-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+-        request.setAttribute("products", iProductService.showAllMerch());
+-        try {
+-            request.getRequestDispatcher("/view/home.jsp").forward(request, response);
+-        } catch (ServletException e) {
+-            e.printStackTrace();
+-        }
+-    }
+-
+-    @Override
+-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+-
+-    }
+-}
+Index: src/main/java/com/example/merch/controller/team4/service/products/IProductService.java
+===================================================================
+diff --git a/src/main/java/com/example/merch/controller/team4/service/products/IProductService.java b/src/main/java/com/example/merch/controller/team4/service/products/IProductService.java
+deleted file mode 100644
+--- a/src/main/java/com/example/merch/controller/team4/service/products/IProductService.java	(revision 9bd9dd0407cd19b4d200ca791a84063d53c048a1)
++++ /dev/null	(revision 9bd9dd0407cd19b4d200ca791a84063d53c048a1)
+@@ -1,18 +0,0 @@
+-package com.example.team4.service.products;
+-
+-
+-
+-import com.example.team4.model.Product;
+-
+-import java.util.List;
+-
+-public interface IProductService {
+-    List<Product> showAll();
+-    void createNewProduct(Product product);
+-    void updateProduct(Product product);
+-    void deleteProduct(int id);
+-    Product selectProductById(int id);
+-    Product findById(int id);
+-    List<Product> showAllMerch();
+-    List<Product> showAllMusic();
+-}
+Index: src/main/java/com/example/merch/controller/team4/repository/products/IProductTypeRepository.java
+===================================================================
+diff --git a/src/main/java/com/example/merch/controller/team4/repository/products/IProductTypeRepository.java b/src/main/java/com/example/merch/controller/team4/repository/products/IProductTypeRepository.java
+deleted file mode 100644
+--- a/src/main/java/com/example/merch/controller/team4/repository/products/IProductTypeRepository.java	(revision 9bd9dd0407cd19b4d200ca791a84063d53c048a1)
++++ /dev/null	(revision 9bd9dd0407cd19b4d200ca791a84063d53c048a1)
+@@ -1,11 +0,0 @@
+-package com.example.team4.repository.products;
+-
+-
+-
+-import com.example.team4.model.ProductType;
+-
+-import java.util.List;
+-
+-public interface IProductTypeRepository {
+-    List<ProductType> getAll();
+-}
+Index: src/main/java/com/example/merch/controller/team4/DAO/orders/OrderDAO.java
+===================================================================
+diff --git a/src/main/java/com/example/merch/controller/team4/DAO/orders/OrderDAO.java b/src/main/java/com/example/merch/controller/team4/DAO/orders/OrderDAO.java
+deleted file mode 100644
+--- a/src/main/java/com/example/merch/controller/team4/DAO/orders/OrderDAO.java	(revision 9bd9dd0407cd19b4d200ca791a84063d53c048a1)
++++ /dev/null	(revision 9bd9dd0407cd19b4d200ca791a84063d53c048a1)
+@@ -1,111 +0,0 @@
+-package com.example.team4.DAO.orders;
+-
+-import com.example.team4.base.BaseConnection;
+-import com.example.team4.model.Order;
+-
+-import java.sql.Connection;
+-import java.sql.PreparedStatement;
+-import java.sql.ResultSet;
+-import java.sql.SQLException;
+-import java.util.ArrayList;
+-import java.util.List;
+-
+-public class OrderDAO implements IOrderDAO {
+-    Connection connection = BaseConnection.getConnection();
+-
+-    @Override
+-    public void addNewOrder(int customerId) {
+-        try {
+-            PreparedStatement preparedStatement = connection.prepareStatement(BaseConnection.ADD_ORDER);
+-            preparedStatement.setInt(1, customerId);
+-            preparedStatement.executeUpdate();
+-        } catch (SQLException e) {
+-            e.printStackTrace();
+-        }
+-    }
+-
+-    @Override
+-    public int getLatestOrderId() {
+-        try {
+-            PreparedStatement preparedStatement = connection.prepareStatement(BaseConnection.GET_LATEST_ORDER_ID);
+-            ResultSet rs = preparedStatement.executeQuery();
+-            while (rs.next()) {
+-                return rs.getInt("order_id");
+-            }
+-        } catch (SQLException e) {
+-            e.printStackTrace();
+-        }
+-        return -1;
+-    }
+-
+-    @Override
+-    public List<Order> getAllOrders(int customerId) {
+-        List<Order> orders = new ArrayList<>();
+-        try {
+-            PreparedStatement preparedStatement = connection.prepareStatement(BaseConnection.SELECT_ALL_ORDERS);
+-            preparedStatement.setInt(1, customerId);
+-            ResultSet rs = preparedStatement.executeQuery();
+-            while (rs.next()) {
+-                int orderId = rs.getInt("order_id");
+-                String orderTime = String.valueOf(rs.getTimestamp("order_date"));
+-                String orderStatus = rs.getString("order_status");
+-                orders.add(new Order(orderId, orderTime, orderStatus));
+-            }
+-        } catch (SQLException e) {
+-            e.printStackTrace();
+-        }
+-
+-        return orders;
+-    }
+-
+-    @Override
+-    public boolean deleteOrder(int orderId, int customerId) {
+-        boolean rowDeleted = false;
+-        try {
+-            PreparedStatement preparedStatement = connection.prepareStatement(BaseConnection.DELETE_ORDER);
+-            preparedStatement.setInt(1, orderId);
+-            preparedStatement.setInt(2, customerId);
+-            rowDeleted = preparedStatement.executeUpdate() > 0;
+-        } catch (SQLException e) {
+-            e.printStackTrace();
+-        }
+-        return rowDeleted;
+-    }
+-
+-    @Override
+-    public boolean checkOrderId(int orderId, int customerId) {
+-        try {
+-            PreparedStatement preparedStatement = connection.prepareStatement(BaseConnection.CHECK_ORDER_ID);
+-            preparedStatement.setInt(1, orderId);
+-            preparedStatement.setInt(2, customerId);
+-            ResultSet rs = preparedStatement.executeQuery();
+-            if (rs.next()) return true;
+-        } catch (SQLException e) {
+-            e.printStackTrace();
+-        }
+-        return false;
+-    }
+-
+-    @Override
+-    public List<Order> getOrderManagement() {
+-        List<Order> orderManagement = new ArrayList<>();
+-        try {
+-            PreparedStatement preparedStatement = connection.prepareStatement(BaseConnection.SELECT_ORDER_MANAGEMENT);
+-            ResultSet rs = preparedStatement.executeQuery();
+-            while (rs.next()) {
+-                int orderId = rs.getInt("order_id");
+-                String orderDate = String.valueOf(rs.getTimestamp("order_date"));
+-                String orderStatus = rs.getString("order_status");
+-                int customerId = rs.getInt("customer_id");
+-                String customerName = rs.getString("customer_name");
+-                String email = rs.getString("email");
+-                String phone = rs.getString("phone_number");
+-                String address = rs.getString("address");
+-                orderManagement.add(new Order(orderId, orderDate, orderStatus, customerId, customerName, email, phone, address));
+-            }
+-        } catch (SQLException e) {
+-            e.printStackTrace();
+-        }
+-        return orderManagement;
+-    }
+-}
+Index: src/main/java/com/example/merch/controller/team4/controller/StoreUserServlet.java
+===================================================================
+diff --git a/src/main/java/com/example/merch/controller/team4/controller/StoreUserServlet.java b/src/main/java/com/example/merch/controller/team4/controller/StoreUserServlet.java
+deleted file mode 100644
+--- a/src/main/java/com/example/merch/controller/team4/controller/StoreUserServlet.java	(revision 9bd9dd0407cd19b4d200ca791a84063d53c048a1)
++++ /dev/null	(revision 9bd9dd0407cd19b4d200ca791a84063d53c048a1)
+@@ -1,24 +0,0 @@
+-package com.example.team4.controller;
+-
+-import com.example.team4.DAO.customers.CustomerDAO;
+-import com.example.team4.DAO.customers.ICustomerDAO;
+-
+-import javax.servlet.*;
+-import javax.servlet.http.*;
+-import javax.servlet.annotation.*;
+-import java.io.IOException;
+-
+-@WebServlet(name = "StoreUserServlet", value = "/users")
+-public class StoreUserServlet extends HttpServlet {
+-    ICustomerDAO iCustomerDAO = new CustomerDAO();
+-    @Override
+-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+-        request.setAttribute("users", iCustomerDAO.getAllCustomers());
+-        request.getRequestDispatcher("/view/store-users.jsp").forward(request,response);
+-    }
+-
+-    @Override
+-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+-
+-    }
+-}
+Index: src/main/java/com/example/merch/controller/MusicServlet.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.team4.controller;\r\n\r\n\r\n\r\nimport com.example.team4.service.products.IProductService;\r\nimport com.example.team4.service.products.ProductService;\r\n\r\nimport javax.servlet.*;\r\nimport javax.servlet.http.*;\r\nimport javax.servlet.annotation.*;\r\nimport java.io.IOException;\r\n\r\n@WebServlet(name = \"MusicServlet\", value = \"/music\")\r\npublic class MusicServlet extends HttpServlet {\r\n    public static IProductService iProductService = new ProductService();\r\n    @Override\r\n    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {\r\n        request.setAttribute(\"products\", iProductService.showAllMusic());\r\n        try {\r\n            request.getRequestDispatcher(\"/view/home.jsp\").forward(request, response);\r\n        } catch (ServletException e) {\r\n            e.printStackTrace();\r\n        }\r\n    }\r\n\r\n    @Override\r\n    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {\r\n\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/example/merch/controller/MusicServlet.java b/src/main/java/com/example/merch/controller/MusicServlet.java
+--- a/src/main/java/com/example/merch/controller/MusicServlet.java	(revision 9bd9dd0407cd19b4d200ca791a84063d53c048a1)
++++ b/src/main/java/com/example/merch/controller/MusicServlet.java	(date 1686193163805)
+@@ -1,9 +1,8 @@
+-package com.example.team4.controller;
++package com.example.merch.controller;
+ 
+ 
+ 
+-import com.example.team4.service.products.IProductService;
+-import com.example.team4.service.products.ProductService;
++
+ 
+ import javax.servlet.*;
+ import javax.servlet.http.*;
+Index: src/main/java/com/example/merch/controller/LogoutServlet.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.team4.controller;\r\n\r\nimport javax.servlet.*;\r\nimport javax.servlet.http.*;\r\nimport javax.servlet.annotation.*;\r\nimport java.io.IOException;\r\n\r\n@WebServlet(name = \"LogoutServlet\", value = \"/logout\")\r\npublic class LogoutServlet extends HttpServlet {\r\n    @Override\r\n    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {\r\n\r\n        HttpSession session = request.getSession();\r\n//        session.invalidate();\r\n        session.removeAttribute(\"accountId\");\r\n        session.removeAttribute(\"cartList\");\r\n        if(session.getAttribute(\"accountId\") == null) response.sendRedirect(\"/home\");\r\n\r\n    }\r\n\r\n    @Override\r\n    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {\r\n\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/example/merch/controller/LogoutServlet.java b/src/main/java/com/example/merch/controller/LogoutServlet.java
+--- a/src/main/java/com/example/merch/controller/LogoutServlet.java	(revision 9bd9dd0407cd19b4d200ca791a84063d53c048a1)
++++ b/src/main/java/com/example/merch/controller/LogoutServlet.java	(date 1686193163912)
+@@ -1,4 +1,4 @@
+-package com.example.team4.controller;
++package com.example.merch.controller;
+ 
+ import javax.servlet.*;
+ import javax.servlet.http.*;
+Index: src/main/java/com/example/merch/model/Cart.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.team4.model;\r\n\r\npublic class Cart {\r\n    private int id;\r\n    private int customerId;\r\n    private int productId;\r\n    private String productName;\r\n    private int productTypeId;\r\n    private String image;\r\n    private double price;\r\n\r\n    private int quantity;\r\n    private double total;\r\n\r\n\r\n    public Cart() {\r\n\r\n    }\r\n\r\n    public Cart(int customerId, int productId, String productName, int productTypeId, double price, String image, int quantity) {\r\n        this.customerId = customerId;\r\n        this.productId = productId;\r\n        this.productName = productName;\r\n        this.productTypeId = productTypeId;\r\n        this.price = price;\r\n        this.image = image;\r\n        this.quantity = quantity;\r\n\r\n    }\r\n\r\n    public Cart(int customerId, int productId, String productName,int productTypeId, double price, String image, int quantity, double total) {\r\n        this.customerId = customerId;\r\n        this.productId = productId;\r\n        this.productName = productName;\r\n        this.price = price;\r\n        this.image = image;\r\n        this.quantity = quantity;\r\n        this.total = total;\r\n        this.productTypeId = productTypeId;\r\n    }\r\n\r\n    public int getId() {\r\n        return id;\r\n    }\r\n\r\n    public void setId(int id) {\r\n        this.id = id;\r\n    }\r\n\r\n    public int getCustomerId() {\r\n        return customerId;\r\n    }\r\n\r\n    public void setCustomerId(int customerId) {\r\n        this.customerId = customerId;\r\n    }\r\n\r\n    public int getProductId() {\r\n        return productId;\r\n    }\r\n\r\n    public void setProductId(int productId) {\r\n        this.productId = productId;\r\n    }\r\n\r\n    public int getQuantity() {\r\n        return quantity;\r\n    }\r\n\r\n    public void setQuantity(int quantity) {\r\n        this.quantity = quantity;\r\n    }\r\n\r\n    public String getProductName() {\r\n        return productName;\r\n    }\r\n\r\n    public void setProductName(String productName) {\r\n        this.productName = productName;\r\n    }\r\n\r\n    public String getImage() {\r\n        return image;\r\n    }\r\n\r\n    public void setImage(String image) {\r\n        this.image = image;\r\n    }\r\n\r\n    public double getPrice() {\r\n        return price;\r\n    }\r\n\r\n    public void setPrice(double price) {\r\n        this.price = price;\r\n    }\r\n\r\n    public double getTotal() {\r\n        return total;\r\n    }\r\n\r\n    public void setTotal(double total) {\r\n        this.total = total;\r\n    }\r\n\r\n    public int getProductTypeId() {\r\n        return productTypeId;\r\n    }\r\n\r\n    public void setProductTypeId(int productTypeId) {\r\n        this.productTypeId = productTypeId;\r\n    }\r\n\r\n    @Override\r\n    public String toString() {\r\n        return \"Cart{\" +\r\n                \"id=\" + id +\r\n                \", customerId=\" + customerId +\r\n                \", productId=\" + productId +\r\n                \", productName='\" + productName + '\\'' +\r\n                \", productTypeId=\" + productTypeId +\r\n                \", image='\" + image + '\\'' +\r\n                \", price=\" + price +\r\n                \", quantity=\" + quantity +\r\n                \", total=\" + total +\r\n                '}';\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/example/merch/model/Cart.java b/src/main/java/com/example/merch/model/Cart.java
+--- a/src/main/java/com/example/merch/model/Cart.java	(revision 9bd9dd0407cd19b4d200ca791a84063d53c048a1)
++++ b/src/main/java/com/example/merch/model/Cart.java	(date 1686193163875)
+@@ -1,4 +1,4 @@
+-package com.example.team4.model;
++package com.example.merch.model;
+ 
+ public class Cart {
+     private int id;
+Index: src/main/java/com/example/merch/repository/carts/ICartRepository.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.team4.repository.carts;\r\n\r\nimport com.example.team4.model.Cart;\r\n\r\nimport java.util.List;\r\n\r\npublic interface ICartRepository {\r\n    void addCart(Cart cart);\r\n\r\n    boolean checkCartExistence(int customerId, int productId);\r\n\r\n    boolean updateCart(int customerId, int productId, int newQuantity);\r\n\r\n    boolean deleteCart(int customerId, int productId);\r\n\r\n    boolean deleteAllCartsAfterOrder(int customerId);\r\n\r\n    List<Cart> getAllCarts(int customerId);\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/example/merch/repository/carts/ICartRepository.java b/src/main/java/com/example/merch/repository/carts/ICartRepository.java
+--- a/src/main/java/com/example/merch/repository/carts/ICartRepository.java	(revision 9bd9dd0407cd19b4d200ca791a84063d53c048a1)
++++ b/src/main/java/com/example/merch/repository/carts/ICartRepository.java	(date 1686193163886)
+@@ -1,6 +1,7 @@
+-package com.example.team4.repository.carts;
++package com.example.merch.repository.carts;
+ 
+-import com.example.team4.model.Cart;
++
++import com.example.merch.model.Cart;
+ 
+ import java.util.List;
+ 
+Index: src/main/java/com/example/merch/controller/ProductServlet.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.merch.controller;\r\n\r\n\r\n\r\n\r\nimport com.example.merch.model.Product;\r\nimport com.example.merch.model.ProductType;\r\nimport com.example.merch.service.products.IProductService;\r\nimport com.example.merch.service.products.IProductTypeService;\r\nimport com.example.merch.service.products.ProductService;\r\nimport com.example.merch.service.products.ProductTypeService;\r\n\r\nimport javax.servlet.*;\r\nimport javax.servlet.http.*;\r\nimport javax.servlet.annotation.*;\r\nimport java.io.IOException;\r\nimport java.util.List;\r\n\r\n\r\n@WebServlet(name = \"ProductServlet\", value = \"/products\")\r\npublic class ProductServlet extends HttpServlet {\r\n    private IProductService productService = new ProductService();\r\n    private IProductTypeService productTypeService = new ProductTypeService();\r\n\r\n    @Override\r\n    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {\r\n        String action = request.getParameter(\"action\");\r\n        if (action == null) {\r\n            action = \"\";\r\n        }\r\n        switch (action) {\r\n            case \"create\":\r\n                showCreateForm(request, response);\r\n                break;\r\n            case \"edit\":\r\n                showEditForm(request, response);\r\n                break;\r\n            case \"details\":\r\n                showDetails(request, response);\r\n                break;\r\n            default:\r\n                showlist(request, response);\r\n                break;\r\n        }\r\n    }\r\n\r\n    private void showDetails(HttpServletRequest request, HttpServletResponse response) {\r\n        int id = Integer.parseInt(request.getParameter(\"id\"));\r\n        System.out.println(id);\r\n        Product product = productService.findById(id);\r\n        request.setAttribute(\"product\", product);\r\n        try {\r\n            request.getRequestDispatcher(\"/view/product-details.jsp\").forward(request, response);\r\n        } catch (ServletException | IOException e) {\r\n            e.printStackTrace();\r\n        }\r\n    }\r\n\r\n    private void showEditForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {\r\n        int id = Integer.parseInt(request.getParameter(\"id\"));\r\n        List<ProductType> productTypeList = productTypeService.getAll();\r\n        request.setAttribute(\"productTypeList\", productTypeList);\r\n        Product productById = productService.selectProductById(id);\r\n        request.setAttribute(\"productById\", productById);\r\n        RequestDispatcher requestDispatcher = request.getRequestDispatcher(\"view/product/edit.jsp\");\r\n        requestDispatcher.forward(request, response);\r\n    }\r\n\r\n    private void showCreateForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {\r\n        List<ProductType> productTypeList = productTypeService.getAll();\r\n        request.setAttribute(\"productTypeList\", productTypeList);\r\n        RequestDispatcher requestDispatcher = request.getRequestDispatcher(\"view/product/create.jsp\");\r\n        requestDispatcher.forward(request, response);\r\n    }\r\n\r\n    private void showlist(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {\r\n        List<Product> productList = productService.showAll();\r\n        request.setAttribute(\"productList\", productList);\r\n        RequestDispatcher requestDispatcher = request.getRequestDispatcher(\"view/product/list.jsp\");\r\n        requestDispatcher.forward(request, response);\r\n    }\r\n\r\n    @Override\r\n    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {\r\n        String action = request.getParameter(\"action\");\r\n        if (action == null) {\r\n            action = \"\";\r\n        }\r\n        switch (action) {\r\n            case \"create\":\r\n                save(request, response);\r\n                break;\r\n            case \"edit\":\r\n                edit(request, response);\r\n                break;\r\n            case \"delete\":\r\n                delete(request, response);\r\n                break;\r\n            case \"details\":\r\n                showDetails(request, response);\r\n                break;\r\n            default:\r\n                showlist(request, response);\r\n                break;\r\n        }\r\n    }\r\n\r\n    private void delete(HttpServletRequest request, HttpServletResponse response) {\r\n        int id = Integer.parseInt(request.getParameter(\"idDelete\"));\r\n        System.out.println(id);\r\n        productService.deleteProduct(id);\r\n        try {\r\n            response.sendRedirect(\"/products\");\r\n        } catch (IOException e) {\r\n            e.printStackTrace();\r\n        }\r\n    }\r\n\r\n    private void edit(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {\r\n        int id = Integer.parseInt(request.getParameter(\"id\"));\r\n        String name = request.getParameter(\"name\");\r\n        String description = request.getParameter(\"description\");\r\n        double price = Double.parseDouble(request.getParameter(\"price\"));\r\n        String image = request.getParameter(\"image\");\r\n        int productTypeId = Integer.parseInt(request.getParameter(\"productType\"));\r\n        ProductType productType = new ProductType(productTypeId);\r\n        Product product = new Product(id, name, description, price, image, productType);\r\n        productService.updateProduct(product);\r\n        RequestDispatcher requestDispatcher;\r\n        if (product == null) {\r\n            requestDispatcher = request.getRequestDispatcher(\"error-404.jsp\");\r\n        } else {\r\n            request.setAttribute(\"message\", \"Update success\");\r\n            requestDispatcher = request.getRequestDispatcher(\"view/product/edit.jsp\");\r\n        }\r\n        requestDispatcher.forward(request, response);\r\n    }\r\n\r\n    private void save(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {\r\n        String name = request.getParameter(\"name\");\r\n        String description = request.getParameter(\"description\");\r\n        double price = Double.parseDouble(request.getParameter(\"price\"));\r\n        String image = request.getParameter(\"image\");\r\n        int productTypeId = Integer.parseInt(request.getParameter(\"productType\"));\r\n        ProductType productType = new ProductType(productTypeId);\r\n        Product product = new Product(name, description, price, image, productType);\r\n        productService.createNewProduct(product);\r\n        RequestDispatcher requestDispatcher ;\r\n        if (product == null) {\r\n            requestDispatcher = request.getRequestDispatcher(\"error-404.jsp\");\r\n        } else {\r\n            request.setAttribute(\"message\", \"Add new success\");\r\n            requestDispatcher = request.getRequestDispatcher(\"view/product/create.jsp\");\r\n        }\r\n        requestDispatcher.forward(request, response);\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/example/merch/controller/ProductServlet.java b/src/main/java/com/example/merch/controller/ProductServlet.java
+--- a/src/main/java/com/example/merch/controller/ProductServlet.java	(revision 9bd9dd0407cd19b4d200ca791a84063d53c048a1)
++++ b/src/main/java/com/example/merch/controller/ProductServlet.java	(date 1686190879747)
+@@ -126,14 +126,10 @@
+         ProductType productType = new ProductType(productTypeId);
+         Product product = new Product(id, name, description, price, image, productType);
+         productService.updateProduct(product);
+-        RequestDispatcher requestDispatcher;
+-        if (product == null) {
+-            requestDispatcher = request.getRequestDispatcher("error-404.jsp");
+-        } else {
++        if (product != null) {
+             request.setAttribute("message", "Update success");
+-            requestDispatcher = request.getRequestDispatcher("view/product/edit.jsp");
++            response.sendRedirect("/products");
+         }
+-        requestDispatcher.forward(request, response);
+     }
+ 
+     private void save(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+Index: src/main/java/com/example/merch/service/carts/CartService.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.team4.service.carts;\r\n\r\nimport com.example.team4.model.Cart;\r\nimport com.example.team4.repository.carts.CartRepository;\r\nimport com.example.team4.repository.carts.ICartRepository;\r\n\r\nimport java.util.List;\r\n\r\npublic class CartService implements ICartService{\r\n    ICartRepository iCartRepository = new CartRepository();\r\n    @Override\r\n    public void addCart(Cart cart) {\r\n        iCartRepository.addCart(cart);\r\n    }\r\n\r\n    @Override\r\n    public boolean checkCartExistence(int customerId, int productId) {\r\n        return iCartRepository.checkCartExistence(customerId, productId);\r\n    }\r\n\r\n    @Override\r\n    public boolean updateCart(int customerId, int productId, int newQuantity) {\r\n        return iCartRepository.updateCart(customerId, productId, newQuantity);\r\n    }\r\n\r\n    @Override\r\n    public boolean deleteCart(int customerId, int productId) {\r\n        return iCartRepository.deleteCart(customerId, productId);\r\n    }\r\n\r\n    @Override\r\n    public boolean deleteAllCartsAfterOrder(int customerId) {\r\n        return iCartRepository.deleteAllCartsAfterOrder(customerId);\r\n    }\r\n\r\n    @Override\r\n    public List<Cart> getAllCarts(int customerId) {\r\n        return iCartRepository.getAllCarts(customerId);\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/example/merch/service/carts/CartService.java b/src/main/java/com/example/merch/service/carts/CartService.java
+--- a/src/main/java/com/example/merch/service/carts/CartService.java	(revision 9bd9dd0407cd19b4d200ca791a84063d53c048a1)
++++ b/src/main/java/com/example/merch/service/carts/CartService.java	(date 1686193163899)
+@@ -1,8 +1,9 @@
+-package com.example.team4.service.carts;
++package com.example.merch.service.carts;
+ 
+-import com.example.team4.model.Cart;
+-import com.example.team4.repository.carts.CartRepository;
+-import com.example.team4.repository.carts.ICartRepository;
++
++import com.example.merch.model.Cart;
++import com.example.merch.repository.carts.CartRepository;
++import com.example.merch.repository.carts.ICartRepository;
+ 
+ import java.util.List;
+ 
+Index: src/main/java/com/example/merch/service/carts/ICartService.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.team4.service.carts;\r\n\r\nimport com.example.team4.model.Cart;\r\n\r\nimport java.util.List;\r\n\r\npublic interface ICartService {\r\n    void addCart(Cart cart);\r\n\r\n    boolean checkCartExistence(int customerId, int productId);\r\n\r\n    boolean updateCart(int customerId, int productId, int newQuantity);\r\n\r\n    boolean deleteCart(int customerId, int productId);\r\n\r\n    boolean deleteAllCartsAfterOrder(int customerId);\r\n\r\n    List<Cart> getAllCarts(int customerId);\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/example/merch/service/carts/ICartService.java b/src/main/java/com/example/merch/service/carts/ICartService.java
+--- a/src/main/java/com/example/merch/service/carts/ICartService.java	(revision 9bd9dd0407cd19b4d200ca791a84063d53c048a1)
++++ b/src/main/java/com/example/merch/service/carts/ICartService.java	(date 1686193163895)
+@@ -1,6 +1,7 @@
+-package com.example.team4.service.carts;
++package com.example.merch.service.carts;
+ 
+-import com.example.team4.model.Cart;
++
++import com.example.merch.model.Cart;
+ 
+ import java.util.List;
+ 
+Index: src/main/java/com/example/merch/base/BaseConnection.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.merch.base;\r\n\r\nimport java.sql.Connection;\r\nimport java.sql.DriverManager;\r\nimport java.sql.SQLException;\r\n\r\npublic class BaseConnection {\r\n    static String jdbcURL = \"jdbc:mysql://localhost:3306/team4\";\r\n    static String jdbcUsername = \"root\";\r\n    static String jdbcPassword = \"bigbang23\";\r\n\r\n    public static final String CHECK_ACCOUNT = \"call check_account(?, ?);\";\r\n    public static final String CHECK_ROLE = \"call check_role(?); \";\r\n    public static final String SELECT_ALL_PRODUCTS = \"select * from products;\";\r\n    public static final String FIND_PRODUCT = \"select * from products where product_id = ?;\";\r\n    public static final String DELETE_PRODUCT = \"delete from products where product_id = ?;\";\r\n    public static final String ADD_PRODUCT = \"call add_product(?,?,?,?,?);\";\r\n    public static final String UPDATE_PRODUCT = \"call update_product(?,?,?,?,?,?);\";\r\n    public static final String SELECT_MERCH = \"call select_merch();\";\r\n    public static final String SELECT_MUSIC = \"call select_music();\";\r\n    public static final String ADD_CUSTOMER_ACCOUNT = \"call create_customer_account(?,?,?,?);\";\r\n\r\n    public static final String FIND_CUSTOMER_BY_ACCOUNT_ID = \"select * from customers where account_id = ?;\";\r\n    public static final String CHECK_ACCOUNT_EXISTENCE = \"select * from account_users where user_email = ?;\";\r\n\r\n    public static final String ADD_CART = \"insert into cart_details(customer_id, product_id, product_name, product_type_id, price, image, quantity) values (?,?,?,?,?,?,?);\";\r\n    public static final String CHECK_CART_EXISTENCE = \"select * from cart_details where customer_id = ? and product_id = ?;\";\r\n    public static final String UPDATE_CART = \"call update_cart(?,?,?);\";\r\n    public static final String SELECT_ALL_CARTS = \"call view_cart(?);\";\r\n\r\n    public static final String DELETE_CART = \"delete from cart_details where customer_id = ? and product_id = ?;\";\r\n\r\n    public static final String ADD_ORDER = \"insert into orders(customer_id) values (?);\";\r\n    public static final String GET_LATEST_ORDER_ID = \"call get_latest_order_id();\";\r\n    public static final String ADD_ORDER_DETAILS = \"insert into order_details(order_id, product_id, product_type_id, quantity, price) values (?,?,?,?,?);\";\r\n\r\n    public static final String DELETE_ALL_CARTS_AFTER_ORDER = \"delete from cart_details where customer_id = ? ;\";\r\n\r\n    public static final String SELECT_ALL_CUSTOMERS = \"select * from customers;\";\r\n    public static final String UPDATE_ACCOUNT_INFO = \"update customers set customer_name = ?, phone_number = ?, address = ? where customer_id = ?;\";\r\n    public static final String DELETE_ACCOUNT = \"call delete_account_user(?);\";\r\n\r\n    public static final String SELECT_ALL_ORDERS = \"select * from orders where customer_id = ?;\";\r\n    public static final String DELETE_ORDER = \"call delete_order(?,?);\";\r\n    public static final String CHECK_ORDER_ID = \"select * from orders where order_id = ? and customer_id = ?;\";\r\n\r\n    public static final String SELECT_ORDER_MANAGEMENT = \"call show_order_management();\";\r\n\r\n    public static final String UPDATE_SHIPPING_INFO = \"update customers set phone_number = ?, address = ? where customer_id = ? ;\";\r\n\r\n    public static Connection getConnection() {\r\n        Connection connection = null;\r\n        try {\r\n            Class.forName(\"com.mysql.jdbc.Driver\");\r\n            connection = DriverManager.getConnection(jdbcURL, jdbcUsername, jdbcPassword);\r\n        } catch (SQLException | ClassNotFoundException e) {\r\n            e.printStackTrace();\r\n        }\r\n        return connection;\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/example/merch/base/BaseConnection.java b/src/main/java/com/example/merch/base/BaseConnection.java
+--- a/src/main/java/com/example/merch/base/BaseConnection.java	(revision 9bd9dd0407cd19b4d200ca791a84063d53c048a1)
++++ b/src/main/java/com/example/merch/base/BaseConnection.java	(date 1686190901210)
+@@ -7,7 +7,7 @@
+ public class BaseConnection {
+     static String jdbcURL = "jdbc:mysql://localhost:3306/team4";
+     static String jdbcUsername = "root";
+-    static String jdbcPassword = "bigbang23";
++    static String jdbcPassword = "codegym";
+ 
+     public static final String CHECK_ACCOUNT = "call check_account(?, ?);";
+     public static final String CHECK_ROLE = "call check_role(?); ";
+Index: src/main/java/com/example/merch/controller/SignupServlet.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.team4.controller;\r\n\r\n\r\nimport com.example.team4.DAO.customers.CustomerDAO;\r\nimport com.example.team4.DAO.customers.ICustomerDAO;\r\nimport com.example.team4.model.Customer;\r\n\r\nimport javax.servlet.*;\r\nimport javax.servlet.http.*;\r\nimport javax.servlet.annotation.*;\r\nimport java.io.IOException;\r\n\r\n@WebServlet(name = \"SignupServlet\", value = \"/signup\")\r\npublic class SignupServlet extends HttpServlet {\r\n    public static ICustomerDAO iCustomerDAO = new CustomerDAO();\r\n    @Override\r\n    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {\r\n\r\n    }\r\n\r\n    @Override\r\n    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {\r\n        String firstName = request.getParameter(\"firstName\");\r\n        String lastName = request.getParameter(\"lastName\");\r\n        String email = request.getParameter(\"email\");\r\n        String password = request.getParameter(\"password\");\r\n        if(iCustomerDAO.checkAccountExistence(email)){\r\n            request.setAttribute(\"message\", \"Cannot use this account! Please try another one!\");\r\n            request.getRequestDispatcher(\"/view/sign-up.jsp\").forward(request, response);\r\n        } else {\r\n            iCustomerDAO.addNewCustomerAccount(new Customer(firstName, lastName, email, password));\r\n            response.sendRedirect(\"/login\");\r\n        }\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/example/merch/controller/SignupServlet.java b/src/main/java/com/example/merch/controller/SignupServlet.java
+--- a/src/main/java/com/example/merch/controller/SignupServlet.java	(revision 9bd9dd0407cd19b4d200ca791a84063d53c048a1)
++++ b/src/main/java/com/example/merch/controller/SignupServlet.java	(date 1686193163866)
+@@ -1,9 +1,6 @@
+-package com.example.team4.controller;
++package com.example.merch.controller;
+ 
+ 
+-import com.example.team4.DAO.customers.CustomerDAO;
+-import com.example.team4.DAO.customers.ICustomerDAO;
+-import com.example.team4.model.Customer;
+ 
+ import javax.servlet.*;
+ import javax.servlet.http.*;
+Index: src/main/java/com/example/merch/controller/LoginServlet.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.team4.controller;\r\n\r\n\r\nimport com.example.team4.DAO.customers.CustomerDAO;\r\nimport com.example.team4.DAO.customers.ICustomerDAO;\r\nimport com.example.team4.DAO.orders.IOrderDAO;\r\nimport com.example.team4.DAO.orders.OrderDAO;\r\nimport com.example.team4.base.BaseConnection;\r\nimport com.example.team4.model.Cart;\r\nimport com.example.team4.model.Customer;\r\nimport com.example.team4.model.Order;\r\nimport com.example.team4.service.carts.CartService;\r\nimport com.example.team4.service.carts.ICartService;\r\n\r\nimport javax.servlet.*;\r\nimport javax.servlet.http.*;\r\nimport javax.servlet.annotation.*;\r\nimport java.io.IOException;\r\nimport java.sql.Connection;\r\nimport java.sql.PreparedStatement;\r\nimport java.sql.ResultSet;\r\nimport java.sql.SQLException;\r\nimport java.util.List;\r\n\r\n@WebServlet(name = \"LoginServlet\", value = \"/login\")\r\npublic class LoginServlet extends HttpServlet {\r\n    ICustomerDAO iCustomerDAO = new CustomerDAO();\r\n    IOrderDAO iOrderDAO = new OrderDAO();\r\n    ICartService iCartService = new CartService();\r\n\r\n    @Override\r\n    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {\r\n\r\n        HttpSession session = request.getSession();\r\n        if (session.getAttribute(\"accountId\") == null) {\r\n            response.sendRedirect(\"/view/log-in.jsp\");\r\n        } else {\r\n            response.sendRedirect(\"/view/account.jsp\");\r\n        }\r\n    }\r\n\r\n    @Override\r\n    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {\r\n\r\n        String userName = request.getParameter(\"username\");\r\n        String password = request.getParameter(\"password\");\r\n\r\n        Connection connection = BaseConnection.getConnection();\r\n        try {\r\n            PreparedStatement preparedStatement = connection.prepareStatement(BaseConnection.CHECK_ACCOUNT);\r\n            preparedStatement.setString(1, userName);\r\n            preparedStatement.setString(2, password);\r\n            ResultSet rs = preparedStatement.executeQuery();\r\n\r\n            if (rs.next()) {\r\n                int accountId = rs.getInt(\"account_id\");\r\n                System.out.println(accountId);\r\n                // add accountId to session\r\n                HttpSession session = request.getSession();\r\n                session.setAttribute(\"accountId\", accountId);\r\n\r\n                PreparedStatement preparedStatement1 = connection.prepareStatement(BaseConnection.CHECK_ROLE);\r\n                preparedStatement1.setInt(1, accountId);\r\n                ResultSet rs1 = preparedStatement1.executeQuery();\r\n                if (rs1.next()) {\r\n                    String role = rs1.getString(\"role_name\");\r\n                    System.out.println(role);\r\n\r\n                    if (role.equals(\"employee\")) {\r\n                        response.sendRedirect(\"/products\");\r\n                    }\r\n                    if (role.equals(\"customer\")) {\r\n                        Customer currentCustomer = iCustomerDAO.findCustomerByAccountId(accountId);\r\n                        List<Order> orders = iOrderDAO.getAllOrders(currentCustomer.getId());\r\n                        List<Cart> carts = iCartService.getAllCarts(currentCustomer.getId());\r\n                        session.setAttribute(\"currentCustomer\", currentCustomer);\r\n                        session.setAttribute(\"orders\", orders);\r\n                        session.setAttribute(\"cartList\", carts);\r\n                        response.sendRedirect(\"/view/account.jsp\");\r\n                    }\r\n                }\r\n\r\n            } else {\r\n                request.setAttribute(\"message\", \"Incorrect email or password!\");\r\n                request.getRequestDispatcher(\"/view/log-in.jsp\").forward(request, response);\r\n            }\r\n\r\n        } catch (SQLException e) {\r\n            e.printStackTrace();\r\n        }\r\n\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/example/merch/controller/LoginServlet.java b/src/main/java/com/example/merch/controller/LoginServlet.java
+--- a/src/main/java/com/example/merch/controller/LoginServlet.java	(revision 9bd9dd0407cd19b4d200ca791a84063d53c048a1)
++++ b/src/main/java/com/example/merch/controller/LoginServlet.java	(date 1686193163772)
+@@ -1,4 +1,4 @@
+-package com.example.team4.controller;
++package com.example.merch.controller;
+ 
+ 
+ import com.example.team4.DAO.customers.CustomerDAO;
+Index: src/main/java/com/example/merch/controller/HomeServlet.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.team4.controller;\r\n\r\n\r\nimport com.example.team4.service.products.IProductService;\r\nimport com.example.team4.service.products.ProductService;\r\n\r\nimport javax.servlet.*;\r\nimport javax.servlet.http.*;\r\nimport javax.servlet.annotation.*;\r\nimport java.io.IOException;\r\n\r\n@WebServlet(name = \"HomeServlet\", value = \"/home\")\r\npublic class HomeServlet extends HttpServlet {\r\n\r\n    public static IProductService iProductService = new ProductService();\r\n    @Override\r\n    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {\r\n\r\n        request.setAttribute(\"products\", iProductService.showAll());\r\n        System.out.println(\"im here\");\r\n        System.out.println(iProductService.showAll());\r\n        try {\r\n            request.getRequestDispatcher(\"/view/home.jsp\").forward(request, response);\r\n        } catch (ServletException e) {\r\n            e.printStackTrace();\r\n        }\r\n    }\r\n\r\n    @Override\r\n    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {\r\n\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/example/merch/controller/HomeServlet.java b/src/main/java/com/example/merch/controller/HomeServlet.java
+--- a/src/main/java/com/example/merch/controller/HomeServlet.java	(revision 9bd9dd0407cd19b4d200ca791a84063d53c048a1)
++++ b/src/main/java/com/example/merch/controller/HomeServlet.java	(date 1686193163841)
+@@ -1,4 +1,4 @@
+-package com.example.team4.controller;
++package com.example.merch.controller;
+ 
+ 
+ import com.example.team4.service.products.IProductService;
