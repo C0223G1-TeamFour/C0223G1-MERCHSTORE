@@ -1,11 +1,13 @@
-package com.example.manage_merch.service;
+package com.example.merch_store.service.employee;
 
-import com.example.manage_merch.model.Employee;
-import com.example.manage_merch.repository.EmployeeRepository;
-import com.example.manage_merch.repository.IEmployeeRepository;
 
-public class EmployeeService implements IEmployeeService{
+import com.example.merch_store.model.Employee;
+import com.example.merch_store.repository.employee.EmployeeRepository;
+import com.example.merch_store.repository.employee.IEmployeeRepository;
+
+public class EmployeeService implements IEmployeeService {
     private IEmployeeRepository employeeRepository = new EmployeeRepository();
+
     @Override
     public Employee getEmployee(int account_id) {
         return employeeRepository.getEmployee(account_id);

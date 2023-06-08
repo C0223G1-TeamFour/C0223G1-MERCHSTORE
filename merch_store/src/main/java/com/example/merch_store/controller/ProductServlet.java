@@ -1,4 +1,5 @@
 package com.example.merch_store.controller;
+
 import com.example.merch_store.model.Product;
 import com.example.merch_store.model.ProductType;
 import com.example.merch_store.service.products.IProductService;
@@ -46,7 +47,7 @@ public class ProductServlet extends HttpServlet {
         Product product = productService.findById(id);
         request.setAttribute("product", product);
         try {
-            request.getRequestDispatcher("/view/product-details.jsp").forward(request, response);
+            request.getRequestDispatcher("/view/carts/product-details.jsp").forward(request, response);
         } catch (ServletException | IOException e) {
             e.printStackTrace();
         }
@@ -123,13 +124,10 @@ public class ProductServlet extends HttpServlet {
         Product product = new Product(id, name, description, price, image, productType);
         productService.updateProduct(product);
         RequestDispatcher requestDispatcher;
-        if (product == null) {
-            requestDispatcher = request.getRequestDispatcher("error-404.jsp");
-        } else {
-            request.setAttribute("message", "Update success");
-            requestDispatcher = request.getRequestDispatcher("view/product/edit.jsp");
-        }
-        requestDispatcher.forward(request, response);
+
+        request.setAttribute("message", "Update success");
+        request.setAttribute("productList", productService.showAll());
+        response.sendRedirect("/products");
     }
 
     private void save(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -141,7 +139,7 @@ public class ProductServlet extends HttpServlet {
         ProductType productType = new ProductType(productTypeId);
         Product product = new Product(name, description, price, image, productType);
         productService.createNewProduct(product);
-        RequestDispatcher requestDispatcher ;
+        RequestDispatcher requestDispatcher;
         if (product == null) {
             requestDispatcher = request.getRequestDispatcher("error-404.jsp");
         } else {

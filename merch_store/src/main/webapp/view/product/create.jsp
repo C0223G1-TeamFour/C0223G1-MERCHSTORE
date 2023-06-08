@@ -13,8 +13,8 @@
 
 </head>
 <body>
-<%@include file="/view/store-header.jsp" %>
-<a href="/product"><button type="submit" class="btn btn-primary bg-black text-white">Back</button></a><br>
+<%@include file="/view/carts/store-header.jsp" %>
+<a href="/products"><button type="submit" class="btn btn-primary bg-black text-white">Back</button></a><br>
 <h2 id="success">
     <c:if test="${requestScope['message'] != null}">
         <span style="color: blue"><i class="fa-solid fa-square-check"></i>${requestScope['message']}</span>
@@ -60,5 +60,6 @@
         document.getElementById("success").style.display = "none";
     },1000)
 </script>
+<%@include file="/view/carts/footer.jsp" %>
 </body>
 </html>

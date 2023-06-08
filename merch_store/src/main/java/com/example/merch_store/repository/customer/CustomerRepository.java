@@ -1,14 +1,13 @@
-package com.example.manage_merch.repository;
-
-import com.example.manage_merch.model.AccountUser;
-import com.example.manage_merch.model.Customer;
+package com.example.merch_store.repository.customer;
+import com.example.merch_store.base.BaseConnection;
+import com.example.merch_store.model.AccountUser;
+import com.example.merch_store.model.Customer;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class CustomerRepository implements ICustomerRepository {
-    private BaseRepository baseRepository = new BaseRepository();
     private static final String SELECT_EMPLOYEE = "SELECT customers.customer_id,customers.customer_name,customers.email,customers.phone_number,customers.address FROM customers \n" +
             "join account_users on account_users.account_id = customers.account_id\n" +
             "join users_role on users_role.account_id =account_users.account_id\n" +
@@ -30,7 +29,7 @@ public class CustomerRepository implements ICustomerRepository {
     @Override
     public List<Customer> getListCustomer() {
         List<Customer> customerList = new ArrayList<>();
-        Connection connection = baseRepository.getConnection();
+        Connection connection = BaseConnection.getConnection();
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_CUSTOMER);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -60,7 +59,7 @@ public class CustomerRepository implements ICustomerRepository {
 
     @Override
     public void deleteCustomer(int id) {
-        Connection connection = baseRepository.getConnection();
+        Connection connection = BaseConnection.getConnection();
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(DELETE_CUSTOMER_BY_ID);
             preparedStatement.setInt(1, id);
@@ -84,11 +83,11 @@ public class CustomerRepository implements ICustomerRepository {
     //    private static final String Edit_Customer = "update customers set customer_name=?,email=?,phone_number=?,address=? where customer_id=?";
     @Override
     public void editCustomer(int id, Customer customer) {
-        Connection connection = baseRepository.getConnection();
+        Connection connection = BaseConnection.getConnection();
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(Edit_Customer);
             preparedStatement.setString(1, customer.getName());
-            preparedStatement.setString(2, customer.getPhone());
+            preparedStatement.setString(2, customer.getPhoneNumber());
             preparedStatement.setString(3, customer.getAddress());
             preparedStatement.setInt(4, id);
             int resultSet = preparedStatement.executeUpdate();
@@ -107,7 +106,7 @@ public class CustomerRepository implements ICustomerRepository {
     @Override
     public Customer getCustomer(int id) {
         Customer customer = null;
-        Connection connection = baseRepository.getConnection();
+        Connection connection = BaseConnection.getConnection();
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_CUSTOMER_BY_ID);
             preparedStatement.setInt(1, id);
@@ -135,14 +134,14 @@ public class CustomerRepository implements ICustomerRepository {
 
     @Override
     public void save(Customer customer) {
-        Connection connection = baseRepository.getConnection();
+        Connection connection = BaseConnection.getConnection();
         try {
             CallableStatement callableStatement = connection.prepareCall(INSERT_CUSTOMER);
             callableStatement.setString(1, customer.getName());
-            callableStatement.setString(2, customer.getPhone());
+            callableStatement.setString(2, customer.getPhoneNumber());
             callableStatement.setString(3,customer.getEmail());
             callableStatement.setString(4,customer.getAddress());
-            callableStatement.setString(5,customer.getAccountUser().getPassWord());
+            callableStatement.setString(5,customer.getAccountUser().getUserPassword());
             callableStatement.executeUpdate();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -152,7 +151,7 @@ public class CustomerRepository implements ICustomerRepository {
     @Override
     public List<Customer> viewListCustomer(String name, String address) {
         List<Customer> customerList = new ArrayList<>();
-        Connection connection = baseRepository.getConnection();
+        Connection connection = BaseConnection.getConnection();
         try {
             CallableStatement callableStatement = connection.prepareCall(FIND_CUSTOMER);
             callableStatement.setString(1,name);
@@ -173,4 +172,52 @@ public class CustomerRepository implements ICustomerRepository {
         return customerList;
     }
 
+    @Override
+    public Customer findCustomerByAccountId(int accountId) {
+        System.out.println("hhihihi acc id" + accountId);
+        Customer customer = null;
+        try {
+            PreparedStatement preparedStatement = BaseConnection.getConnection().prepareStatement(BaseConnection.FIND_CUSTOMER_BY_ACCOUNT_ID);
+            preparedStatement.setInt(1, accountId);
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                int customerId = rs.getInt("customer_id");
+                String name = rs.getString("customer_name");
+                String email = rs.getString("email");
+                String phone = rs.getString("phone_number");
+                String address = rs.getString("address");
+                int accountId1 = rs.getInt("account_id");
+                customer = new Customer(customerId, name, email, phone, address, accountId1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return customer;
+    }
+    @Override
+    public boolean checkAccountExistence(String email) {
+        try {
+            PreparedStatement preparedStatement = BaseConnection.getConnection().prepareStatement(BaseConnection.CHECK_ACCOUNT_EXISTENCE);
+            preparedStatement.setString(1, email);
+            ResultSet rs = preparedStatement.executeQuery();
+            if (rs.next()) return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    @Override
+    public void addNewCustomerAccount(Customer newCustomer) {
+        try {
+            PreparedStatement preparedStatement = BaseConnection.getConnection().prepareStatement(BaseConnection.ADD_CUSTOMER_ACCOUNT);
+            preparedStatement.setString(1, newCustomer.getFirstName());
+            preparedStatement.setString(2, newCustomer.getLastName());
+            preparedStatement.setString(3, newCustomer.getEmail());
+            preparedStatement.setString(4, newCustomer.getPassWord());
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }

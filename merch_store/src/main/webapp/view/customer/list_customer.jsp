@@ -80,7 +80,7 @@
 </style>
 <body>
 
-<%@include file="/view/header.jsp" %>
+<%@include file="/view/carts/header.jsp" %>
 <div class="row gutters-sm">
     <div class="col-md-1 mb-3">
     </div>

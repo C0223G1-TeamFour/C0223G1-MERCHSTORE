@@ -1,10 +1,10 @@
-package com.example.manage_merch.service;
+package com.example.merch_store.service.customer;
 
-import com.example.manage_merch.model.Customer;
-import com.example.manage_merch.repository.CustomerRepository;
-import com.example.manage_merch.repository.ICustomerRepository;
 
-import java.util.ArrayList;
+import com.example.merch_store.model.Customer;
+import com.example.merch_store.repository.customer.CustomerRepository;
+import com.example.merch_store.repository.customer.ICustomerRepository;
+
 import java.util.List;
 
 public class CustomerService implements ICustomerService {
@@ -39,5 +39,20 @@ public class CustomerService implements ICustomerService {
     @Override
     public List<Customer> searchCustomer(String name, String address) {
         return customerRepository.viewListCustomer(name,address);
+    }
+
+    @Override
+    public Customer findCustomerByAccountId(int accountId) {
+        return customerRepository.findCustomerByAccountId(accountId);
+    }
+
+    @Override
+    public boolean checkAccountExistence(String email) {
+        return customerRepository.checkAccountExistence(email);
+    }
+
+    @Override
+    public void addNewCustomerAccount(Customer newCustomer) {
+        customerRepository.addNewCustomerAccount(newCustomer);
     }
 }

@@ -21,7 +21,7 @@
             font-weight: lighter;
         }
     </style>
-    <c:import url="/view/carts/header.jsp"></c:import>
+    <c:import url="/view/carts/store-header.jsp"></c:import>
 </head>
 <body>
 <div class="container-fluid">
@@ -56,7 +56,7 @@
             <td>
                 <button type="submit" class="btn">
                     <a class="btn btn-outline-secondary"
-                       href="/order-servlet?action=details&id=${orders.id}">DETAILS</a>
+                       href="/orders?action=details&id=${orders.id}">DETAILS</a>
                 </button>
 
             <td>
@@ -86,7 +86,7 @@
                 </h3>
             </div>
             <div class="modal-footer">
-                <form action="/order-servlet?action=delete" method="post">
+                <form action="/orders?action=delete" method="post">
                     <input type="hidden" name="idDelete" id="idDelete">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">NO</button>
                     <button type="submit" class="btn btn-primary">YES</button>

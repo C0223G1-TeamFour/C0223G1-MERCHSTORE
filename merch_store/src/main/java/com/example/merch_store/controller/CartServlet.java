@@ -50,7 +50,7 @@ public class CartServlet extends HttpServlet {
         Customer currentCustomer = (Customer) session.getAttribute("currentCustomer");
         request.setAttribute("carts", iCartService.getAllCarts(currentCustomer.getId()));
         try {
-            request.getRequestDispatcher("/view/cart.jsp").forward(request, response);
+            request.getRequestDispatcher("/view/carts/cart.jsp").forward(request, response);
         } catch (ServletException | IOException e) {
             e.printStackTrace();
         }
@@ -105,7 +105,7 @@ public class CartServlet extends HttpServlet {
         request.setAttribute("carts", iCartService.getAllCarts(currentCustomer.getId()));
         session.setAttribute("cartList", iCartService.getAllCarts(currentCustomer.getId()));
         try {
-            request.getRequestDispatcher("/view/cart.jsp").forward(request, response);
+            request.getRequestDispatcher("/view/carts/cart.jsp").forward(request, response);
         } catch (ServletException | IOException e) {
             e.printStackTrace();
         }

@@ -1,6 +1,6 @@
-package com.example.manage_merch.repository;
+package com.example.merch_store.repository.employee;
 
-import com.example.manage_merch.model.Employee;
+import com.example.merch_store.model.Employee;
 
 public interface IEmployeeRepository {
     Employee getEmployee(int id);

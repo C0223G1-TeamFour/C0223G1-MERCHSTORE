@@ -29,4 +29,9 @@ public class OrderService implements IOrderService {
     public void deleteOrder(int id) {
         orderRepository.deleteOrder(id);
     }
+
+    @Override
+    public List<Order> getAllFromACustomer(int customerId) {
+        return orderRepository.getAllFromACustomer(customerId);
+    }
 }

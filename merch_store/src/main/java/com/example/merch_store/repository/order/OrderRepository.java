@@ -68,8 +68,7 @@ public class OrderRepository implements IOrderRepository {
                 int quantity = resultSet.getInt("quantity");
                 double price = resultSet.getDouble("price");
                 Product product = new Product(name);
-//                Order order = new Order(detailsId);
-                OrderDetail orderDetail = new OrderDetail(detailsId, product, quantity, price);
+                    OrderDetail orderDetail = new OrderDetail(detailsId, product, quantity, price);
                 orderDetailList.add(orderDetail);
             }
         } catch (SQLException e) {
@@ -95,5 +94,25 @@ public class OrderRepository implements IOrderRepository {
                 e.printStackTrace();
             }
         }
+    }
+    @Override
+    public List<Order> getAllFromACustomer(int customerId) {
+        List<Order> orders = new ArrayList<>();
+        try {
+            PreparedStatement preparedStatement = BaseConnection.getConnection().prepareStatement(BaseConnection.SELECT_ALL_ORDERS);
+            preparedStatement.setInt(1, customerId);
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                int orderId = rs.getInt("order_id");
+                String orderTime = String.valueOf(rs.getTimestamp("order_date"));
+                String orderStatus = rs.getString("order_status");
+                orders.add(new Order(orderId, orderTime, orderStatus));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return orders;
+
     }
 }

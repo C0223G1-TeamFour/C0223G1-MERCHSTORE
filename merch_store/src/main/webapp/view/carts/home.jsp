@@ -7,6 +7,7 @@
 --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!DOCTYPE html>
 <html>
 <head>
     <link
@@ -25,121 +26,6 @@
 
     <title>Home</title>
 </head>
-<style>
-    img:hover {
-        transform: scale(1.1);
-    }
-
-    *,
-    *::before,
-    *::after {
-        box-sizing: border-box;
-    }
-
-    * {
-        padding: 0;
-        margin: 0;
-    }
-
-    .message {
-        background: black;
-        text-align: center;
-        color: white;
-        padding: 0.5em 0;
-        font-size: 14px;
-    }
-
-    p {
-        margin: 0;
-    }
-
-    .logo {
-        width: 150px;
-    }
-
-    .bag-icon {
-        display: inline;
-        margin-left: 1rem;
-    }
-
-    i {
-        font-size: 1.5rem;
-    }
-
-    .card {
-        border: none;
-    }
-
-    footer a {
-        text-decoration: none;
-        text-transform: uppercase;
-        cursor: pointer;
-        display: inline-block;
-        color: black;
-    }
-
-    footer a:hover {
-        color: palevioletred;
-        text-decoration: underline;
-    }
-
-    .footer--text {
-        color: gray;
-        font-size: 0.85rem;
-    }
-
-    .links {
-        font-size: 1.5rem;
-        text-decoration: none;
-        margin-left: 1.5rem;
-        padding: 0;
-        color: gray;
-        font-weight: lighter;
-    }
-
-    .links:hover {
-        color: palevioletred;
-        text-decoration: underline;
-    }
-
-    .hamburger {
-        background: white;
-        border: none;
-    }
-
-    .sign-up button,
-    .log-in button,
-    .sign-up button:hover,
-    .log-in button:hover {
-        color: white;
-    }
-
-    .product-img:hover {
-        cursor: pointer;
-    }
-
-
-    @media (max-width: 768px) {
-        .overlay--main {
-            z-index: 999;
-            position: absolute;
-            top: 120px;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: white;
-
-        }
-
-        .overlay--main a {
-            font-size: 1.5rem;
-            font-weight: lighter;
-            text-decoration: none;
-            color: black;
-        }
-    }
-</style>
-
 <body>
 
 
@@ -171,7 +57,6 @@
                     </div>
                 </div>
             </c:forEach>
-
         </div>
     </div>
 </section>

@@ -1,19 +1,20 @@
-package com.example.manage_merch.repository;
+package com.example.merch_store.repository.employee;
 
-import com.example.manage_merch.model.AccountUser;
-import com.example.manage_merch.model.Employee;
+
+import com.example.merch_store.base.BaseConnection;
+import com.example.merch_store.model.Employee;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class EmployeeRepository implements IEmployeeRepository{
-    private BaseRepository baseRepository =new BaseRepository();
+public class EmployeeRepository implements IEmployeeRepository {
+
     private  static  final String  SELECT_EMPLOYEE="SELECT *from employee where account_id=?";
     @Override
     public Employee getEmployee(int employee_id) {
-        Connection connection = baseRepository.getConnection();
+        Connection connection = BaseConnection.getConnection();
         Employee employee=null;
         try {
             PreparedStatement preparedStatement= connection.prepareStatement(SELECT_EMPLOYEE);

@@ -52,7 +52,7 @@
                             class="col-auto btn bg-black mt-5 py-2 px-5 text-white">
                         Sign in
                     </button>
-                    <a class=" text-center col mt-3" href="/view/sign-up.jsp">Create account</a>
+                    <a class=" text-center col mt-3" href="/view/carts/sign-up.jsp">Create account</a>
                 </div>
             </form>
         </div>

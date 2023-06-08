@@ -135,8 +135,8 @@
                 </div>
                 <div class="col d-md-block d-none">
                     <a class="links" href="/products">PRODUCTS</a>
-                    <a class="links" href="/users">USERS</a>
-                    <a class="links" href="/order-servlet">ORDERS</a>
+                    <a class="links" href="/employee">USERS</a>
+                    <a class="links" href="/orders">ORDERS</a>
                 </div>
             </div>
 
@@ -155,10 +155,10 @@
             <td><a href="/products">PRODUCTS</a></td>
         </tr>
         <tr>
-            <td><a href="/users">USERS</a></td>
+            <td><a href="/employee">USERS</a></td>
         </tr>
         <tr>
-            <td><a href="/store-orders">ORDERS</a></td>
+            <td><a href="/orders">ORDERS</a></td>
         </tr>
     </table>
 </section>
