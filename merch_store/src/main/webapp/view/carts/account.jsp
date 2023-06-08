@@ -220,11 +220,11 @@
                 </h3>
                 <hr>
                 <h6>Name:
-                    <span class="fw-light"> <%= currentCustomer.getFullName()%> </span></h6>
+                    <span class="fw-light"> <%= currentCustomer.getName()%> </span></h6>
                 <h6>Email:
                     <span class="fw-light"><%= currentCustomer.getEmail()%></span></h6>
                 <h6>Phone:
-                    <span class="fw-light"><%= currentCustomer.getPhone()%></span></h6>
+                    <span class="fw-light"><%= currentCustomer.getPhoneNumber()%></span></h6>
                 <h6>Address:
                     <span class="fw-light"><%= currentCustomer.getAddress()%></span></h6>
             </div>

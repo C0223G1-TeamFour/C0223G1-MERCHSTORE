@@ -4,11 +4,11 @@ public class Employee {
     private int id;
     private String name;
     private String email;
-    private int phone;
+    private String phone;
     private String adress;
     private AccountUser accountUser;
 
-    public Employee(int id, String name, String email, int phone, String adress, AccountUser accountUser) {
+    public Employee(int id, String name, String email, String phone, String adress, AccountUser accountUser) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -17,11 +17,21 @@ public class Employee {
         this.accountUser = accountUser;
     }
 
-    public Employee() {
+    public Employee(String name, String email, String number_phone, String address) {
+        this.name = name;
+        this.email = email;
+        this.phone = number_phone;
+        this.adress = address;
     }
 
     public Employee(String name) {
         this.name = name;
+    }
+
+    public Employee(String name, String email, String address) {
+        this.name = name;
+        this.email = email;
+        this.adress = address;
     }
 
     public int getId() {
@@ -48,11 +58,11 @@ public class Employee {
         this.email = email;
     }
 
-    public int getPhone() {
+    public String getPhone() {
         return phone;
     }
 
-    public void setPhone(int phone) {
+    public void setPhone(String phone) {
         this.phone = phone;
     }
 

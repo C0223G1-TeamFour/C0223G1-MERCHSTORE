@@ -21,7 +21,7 @@
 
 </head>
 <body>
-<%@include file="/view/store-header.jsp" %>
+<%@include file="/view/carts/store-header.jsp" %>
 <div class="container-fluid">
     <div>
             <div class="col-12 mb-3">
@@ -29,12 +29,12 @@
                     Add new products</button></a>
             </div>
     </div>
-    <div>
-        <h2>
+    <div id="success">
+        <p>
             <c:if test="${requestScope['message'] != null}">
                 <span style="color: blue">${requestScope['message']}</span>
             </c:if>
-        </h2>
+        </p>
     </div>
     <%--    table--%>
     <div class="d-flex">
@@ -153,7 +153,7 @@
         $('#tableStudent').dataTable({
             "dom": 'lrtip',
             "lengthChange": false,
-            "pageLength": 2
+            "pageLength": 5
         });
     });
 
@@ -162,6 +162,11 @@
         document.getElementById("idDelete").value = productId;
     }
 </script>
-<%--<%@include file="/view/footer.jsp" %>--%>
+<script>
+    setTimeout(function () {
+        document.getElementById("success").style.display = "none";
+    },1000)
+</script>
+<%@include file="/view/carts/footer.jsp" %>
 </body>
 </html>

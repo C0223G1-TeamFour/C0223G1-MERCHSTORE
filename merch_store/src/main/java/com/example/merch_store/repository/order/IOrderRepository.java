@@ -14,5 +14,6 @@ public interface IOrderRepository {
     List<OrderDetail> getDetails(int id);
 
     void deleteOrder(int id);
+    List<Order> getAllFromACustomer(int customerId);
 
 }

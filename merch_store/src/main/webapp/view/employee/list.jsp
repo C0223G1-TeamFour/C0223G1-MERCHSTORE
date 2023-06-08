@@ -6,7 +6,6 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%--<%@ page contentType="text/html;charset=UTF-8" language="java" %>--%>
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!doctype html>
 <html lang="en">
@@ -100,7 +99,7 @@
 
 </style>
 <body>
-<%@include file="/view/header.jsp" %>
+<%@include file="/view/carts/store-header.jsp" %>
 <div class="container px-2">
 <div class=" row mb-4">
     <div class="col-md-2 col-sm-6">
@@ -131,7 +130,7 @@
                 </button>
             </div>
         </div>
-    </form
+    </form>
 </div>
 <table class="table table-bordered "  id="tableUser">
     <thead class="table-dark ">
@@ -197,7 +196,7 @@
     </div>
 </div>
 
-<%@include file="/view/footer.jsp" %>
+<%@include file="/view/carts/footer.jsp" %>
 <script src="../../jquery/jquery-3.5.1.min.js"></script>
 <script src="../../datatables/js/jquery.dataTables.min.js"></script>
 <script src="../../datatables/js/dataTables.bootstrap5.min.js"></script>

@@ -58,7 +58,7 @@ public class ProductRepository implements IProductRepository {
             preparedStatement.setString(2, product.getDescription());
             preparedStatement.setDouble(3, product.getPrice());
             preparedStatement.setString(4, product.getImage());
-            preparedStatement.setInt(5, product.getProductTypeId().getProductTypeId());
+            preparedStatement.setInt(5, product.getProductType().getProductTypeId());
             preparedStatement.executeUpdate();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -76,7 +76,7 @@ public class ProductRepository implements IProductRepository {
             preparedStatement.setString(2, product.getDescription());
             preparedStatement.setDouble(3, product.getPrice());
             preparedStatement.setString(4, product.getImage());
-            preparedStatement.setInt(5, product.getProductTypeId().getProductTypeId());
+            preparedStatement.setInt(5, product.getProductType().getProductTypeId());
             preparedStatement.executeUpdate();
         } catch (SQLException throwables) {
             throwables.printStackTrace();

@@ -1,6 +1,7 @@
-package com.example.manage_merch.service;
+package com.example.merch_store.service.employee;
 
-import com.example.manage_merch.model.Employee;
+
+import com.example.merch_store.model.Employee;
 
 public interface IEmployeeService {
     Employee getEmployee(int account_id);

@@ -10,9 +10,9 @@
 <html>
 <head>
     <title>Title</title>
-</head>
+</head><q></q>
 <body>
-<%@include file="/view/store-header.jsp" %>
+<%@include file="/view/carts/store-header.jsp" %>
 <a href="/products"><button type="submit" class="btn btn-primary bg-black text-white">Back</button></a><br>
 <h2>
     <c:if test="${requestScope['message'] != null}">
@@ -41,8 +41,7 @@
         </div>
         <div class="col-12 ">
             <div class="input-group mb-3">
-                <span class="input-group-text" id="basic-addon3">${productById.image}</span>
-                <input name="image" type="text" class="form-control" >
+                <input name="image" type="text" class="form-control" value="${productById.image}"> >
                 <label class="input-group-text" >Image</label>
             </div>
 <%--            id="inputGroupFile02"
@@ -60,6 +59,6 @@ for="inputGroupFile02"--%>
         </div>
     </form>
 </div>
-<%--<%@include file="/view/footer.jsp" %>--%>
+<%@include file="/view/carts/footer.jsp" %>
 </body>
 </html>

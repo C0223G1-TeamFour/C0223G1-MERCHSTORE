@@ -3,6 +3,11 @@ package com.example.merch_store.model;
 public class Order {
     private int id;
     private String date;
+    private int customerId;
+    private String customerName;
+    private String email;
+    private String phone;
+    private String address;
     private Customer customer;
     private Employee employee;
     private String status;
@@ -22,11 +27,33 @@ public class Order {
         this.status = status;
     }
 
-    public Order() {
+    public Order(int orderId, String orderTime, String orderStatus) {
+        this.id = orderId;
+        this.date = orderTime;
+        this.status = orderStatus;
     }
 
     public Order(int id) {
         this.id = id;
+    }
+
+    public Order(int orderId, String orderDate, String orderStatus, int customerId, String customerName, String email, String phone, String address) {
+        this.id = orderId;
+        this.date = orderDate;
+        this.status = orderStatus;
+        this.customerId = customerId;
+        this.customerName = customerName;
+        this.email = email;
+        this.phone = phone;
+        this.address = address;
+    }
+
+    public int getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(int customerId) {
+        this.customerId = customerId;
     }
 
     public int getId() {

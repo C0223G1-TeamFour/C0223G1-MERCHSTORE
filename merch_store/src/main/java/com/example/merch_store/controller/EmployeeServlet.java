@@ -1,11 +1,11 @@
-package com.example.manage_merch.controller;
+package com.example.merch_store.controller;
 
-import com.example.manage_merch.model.Customer;
-import com.example.manage_merch.model.Employee;
-import com.example.manage_merch.service.CustomerService;
-import com.example.manage_merch.service.EmployeeService;
-import com.example.manage_merch.service.ICustomerService;
-import com.example.manage_merch.service.IEmployeeService;
+import com.example.merch_store.model.Customer;
+import com.example.merch_store.model.Employee;
+import com.example.merch_store.service.customer.CustomerService;
+import com.example.merch_store.service.customer.ICustomerService;
+import com.example.merch_store.service.employee.EmployeeService;
+import com.example.merch_store.service.employee.IEmployeeService;
 
 import javax.servlet.*;
 import javax.servlet.http.*;

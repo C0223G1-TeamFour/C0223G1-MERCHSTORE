@@ -44,7 +44,7 @@
 
 <body>
 <%--<% List<Cart> cartList = (List<Cart>) session.getAttribute("cartList"); %>--%>
-<%@include file="/view/header.jsp" %>
+<%@include file="/view/carts/header.jsp" %>
 
 <section class="overlay--main d-md-none" style="display: none">
     <table class="table table-hover">
@@ -95,7 +95,7 @@
     </div>
     <div class="col-md-4 col-sm-0"></div>
 </div>
-<%@include file="/view/footer.jsp" %>
+<%@include file="/view/carts/footer.jsp" %>
 <script>
     function switcher() {
         let overlayMain = document.querySelector(".overlay--main");

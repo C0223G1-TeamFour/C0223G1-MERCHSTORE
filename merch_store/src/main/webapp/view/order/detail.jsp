@@ -19,7 +19,7 @@
     />
     <link rel="stylesheet" href="bootstrap520/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="datatables/css/dataTables.bootstrap5.min.css"/>
-    <c:import url="/view/carts/header.jsp"></c:import>
+    <c:import url="/view/carts/store-header.jsp"></c:import>
 </head>
 <body>
 <div class="container-fluid">

@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-@WebServlet(name = "OrderServlet", value = "/order-servlet")
+@WebServlet(name = "OrderServlet", value = "/orders")
 public class OrderServlet extends HttpServlet {
     private OrderService orderService = new OrderService();
 
@@ -80,7 +80,7 @@ public class OrderServlet extends HttpServlet {
         int id = Integer.parseInt(request.getParameter("idDelete"));
         orderService.deleteOrder(id);
         try {
-            response.sendRedirect("/order-servlet");
+            response.sendRedirect("/orders");
         } catch (IOException e) {
             e.printStackTrace();
         }
