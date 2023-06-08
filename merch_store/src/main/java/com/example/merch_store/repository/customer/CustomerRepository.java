@@ -1,4 +1,6 @@
-package com.example.merch_store.repository.customer;
+package com.example.merch_store.repository;
+
+
 import com.example.merch_store.base.BaseConnection;
 import com.example.merch_store.model.AccountUser;
 import com.example.merch_store.model.Customer;
@@ -7,7 +9,8 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CustomerRepository implements ICustomerRepository {
+public class CustomerRepository implements com.example.merch_store.repository.ICustomerRepository {
+
     private static final String SELECT_EMPLOYEE = "SELECT customers.customer_id,customers.customer_name,customers.email,customers.phone_number,customers.address FROM customers \n" +
             "join account_users on account_users.account_id = customers.account_id\n" +
             "join users_role on users_role.account_id =account_users.account_id\n" +

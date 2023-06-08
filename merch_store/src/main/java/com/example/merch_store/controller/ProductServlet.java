@@ -102,15 +102,13 @@ public class ProductServlet extends HttpServlet {
         }
     }
 
-    private void delete(HttpServletRequest request, HttpServletResponse response) {
+    private void delete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int id = Integer.parseInt(request.getParameter("idDelete"));
         System.out.println(id);
         productService.deleteProduct(id);
-        try {
-            response.sendRedirect("/products");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        request.setAttribute("message", "Delete success");
+        request.setAttribute("productList", productService.showAll());
+        request.getRequestDispatcher("/view/product/list.jsp").forward(request,response);
     }
 
     private void edit(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -123,11 +121,9 @@ public class ProductServlet extends HttpServlet {
         ProductType productType = new ProductType(productTypeId);
         Product product = new Product(id, name, description, price, image, productType);
         productService.updateProduct(product);
-        RequestDispatcher requestDispatcher;
-
         request.setAttribute("message", "Update success");
         request.setAttribute("productList", productService.showAll());
-        response.sendRedirect("/products");
+        request.getRequestDispatcher("/view/product/list.jsp").forward(request,response);
     }
 
     private void save(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

@@ -2,18 +2,18 @@ package com.example.merch_store.model;
 
 public class ProductType {
     private int productTypeId;
-    private String productTypeName;
+    private String  productTypeName;
+
+    public ProductType() {
+    }
 
     public ProductType(int productTypeId) {
+        this.productTypeId = productTypeId;
     }
 
-    public ProductType(int id, String name) {
-        this.productTypeId = id;
-        this.productTypeName = name;
-    }
-
-    public ProductType(String name) {
-        this.productTypeName = name;
+    public ProductType(int productTypeId, String productTypeName) {
+        this.productTypeId = productTypeId;
+        this.productTypeName = productTypeName;
     }
 
     public int getProductTypeId() {
@@ -32,3 +32,4 @@ public class ProductType {
         this.productTypeName = productTypeName;
     }
 }
+

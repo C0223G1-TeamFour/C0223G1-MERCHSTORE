@@ -10,9 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProductRepository implements IProductRepository {
-    private static final String INSERT = "insert into products(product_name, product_description, price, image, product_type_id) values(?, ?, ?, ?, ?);";
+    private static final String INSERT = "set foreign_key_checks = 0; insert into products(product_name, product_description, price, image, product_type_id) values(?, ?, ?, ?, ?);";
     private static final String SELECT = "select p.*, pt.product_type_name from products p join product_type pt on pt.product_type_id = p.product_type_id;";
-    private static final String DELETE = "delete from products where product_id = ?;";
+    private static final String DELETE = "call DELETE_PRODUCT(?);";
     private static final String UPDATE = "update products set product_name = ?, product_description = ?, price = ?, image = ?, product_type_id = ? where product_id = ?;";
     private static final String SELECT_PRODUCT_BY_ID = "select p.*, pt.product_type_name from products p join product_type pt on pt.product_type_id = p.product_type_id where product_id = ?;";
 
@@ -58,7 +58,7 @@ public class ProductRepository implements IProductRepository {
             preparedStatement.setString(2, product.getDescription());
             preparedStatement.setDouble(3, product.getPrice());
             preparedStatement.setString(4, product.getImage());
-            preparedStatement.setInt(5, product.getProductType().getProductTypeId());
+            preparedStatement.setInt(5, product.getProductTypeId().getProductTypeId());
             preparedStatement.executeUpdate();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -76,7 +76,7 @@ public class ProductRepository implements IProductRepository {
             preparedStatement.setString(2, product.getDescription());
             preparedStatement.setDouble(3, product.getPrice());
             preparedStatement.setString(4, product.getImage());
-            preparedStatement.setInt(5, product.getProductType().getProductTypeId());
+            preparedStatement.setInt(5, product.getProductTypeId().getProductTypeId());
             preparedStatement.executeUpdate();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -87,9 +87,9 @@ public class ProductRepository implements IProductRepository {
     public void deleteProduct(int id) {
         Connection connection = BaseConnection.getConnection();
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement(DELETE);
-            preparedStatement.setInt(1, id);
-            preparedStatement.executeUpdate();
+            CallableStatement callableStatement = connection.prepareCall(DELETE);
+            callableStatement.setInt(1, id);
+            callableStatement.executeUpdate();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }

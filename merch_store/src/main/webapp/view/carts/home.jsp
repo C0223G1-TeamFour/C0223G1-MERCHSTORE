@@ -7,7 +7,7 @@
 --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<!DOCTYPE html>
+<%--<!DOCTYPE html>--%>
 <html>
 <head>
     <link
@@ -27,13 +27,10 @@
     <title>Home</title>
 </head>
 <body>
-
-
 <%@include file="header.jsp" %>
 <section>
     <div class="container mt-2">
         <div class="row row-cols-md-3 row-cols-2 justify-content-center gy-2 gx-3" id="tableStudent">
-
             <c:forEach var="product" items="${products}">
                 <div class="col">
                     <div class="row justify-content-center">
@@ -60,9 +57,6 @@
         </div>
     </div>
 </section>
-
-
 <%@include file="footer.jsp" %>
-
 </body>
 </html>
