@@ -71,7 +71,7 @@ public class OrderServlet extends HttpServlet {
                 deleteOrder(request, response);
                 break;
             case "search":
-                searchOrder(request,response);
+                searchOrder(request, response);
                 break;
             default:
                 showList(request, response);
@@ -81,16 +81,16 @@ public class OrderServlet extends HttpServlet {
 
     private void searchOrder(HttpServletRequest request, HttpServletResponse response) {
         String name = request.getParameter("name").trim();
-        if(name==null){
-            name="";
+        if (name == null) {
+            name = "";
         }
         List<Order> orderManagement = orderService.getOrderByNameCustomer(name);
-        request.setAttribute("orderManagement",orderManagement);
+        request.setAttribute("orderManagement", orderManagement);
         Map<Integer, Integer> integerMap = orderService.getTotalPrice();
         request.setAttribute("integerMap", integerMap);
         RequestDispatcher requestDispatcher = request.getRequestDispatcher("/view/order/order-management.jsp");
         try {
-            requestDispatcher.forward(request,response);
+            requestDispatcher.forward(request, response);
         } catch (ServletException e) {
             e.printStackTrace();
         } catch (IOException e) {

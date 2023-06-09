@@ -5,7 +5,7 @@ import com.example.merch_store.model.CustomerOrderDetails;
 import com.example.merch_store.repository.customer_order_details.CustomerOrderDetailsRepository;
 import com.example.merch_store.repository.customer_order_details.ICustomerOrderDetailsRepository;
 
-public class CustomerOrderDetailsService implements ICustomerOrderDetailsService{
+public class CustomerOrderDetailsService implements ICustomerOrderDetailsService {
     private final ICustomerOrderDetailsRepository iCustomerOrderDetailsRepository = new CustomerOrderDetailsRepository();
 
     @Override

@@ -48,6 +48,13 @@ public class Order {
         this.address = address;
     }
 
+    public Order(int id, String date, Customer customer, String status) {
+        this.id = id;
+        this.date = date;
+        this.customer = customer;
+        this.status = status;
+    }
+
     public int getCustomerId() {
         return customerId;
     }

@@ -23,12 +23,12 @@ public class CustomerServlet extends HttpServlet {
         }
         switch (action) {
             case "create":
-                createFromCustomer(request,response);
+                createFromCustomer(request, response);
                 break;
             case "delete":
                 break;
             case "edit":
-                editFormCustomer(request,response);
+                editFormCustomer(request, response);
                 break;
             case "view":
                 break;
@@ -36,8 +36,6 @@ public class CustomerServlet extends HttpServlet {
                 showFormCustomer(request, response);
         }
     }
-
-
 
 
     @Override
@@ -48,7 +46,7 @@ public class CustomerServlet extends HttpServlet {
         }
         switch (action) {
             case "create":
-                save(request,response);
+                save(request, response);
                 break;
             case "delete":
                 delete(request, response);
@@ -64,13 +62,13 @@ public class CustomerServlet extends HttpServlet {
     }
 
     private void save(HttpServletRequest request, HttpServletResponse response) {
-        String name= request.getParameter("name");
-        String email= request.getParameter("email");
-        String phone= request.getParameter("phone");
-        String address= request.getParameter("address");
+        String name = request.getParameter("name");
+        String email = request.getParameter("email");
+        String phone = request.getParameter("phone");
+        String address = request.getParameter("address");
         String password = request.getParameter("password");
-        AccountUser accountUser = new AccountUser(email,address);
-        Customer customer = new Customer(name,email,phone,address,accountUser);
+        AccountUser accountUser = new AccountUser(email, address);
+        Customer customer = new Customer(name, email, phone, address, accountUser);
         customerService.saveCustomer(customer);
         try {
             response.sendRedirect("/employee");
@@ -80,18 +78,19 @@ public class CustomerServlet extends HttpServlet {
     }
 
     private void editFormCustomer(HttpServletRequest request, HttpServletResponse response) {
-        int id_customer= Integer.parseInt(request.getParameter("id"));
+        int id_customer = Integer.parseInt(request.getParameter("id"));
         Customer customer = customerService.getCustomer(id_customer);
-        request.setAttribute("customer",customer);
+        request.setAttribute("customer", customer);
         RequestDispatcher requestDispatcher = request.getRequestDispatcher("/view/customer/edit.jsp");
         try {
-            requestDispatcher.forward(request,response);
+            requestDispatcher.forward(request, response);
         } catch (ServletException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
     private void edit(HttpServletRequest request, HttpServletResponse response) {
         int id = Integer.parseInt(request.getParameter("id"));
         String name = request.getParameter("name");
@@ -117,7 +116,7 @@ public class CustomerServlet extends HttpServlet {
 
     private void showFormCustomer(HttpServletRequest request, HttpServletResponse response) {
 //        int id_customer = Integer.parseInt(request.getParameter("id_customer"));
-        int id_customer =5;
+        int id_customer = 5;
         Customer customer = customerService.getCustomer(id_customer);
         request.setAttribute("customer", customer);
         try {
@@ -128,10 +127,11 @@ public class CustomerServlet extends HttpServlet {
             e.printStackTrace();
         }
     }
+
     private void createFromCustomer(HttpServletRequest request, HttpServletResponse response) {
-        RequestDispatcher requestDispatcher= request.getRequestDispatcher("/view/customer/create.jsp");
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher("/view/customer/create.jsp");
         try {
-            requestDispatcher.forward(request,response);
+            requestDispatcher.forward(request, response);
         } catch (ServletException e) {
             e.printStackTrace();
         } catch (IOException e) {

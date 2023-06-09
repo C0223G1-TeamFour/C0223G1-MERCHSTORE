@@ -22,13 +22,11 @@ public class OrderRepository implements IOrderRepository {
             ResultSet resultSet = callableStatement.executeQuery();
             while (resultSet.next()) {
                 int id = resultSet.getInt("order_id");
-                String nameEmployee = resultSet.getString("employee_name");
                 String nameCustomer = resultSet.getString("customer_name");
                 String date = resultSet.getString("order_date");
                 String status = resultSet.getString("order_status");
                 Customer customer = new Customer(nameCustomer);
-                Employee employee = new Employee(nameEmployee);
-                Order order = new Order(id, date, customer, employee, status);
+                Order order = new Order(id, date, customer, status);
                 list.add(order);
             }
         } catch (SQLException e) {
@@ -69,7 +67,7 @@ public class OrderRepository implements IOrderRepository {
                 int quantity = resultSet.getInt("quantity");
                 double price = resultSet.getDouble("price");
                 Product product = new Product(name);
-                    OrderDetail orderDetail = new OrderDetail(detailsId, product, quantity, price);
+                OrderDetail orderDetail = new OrderDetail(detailsId, product, quantity, price);
                 orderDetailList.add(orderDetail);
             }
         } catch (SQLException e) {
@@ -96,6 +94,7 @@ public class OrderRepository implements IOrderRepository {
             }
         }
     }
+
     @Override
     public List<Order> getAllFromACustomer(int customerId) {
         List<Order> orders = new ArrayList<>();
@@ -123,17 +122,15 @@ public class OrderRepository implements IOrderRepository {
         Connection connection = BaseConnection.getConnection();
         try {
             CallableStatement callableStatement = connection.prepareCall(SP_FIND_ORDER_BY_NAME);
-            callableStatement.setString(1,name_customer);
+            callableStatement.setString(1, name_customer);
             ResultSet resultSet = callableStatement.executeQuery();
-            while (resultSet.next()){
+            while (resultSet.next()) {
                 int id = resultSet.getInt("order_id");
-                String nameEmployee = resultSet.getString("employee_name");
-                String nameCustomer = resultSet.getString("customer_name");
                 String date = resultSet.getString("order_date");
+                String nameCustomer = resultSet.getString("customer_name");
                 String status = resultSet.getString("order_status");
                 Customer customer = new Customer(nameCustomer);
-                Employee employee = new Employee(nameEmployee);
-                Order order = new Order(id, date, customer, employee, status);
+                Order order = new Order(id, date, customer, status);
                 list.add(order);
             }
         } catch (SQLException e) {
@@ -141,27 +138,4 @@ public class OrderRepository implements IOrderRepository {
         }
         return list;
     }
-//    @Override
-//    public List<Order> getAll() {
-//        Connection connection = BaseConnection.getConnection();
-//        List<Order> list = new ArrayList<>();
-//        try {
-//            CallableStatement callableStatement = connection.prepareCall(SP_ORDER_MANAGEMENT);
-//            ResultSet resultSet = callableStatement.executeQuery();
-//            while (resultSet.next()) {
-//                int id = resultSet.getInt("order_id");
-//                String nameEmployee = resultSet.getString("employee_name");
-//                String nameCustomer = resultSet.getString("customer_name");
-//                String date = resultSet.getString("order_date");
-//                String status = resultSet.getString("order_status");
-//                Customer customer = new Customer(nameCustomer);
-//                Employee employee = new Employee(nameEmployee);
-//                Order order = new Order(id, date, customer, employee, status);
-//                list.add(order);
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//        return list;
-//    }
 }

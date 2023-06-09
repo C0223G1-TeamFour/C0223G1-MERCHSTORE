@@ -1,8 +1,6 @@
 package com.example.merch_store.controller;
 
 
-
-
 import com.example.merch_store.service.products.IProductService;
 import com.example.merch_store.service.products.ProductService;
 
@@ -14,6 +12,7 @@ import java.io.IOException;
 @WebServlet(name = "MusicServlet", value = "/music")
 public class MusicServlet extends HttpServlet {
     public static IProductService iProductService = new ProductService();
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setAttribute("products", iProductService.showAllMusic());

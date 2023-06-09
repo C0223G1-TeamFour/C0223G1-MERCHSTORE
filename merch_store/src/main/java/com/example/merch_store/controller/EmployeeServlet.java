@@ -1,7 +1,6 @@
 package com.example.merch_store.controller;
 
 
-
 import com.example.merch_store.model.Customer;
 import com.example.merch_store.model.Employee;
 import com.example.merch_store.service.customer.CustomerService;
@@ -21,6 +20,7 @@ import java.util.List;
 public class EmployeeServlet extends HttpServlet {
     private IEmployeeService employeeService = new EmployeeService();
     private ICustomerService customerService = new CustomerService();
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
@@ -30,10 +30,10 @@ public class EmployeeServlet extends HttpServlet {
         }
         response.setContentType("text/html;charset=UTF-8");
         String action = request.getParameter("action");
-        if(action==null){
-            action="";
+        if (action == null) {
+            action = "";
         }
-        switch (action){
+        switch (action) {
             case "create":
                 break;
             case "edit":
@@ -41,13 +41,12 @@ public class EmployeeServlet extends HttpServlet {
             case "delete":
                 break;
             case "search":
-                search(request,response);
+                search(request, response);
                 break;
             default:
-                manageCustomer(request,response);
+                manageCustomer(request, response);
         }
     }
-
 
 
     @Override
@@ -59,23 +58,23 @@ public class EmployeeServlet extends HttpServlet {
         }
         response.setContentType("text/html;charset=UTF-8");
         String action = request.getParameter("action");
-        if(action==null){
-            action="";
+        if (action == null) {
+            action = "";
         }
-        switch (action){
+        switch (action) {
             case "create":
                 System.out.println("create");
-                create(request,response);
+                create(request, response);
                 break;
             case "edit":
                 break;
             case "delete":
                 break;
             case "search":
-                search(request,response);
+                search(request, response);
                 break;
             default:
-                manageCustomer(request,response);
+                manageCustomer(request, response);
         }
     }
 
@@ -86,19 +85,19 @@ public class EmployeeServlet extends HttpServlet {
 
     private void search(HttpServletRequest request, HttpServletResponse response) {
 
-        String name=request.getParameter("name").trim();
-        String address= request.getParameter("address").trim();
-        if(name==null){
-            name="";
+        String name = request.getParameter("name").trim();
+        String address = request.getParameter("address").trim();
+        if (name == null) {
+            name = "";
         }
-        if(address==null){
-            address="";
+        if (address == null) {
+            address = "";
         }
-        List<Customer> customerList =customerService.searchCustomer(name,address);
-        request.setAttribute("customerList",customerList);
+        List<Customer> customerList = customerService.searchCustomer(name, address);
+        request.setAttribute("customerList", customerList);
         RequestDispatcher requestDispatcher = request.getRequestDispatcher("/view/employee/list.jsp");
         try {
-            requestDispatcher.forward(request,response);
+            requestDispatcher.forward(request, response);
         } catch (ServletException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -108,13 +107,13 @@ public class EmployeeServlet extends HttpServlet {
 
     private void listEmployee(HttpServletRequest request, HttpServletResponse response) {
 //        int account_id= Integer.parseInt(request.getParameter("account_id"));
-        int account_id=3;
+        int account_id = 3;
         Employee employee = employeeService.getEmployee(account_id);
         String name = employee.getName();
-        request.setAttribute("employee",employee);
-        RequestDispatcher requestDispatcher=request.getRequestDispatcher("/view/employee/list.jsp");
+        request.setAttribute("employee", employee);
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher("/view/employee/list.jsp");
         try {
-            requestDispatcher.forward(request,response);
+            requestDispatcher.forward(request, response);
         } catch (ServletException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -124,15 +123,15 @@ public class EmployeeServlet extends HttpServlet {
 
     private void manageCustomer(HttpServletRequest request, HttpServletResponse response) {
 //        int id = Integer.parseInt(request.getParameter("id"));
-        int id=6;
+        int id = 6;
         Employee employee = employeeService.getEmployee(id);
         List<Customer> customerList = new ArrayList<>();
-        customerList= customerService.findAll();
-        request.setAttribute("employee",employee);
-        request.setAttribute("customerList",customerList);
+        customerList = customerService.findAll();
+        request.setAttribute("employee", employee);
+        request.setAttribute("customerList", customerList);
         RequestDispatcher requestDispatcher = request.getRequestDispatcher("/view/employee/list.jsp");
         try {
-            requestDispatcher.forward(request,response);
+            requestDispatcher.forward(request, response);
         } catch (ServletException e) {
             e.printStackTrace();
         } catch (IOException e) {

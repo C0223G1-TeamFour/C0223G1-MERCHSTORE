@@ -108,7 +108,7 @@ public class ProductServlet extends HttpServlet {
         productService.deleteProduct(id);
         request.setAttribute("message", "Delete success");
         request.setAttribute("productList", productService.showAll());
-        request.getRequestDispatcher("/view/product/list.jsp").forward(request,response);
+        request.getRequestDispatcher("/view/product/list.jsp").forward(request, response);
     }
 
     private void edit(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -123,7 +123,7 @@ public class ProductServlet extends HttpServlet {
         productService.updateProduct(product);
         request.setAttribute("message", "Update success");
         request.setAttribute("productList", productService.showAll());
-        request.getRequestDispatcher("/view/product/list.jsp").forward(request,response);
+        request.getRequestDispatcher("/view/product/list.jsp").forward(request, response);
     }
 
     private void save(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

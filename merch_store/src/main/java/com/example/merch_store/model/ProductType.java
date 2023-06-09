@@ -2,7 +2,7 @@ package com.example.merch_store.model;
 
 public class ProductType {
     private int productTypeId;
-    private String  productTypeName;
+    private String productTypeName;
 
     public ProductType() {
     }

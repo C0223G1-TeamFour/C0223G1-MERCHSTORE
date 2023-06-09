@@ -10,6 +10,7 @@ import java.util.List;
 
 public class ProductTypeService implements IProductTypeService {
     private IProductTypeRepository productTypeRepository = new ProductTypeRepository();
+
     @Override
     public List<ProductType> getAll() {
         return productTypeRepository.getAll();
