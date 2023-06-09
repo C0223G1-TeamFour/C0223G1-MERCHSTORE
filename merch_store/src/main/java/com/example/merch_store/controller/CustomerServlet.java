@@ -1,10 +1,10 @@
 package com.example.merch_store.controller;
 
+
 import com.example.merch_store.model.AccountUser;
 import com.example.merch_store.model.Customer;
 import com.example.merch_store.service.customer.CustomerService;
 import com.example.merch_store.service.customer.ICustomerService;
-
 
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -13,7 +13,7 @@ import java.io.IOException;
 
 @WebServlet(name = "CustomerServlet", value = "/customer")
 public class CustomerServlet extends HttpServlet {
-    private final ICustomerService customerService = new CustomerService();
+    private ICustomerService customerService = new CustomerService();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

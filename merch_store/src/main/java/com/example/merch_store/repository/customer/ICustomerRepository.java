@@ -1,4 +1,4 @@
-package com.example.merch_store.repository.customer;
+package com.example.merch_store.repository;
 
 import com.example.merch_store.model.Customer;
 
