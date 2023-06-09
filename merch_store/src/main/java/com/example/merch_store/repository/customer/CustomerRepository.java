@@ -1,4 +1,6 @@
 package com.example.merch_store.repository.customer;
+
+
 import com.example.merch_store.base.BaseConnection;
 import com.example.merch_store.model.AccountUser;
 import com.example.merch_store.model.Customer;
@@ -8,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CustomerRepository implements ICustomerRepository {
+
     private static final String SELECT_EMPLOYEE = "SELECT customers.customer_id,customers.customer_name,customers.email,customers.phone_number,customers.address FROM customers \n" +
             "join account_users on account_users.account_id = customers.account_id\n" +
             "join users_role on users_role.account_id =account_users.account_id\n" +
@@ -219,5 +222,20 @@ public class CustomerRepository implements ICustomerRepository {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public boolean updateShippingInfo(int customerId, String phoneNumber, String address) {
+        boolean rowEdited = false;
+        try {
+            PreparedStatement preparedStatement = BaseConnection.getConnection().prepareStatement(BaseConnection.UPDATE_SHIPPING_INFO);
+            preparedStatement.setString(1, phoneNumber);
+            preparedStatement.setString(2, address);
+            preparedStatement.setInt(3, customerId);
+            rowEdited = preparedStatement.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return rowEdited;
     }
 }

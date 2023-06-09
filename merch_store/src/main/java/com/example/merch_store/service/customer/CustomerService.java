@@ -5,6 +5,7 @@ import com.example.merch_store.model.Customer;
 import com.example.merch_store.repository.customer.CustomerRepository;
 import com.example.merch_store.repository.customer.ICustomerRepository;
 
+
 import java.util.List;
 
 public class CustomerService implements ICustomerService {
@@ -54,5 +55,10 @@ public class CustomerService implements ICustomerService {
     @Override
     public void addNewCustomerAccount(Customer newCustomer) {
         customerRepository.addNewCustomerAccount(newCustomer);
+    }
+
+    @Override
+    public boolean updateShippingInfo(int customerId, String phoneNumber, String address) {
+        return customerRepository.updateShippingInfo(customerId,phoneNumber,address);
     }
 }
