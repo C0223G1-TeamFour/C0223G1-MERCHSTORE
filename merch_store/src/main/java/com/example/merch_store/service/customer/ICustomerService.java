@@ -4,6 +4,7 @@ package com.example.merch_store.service.customer;
 import com.example.merch_store.model.Customer;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ICustomerService {
     List<Customer> findAll();
@@ -14,7 +15,7 @@ public interface ICustomerService {
 
     Customer getCustomer(int id_customer);
 
-    void saveCustomer(Customer customer);
+    Map<String,String> saveCustomer(Customer customer);
 
     List<Customer> searchCustomer(String name, String address);
 

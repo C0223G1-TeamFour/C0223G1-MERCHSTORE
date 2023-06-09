@@ -109,7 +109,7 @@
 <body>
 <div class="container px-2">
     <div class="row mb-4">
-        <form class="col-md-8 col-sm-10" action="/orders?action=search" method="post">
+        <form class="col-md-8 col-sm-10" action="/orders?action=search" method="post" >
             <div class="row">
                 <div class="col-xl-2 col-md-3">
                     <label for="inputPassword6" class="col-form-label"><span>Name</span></label>
