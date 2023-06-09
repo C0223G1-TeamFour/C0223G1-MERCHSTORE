@@ -11,6 +11,7 @@ import java.util.List;
 
 public class CustomerOrderService implements ICustomerOrderService {
     private ICustomerOrderRepository iCustomerOrderRepository = new CustomerOrderRepository();
+
     @Override
     public void addNewOrder(int customerId) {
         iCustomerOrderRepository.addNewOrder(customerId);
@@ -28,12 +29,12 @@ public class CustomerOrderService implements ICustomerOrderService {
 
     @Override
     public boolean deleteOrder(int orderId, int customerId) {
-        return iCustomerOrderRepository.deleteOrder(orderId,customerId);
+        return iCustomerOrderRepository.deleteOrder(orderId, customerId);
     }
 
     @Override
     public boolean checkOrderId(int orderId, int customerId) {
-        return iCustomerOrderRepository.checkOrderId(orderId,customerId);
+        return iCustomerOrderRepository.checkOrderId(orderId, customerId);
     }
 
     @Override

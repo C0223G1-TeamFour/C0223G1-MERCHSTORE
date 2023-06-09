@@ -12,6 +12,7 @@ import java.io.IOException;
 @WebServlet(name = "SignupServlet", value = "/signup")
 public class SignupServlet extends HttpServlet {
     public static ICustomerService iCustomerService = new CustomerService();
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
@@ -23,13 +24,13 @@ public class SignupServlet extends HttpServlet {
         String lastName = request.getParameter("lastName");
         String email = request.getParameter("email");
         String password = request.getParameter("password");
-        if(iCustomerService.checkAccountExistence(email)){
+        if (iCustomerService.checkAccountExistence(email)) {
             request.setAttribute("message", "Cannot use this account! Please try another one!");
             request.getRequestDispatcher("/view/carts/sign-up.jsp").forward(request, response);
         } else {
             iCustomerService.addNewCustomerAccount(new Customer(firstName, lastName, email, password));
             request.setAttribute("success", "Successfully created a new account!");
-            request.getRequestDispatcher("/view/carts/log-in.jsp").forward(request,response);
+            request.getRequestDispatcher("/view/carts/log-in.jsp").forward(request, response);
 //            response.sendRedirect("/login");
         }
     }

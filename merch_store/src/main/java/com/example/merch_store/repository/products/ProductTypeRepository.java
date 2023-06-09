@@ -20,15 +20,15 @@ public class ProductTypeRepository implements IProductTypeRepository {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement("select  * from product_type");
             ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()){
-                int id= resultSet.getInt("product_type_id");
+            while (resultSet.next()) {
+                int id = resultSet.getInt("product_type_id");
                 String name = resultSet.getString("product_type_name");
                 ProductType productType = new ProductType(id, name);
                 productTypeList.add(productType);
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
-        }finally {
+        } finally {
             try {
                 connection.close();
             } catch (SQLException e) {

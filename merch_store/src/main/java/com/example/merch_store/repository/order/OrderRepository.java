@@ -67,7 +67,7 @@ public class OrderRepository implements IOrderRepository {
                 int quantity = resultSet.getInt("quantity");
                 double price = resultSet.getDouble("price");
                 Product product = new Product(name);
-                    OrderDetail orderDetail = new OrderDetail(detailsId, product, quantity, price);
+                OrderDetail orderDetail = new OrderDetail(detailsId, product, quantity, price);
                 orderDetailList.add(orderDetail);
             }
         } catch (SQLException e) {
@@ -94,6 +94,7 @@ public class OrderRepository implements IOrderRepository {
             }
         }
     }
+
     @Override
     public List<Order> getAllFromACustomer(int customerId) {
         List<Order> orders = new ArrayList<>();
@@ -121,9 +122,9 @@ public class OrderRepository implements IOrderRepository {
         Connection connection = BaseConnection.getConnection();
         try {
             CallableStatement callableStatement = connection.prepareCall(SP_FIND_ORDER_BY_NAME);
-            callableStatement.setString(1,name_customer);
+            callableStatement.setString(1, name_customer);
             ResultSet resultSet = callableStatement.executeQuery();
-            while (resultSet.next()){
+            while (resultSet.next()) {
                 int id = resultSet.getInt("order_id");
                 String date = resultSet.getString("order_date");
                 String nameCustomer = resultSet.getString("customer_name");

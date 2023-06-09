@@ -14,6 +14,8 @@ public interface IOrderService {
     List<OrderDetail> getDetails(int id);
 
     void deleteOrder(int id);
+
     List<Order> getAllFromACustomer(int customerId);
+
     List<Order> getOrderByNameCustomer(String name_customer);
 }
