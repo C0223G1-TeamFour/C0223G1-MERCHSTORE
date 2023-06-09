@@ -18,16 +18,24 @@
             crossorigin="anonymous"
     />
     <link rel="stylesheet" href="../../bootstrap-5.1.3-dist/css/bootstrap.min.css">
-
+<style>
+    .center{
+        text-align: center;
+    }
+</style>
 </head>
 <body>
 <%@include file="/view/carts/store-header.jsp" %>
-<div class="container-fluid">
-    <div>
-            <div class="col-12 mb-3">
+<div class="container">
+    <div class="d-flex">
+            <div class="col-6 mb-3">
                 <a href="/products?action=create"><button type="submit" class="btn btn-primary bg-black text-white">
                     Add new products</button></a>
             </div>
+        <form class="col-6 d-flex" role="search">
+            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success bg-black text-white" type="submit">Search</button>
+        </form>
     </div>
     <div id="success">
         <p>
@@ -37,25 +45,19 @@
         </p>
     </div>
     <%--    table--%>
-    <div class="d-flex">
-        <h2>List of products </h2>
-        <form class="d-flex " role="search">
-            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-success bg-black text-white" type="submit">Search</button>
-        </form>
-    </div>
-    <table class="table table-bordered mt-5" id="tableStudent">
-        <thead class="table-dark ">
+        <h2 class="mt-3"> PRODUCTS LIST </h2>
+    <table class="container table table-bordered mt-0" id="tableStudent">
+        <thead class="table-secondary">
         <tr>
-            <th scope="col">STT</th>
-            <th scope="col">Id Product</th>
-            <th scope="col">Product's name</th>
-            <th scope="col">Product price</th>
-            <th scope="col">Product Description</th>
-            <th scope="col">Image</th>
-            <th scope="col">Product Type Name</th>
-            <th scope="col">Edit</th>
-            <th scope="col">Delete</th>
+            <th class="center" scope="col">STT</th>
+            <th class="center" scope="col">ID</th>
+            <th class="center" scope="col">IMAGE</th>
+            <th class="center" scope="col">NAME</th>
+            <th class="center" scope="col">DESCRIPTION</th>
+            <th class="center" scope="col">TYPE</th>
+            <th class="center" scope="col">PRICE</th>
+            <th class="center" scope="col">EDIT</th>
+            <th class="center" scope="col">DELETE</th>
         </tr>
         </thead>
         <tbody>
@@ -68,19 +70,19 @@
                     <c:out value="${product.id}"></c:out>
                 </td>
                 <td>
+                    <img src="<c:out value="${product.image}"></c:out>" width="70px">
+                </td>
+                <td>
                     <c:out value="${product.name}"></c:out>
                 </td>
                 <td>
                     <c:out value="${product.description}"></c:out>
                 </td>
                 <td>
-                    <c:out value="${product.price}"></c:out>
-                </td>
-                <td>
-                    <img src="<c:out value="${product.image}"></c:out>" width="50px">
-                </td>
-                <td>
                     <c:out value="${product.productTypeId.productTypeName}"></c:out>
+                </td>
+                <td>
+                    <c:out value="${product.price} €"></c:out>
                 </td>
                 <td>
                     <a href="/products?action=edit&id=${product.id}">
@@ -151,6 +153,7 @@
 <script>
     $(document).ready(function () {
         $('#tableStudent').dataTable({
+            "bInfo": false,
             "dom": 'lrtip',
             "lengthChange": false,
             "pageLength": 5

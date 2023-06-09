@@ -2,8 +2,9 @@ package com.example.merch_store.service.customer;
 
 
 import com.example.merch_store.model.Customer;
-import com.example.merch_store.repository.CustomerRepository;
-import com.example.merch_store.repository.ICustomerRepository;
+import com.example.merch_store.repository.customer.CustomerRepository;
+import com.example.merch_store.repository.customer.ICustomerRepository;
+
 
 import java.util.List;
 
