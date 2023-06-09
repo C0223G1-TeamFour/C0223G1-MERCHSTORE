@@ -28,7 +28,9 @@ public class SignupServlet extends HttpServlet {
             request.getRequestDispatcher("/view/carts/sign-up.jsp").forward(request, response);
         } else {
             iCustomerService.addNewCustomerAccount(new Customer(firstName, lastName, email, password));
-            response.sendRedirect("/login");
+            request.setAttribute("success", "Successfully created a new account!");
+            request.getRequestDispatcher("/view/carts/log-in.jsp").forward(request,response);
+//            response.sendRedirect("/login");
         }
     }
 }

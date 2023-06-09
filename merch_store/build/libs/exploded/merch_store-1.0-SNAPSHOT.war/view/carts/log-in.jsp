@@ -58,6 +58,36 @@
         </div>
     </div>
 </section>
+
+<!-- Modal success -->
+<div class="modal fade" id="modal-success" tabindex="-1" aria-labelledby="exampleModalLabel3" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4>${success}</h4>
+            </div>
+            <div class="modal-footer">
+                <button name="no" type="button" class="btn btn-info" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<c:if test="${success != null}">
+    <script>
+        // Get the modal element
+        let myModal = document.querySelector("#modal-success");
+
+        // Create a new Modal instance
+        let modal = new bootstrap.Modal(myModal);
+
+        // Show the modal
+        modal.show();
+    </script>
+    <% session.removeAttribute("success"); %>
+</c:if>
+
 <%@include file="footer.jsp" %>
 
 <script>

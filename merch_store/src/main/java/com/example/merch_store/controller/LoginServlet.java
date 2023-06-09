@@ -3,11 +3,14 @@ package com.example.merch_store.controller;
 import com.example.merch_store.base.BaseConnection;
 import com.example.merch_store.model.Cart;
 import com.example.merch_store.model.Customer;
+import com.example.merch_store.model.CustomerOrder;
 import com.example.merch_store.model.Order;
 import com.example.merch_store.service.carts.CartService;
 import com.example.merch_store.service.carts.ICartService;
 import com.example.merch_store.service.customer.CustomerService;
 import com.example.merch_store.service.customer.ICustomerService;
+import com.example.merch_store.service.customer_order.CustomerOrderService;
+import com.example.merch_store.service.customer_order.ICustomerOrderService;
 import com.example.merch_store.service.order.IOrderService;
 import com.example.merch_store.service.order.OrderService;
 
@@ -24,7 +27,7 @@ import java.util.List;
 @WebServlet(name = "LoginServlet", value = "/login")
 public class LoginServlet extends HttpServlet {
     ICustomerService iCustomerService = new CustomerService();
-    IOrderService iOrderService = new OrderService();
+    ICustomerOrderService iCustomerOrderService = new CustomerOrderService();
     ICartService iCartService = new CartService();
 
     @Override
@@ -73,7 +76,7 @@ public class LoginServlet extends HttpServlet {
                         System.out.println("nhehe");
                         Customer currentCustomer = iCustomerService.findCustomerByAccountId(accountId);
                         System.out.println(currentCustomer.getName());
-                        List<Order> orders = iOrderService.getAllFromACustomer(currentCustomer.getId());
+                        List<CustomerOrder> orders = iCustomerOrderService.getAllOrders(currentCustomer.getId());
                         List<Cart> carts = iCartService.getAllCarts(currentCustomer.getId());
                         session.setAttribute("currentCustomer", currentCustomer);
                         session.setAttribute("orders", orders);
