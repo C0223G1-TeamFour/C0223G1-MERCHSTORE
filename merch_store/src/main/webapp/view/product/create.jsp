@@ -45,18 +45,18 @@
             </div>
             <div class="mb-3">
                 <label for="name" class="form-label"><span class="text-content">Name</span> </label>
-                <input type="text" class="form-control" id="name" name="name"
-                       pattern="^([\p{Lu}][\p{Ll}]{1,8})(\s([\p{Lu}]|[\p{Lu}][\p{Ll}]{1,10})){0,5}$">
+                <input type="text" class="form-control" id="name" name="name">
+<%--                       pattern="^([\p{Lu}][\p{Ll}]{1,8})(\s([\p{Lu}]|[\p{Lu}][\p{Ll}]{1,10})){0,5}$">--%>
             </div>
             <div class="mb-3">
                 <label for="description" class="form-label"><span class="text-content">Description</span></label>
-                <input type="text" class="form-control" id="description" name="description" aria-describedby="emailHelp"
-                       pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$">
+                <input type="text" class="form-control" id="description" name="description" aria-describedby="emailHelp">
+<%--                       pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$">--%>
             </div>
             <div class="mb-3">
                 <label for="price" class="form-label"><span class="text-content">price</span></label>
-                <input type="number" class="form-control" id="price" name="price" aria-describedby="emailHelp"
-                       pattern="^[0][0-9]{9}$">
+                <input type="number" class="form-control" id="price" name="price" aria-describedby="emailHelp">
+<%--                       pattern="^[0][0-9]{9}$">--%>
             </div>
             <div class="mb-3">
                 <label for="productType" class="form-label"><span class="text-content">Product Type</span></label>
