@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProductRepository implements IProductRepository {
-    private static final String INSERT = "set foreign_key_checks = 0; insert into products(product_name, product_description, price, image, product_type_id) values(?, ?, ?, ?, ?);";
+    private static final String INSERT = "insert into products(product_name, product_description, price, image, product_type_id) values(?, ?, ?, ?, ?);";
     private static final String SELECT = "select p.*, pt.product_type_name from products p join product_type pt on pt.product_type_id = p.product_type_id;";
     private static final String DELETE = "call DELETE_PRODUCT(?);";
     private static final String UPDATE = "update products set product_name = ?, product_description = ?, price = ?, image = ?, product_type_id = ? where product_id = ?;";
