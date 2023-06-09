@@ -14,6 +14,7 @@ import java.io.IOException;
 public class HomeServlet extends HttpServlet {
 
     public static IProductService iProductService = new ProductService();
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 

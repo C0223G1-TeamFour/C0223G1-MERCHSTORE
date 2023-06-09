@@ -27,7 +27,7 @@ public class Cart {
 
     }
 
-    public Cart(int customerId, int productId, String productName,int productTypeId, double price, String image, int quantity, double total) {
+    public Cart(int customerId, int productId, String productName, int productTypeId, double price, String image, int quantity, double total) {
         this.customerId = customerId;
         this.productId = productId;
         this.productName = productName;

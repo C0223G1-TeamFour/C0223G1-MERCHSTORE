@@ -11,6 +11,7 @@ import java.io.IOException;
 @WebServlet(name = "MerchServlet", value = "/merch")
 public class MerchServlet extends HttpServlet {
     public static IProductService iProductService = new ProductService();
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setAttribute("products", iProductService.showAllMerch());

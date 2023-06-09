@@ -23,7 +23,7 @@ public class CartServlet extends HttpServlet {
         if (session.getAttribute("accountId") == null) {
             response.sendRedirect("/view/carts/log-in.jsp");
         } else {
-            displayAllCarts(request,response);
+            displayAllCarts(request, response);
         }
     }
 

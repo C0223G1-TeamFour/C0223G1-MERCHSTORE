@@ -24,7 +24,7 @@ public class CustomerService implements ICustomerService {
 
     @Override
     public void editCustomer(int id, Customer customer) {
-        customerRepository.editCustomer(id,customer);
+        customerRepository.editCustomer(id, customer);
     }
 
     @Override
@@ -34,12 +34,12 @@ public class CustomerService implements ICustomerService {
 
     @Override
     public void saveCustomer(Customer customer) {
-       customerRepository.save(customer);
+        customerRepository.save(customer);
     }
 
     @Override
     public List<Customer> searchCustomer(String name, String address) {
-        return customerRepository.viewListCustomer(name,address);
+        return customerRepository.viewListCustomer(name, address);
     }
 
     @Override
@@ -59,6 +59,6 @@ public class CustomerService implements ICustomerService {
 
     @Override
     public boolean updateShippingInfo(int customerId, String phoneNumber, String address) {
-        return customerRepository.updateShippingInfo(customerId,phoneNumber,address);
+        return customerRepository.updateShippingInfo(customerId, phoneNumber, address);
     }
 }

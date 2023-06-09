@@ -13,12 +13,14 @@ public class CustomerOrder {
     private String phone;
     private String address;
 
-    public CustomerOrder(){
+    public CustomerOrder() {
 
     }
-    public CustomerOrder(int customerId){
+
+    public CustomerOrder(int customerId) {
         this.customerId = customerId;
     }
+
     public CustomerOrder(int id, String orderTime, int customerId) {
         this.id = id;
         this.orderTime = orderTime;

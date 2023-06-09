@@ -7,7 +7,8 @@ public class CustomerOrderDetails {
     private int productTypeId;
     private int quantity;
     private double price;
-//    public CustomerOrderDetails(){
+
+    //    public CustomerOrderDetails(){
 //
 //    }
     public CustomerOrderDetails(int id, int orderId, int productId, int productTypeId, int quantity, double price) {
