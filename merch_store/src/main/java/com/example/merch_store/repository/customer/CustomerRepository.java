@@ -1,4 +1,4 @@
-package com.example.merch_store.repository;
+package com.example.merch_store.repository.customer;
 
 
 import com.example.merch_store.base.BaseConnection;
@@ -9,7 +9,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CustomerRepository implements com.example.merch_store.repository.ICustomerRepository {
+public class CustomerRepository implements ICustomerRepository {
 
     private static final String SELECT_EMPLOYEE = "SELECT customers.customer_id,customers.customer_name,customers.email,customers.phone_number,customers.address FROM customers \n" +
             "join account_users on account_users.account_id = customers.account_id\n" +
