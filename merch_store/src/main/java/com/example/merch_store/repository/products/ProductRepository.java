@@ -18,6 +18,7 @@ public class ProductRepository implements IProductRepository {
 
     private static final String SELECT_MERCH = "select p.*, pt.product_type_name from products p join product_type pt on pt.product_type_id = p.product_type_id where p.product_type_id = '1';";
     private static final String SELECT_MUSIC = "select p.*, pt.product_type_name from products p join product_type pt on pt.product_type_id = p.product_type_id where p.product_type_id = '2';";
+    private static final String SEARCH_PRODUCT = "call search_product(?,?);";
 
     @Override
     public List<Product> showAll() {
@@ -195,6 +196,38 @@ public class ProductRepository implements IProductRepository {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return productList;
+    }
+
+    @Override
+    public List<Product> searchProduct(String name, double price) {
+        List<Product> productList = new ArrayList<>();
+        Connection connection = BaseConnection.getConnection();
+        try {
+            CallableStatement callableStatement = connection.prepareCall(SEARCH_PRODUCT);
+            callableStatement.setString(1, name);
+            callableStatement.setDouble(2, price);
+            ResultSet resultSet = callableStatement.executeQuery();
+            while (resultSet.next()){
+                int id = resultSet.getInt("product_id");
+                String productName = resultSet.getString("product_name");
+                String productDescription = resultSet.getString("product_description");
+                double productPrice = resultSet.getDouble("price");
+                String image = resultSet.getString("image");
+                int productTypeId = resultSet.getInt("product_type_id");
+                String productTypeName = resultSet.getString("product_type_name");
+                ProductType productType = new ProductType(productTypeId, productTypeName);
+                productList.add(new Product(id, productName, productDescription, productPrice, image, productType));
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }finally {
             try {
                 connection.close();
             } catch (SQLException e) {

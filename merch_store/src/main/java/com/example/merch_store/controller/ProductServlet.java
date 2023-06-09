@@ -1,5 +1,6 @@
 package com.example.merch_store.controller;
 
+import com.example.merch_store.model.Customer;
 import com.example.merch_store.model.Product;
 import com.example.merch_store.model.ProductType;
 import com.example.merch_store.service.products.IProductService;
@@ -34,6 +35,9 @@ public class ProductServlet extends HttpServlet {
                 break;
             case "details":
                 showDetails(request, response);
+                break;
+            case "search":
+                search(request, response);
                 break;
             default:
                 showlist(request, response);
@@ -96,19 +100,39 @@ public class ProductServlet extends HttpServlet {
             case "details":
                 showDetails(request, response);
                 break;
+            case "search":
+                search(request, response);
+                break;
             default:
                 showlist(request, response);
                 break;
         }
     }
 
+    private void search(HttpServletRequest request, HttpServletResponse response) {
+        String name=request.getParameter("name").trim();
+        double price= Double.parseDouble(request.getParameter("price").trim());
+        if(name == null){
+            name = "";
+        }
+        List<Product> productList =productService.searchProduct(name,price);
+        request.setAttribute("productList",productList);
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher("/view/product/list.jsp");
+        try {
+            requestDispatcher.forward(request,response);
+        } catch (ServletException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     private void delete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int id = Integer.parseInt(request.getParameter("idDelete"));
         System.out.println(id);
         productService.deleteProduct(id);
         request.setAttribute("message", "Delete success");
         request.setAttribute("productList", productService.showAll());
-        request.getRequestDispatcher("/view/product/list.jsp").forward(request, response);
+        request.getRequestDispatcher("/view/product/list.jsp").forward(request,response);
     }
 
     private void edit(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -121,9 +145,14 @@ public class ProductServlet extends HttpServlet {
         ProductType productType = new ProductType(productTypeId);
         Product product = new Product(id, name, description, price, image, productType);
         productService.updateProduct(product);
-        request.setAttribute("message", "Update success");
-        request.setAttribute("productList", productService.showAll());
-        request.getRequestDispatcher("/view/product/list.jsp").forward(request, response);
+        if (product == null) {
+            request.setAttribute("message", "Update failure");
+            request.getRequestDispatcher("/view/product/edit.jsp").forward(request, response);
+        } else {
+            request.setAttribute("message", "Update success");
+            request.setAttribute("productList", productService.showAll());
+            request.getRequestDispatcher("/view/product/list.jsp").forward(request, response);
+        }
     }
 
     private void save(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -137,11 +166,12 @@ public class ProductServlet extends HttpServlet {
         productService.createNewProduct(product);
         RequestDispatcher requestDispatcher;
         if (product == null) {
-            requestDispatcher = request.getRequestDispatcher("error-404.jsp");
+            request.setAttribute("message", "Add new failure");
+            requestDispatcher = request.getRequestDispatcher("view/product/list.jsp");
         } else {
             request.setAttribute("message", "Add new success");
-            requestDispatcher = request.getRequestDispatcher("view/product/create.jsp");
+            request.setAttribute("productList", productService.showAll());
+            request.getRequestDispatcher("/view/product/list.jsp").forward(request, response);
         }
-        requestDispatcher.forward(request, response);
     }
 }
