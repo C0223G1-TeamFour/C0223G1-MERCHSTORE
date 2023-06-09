@@ -11,6 +11,7 @@ public class OrderRepository implements IOrderRepository {
     private static final String SP_DELETE_ORDER = "call delete_order(?)";
     private static final String SP_TOTAL_PRICE = "call get_total_price()";
     private static final String SP_GET_DETAILS = "call get_details(?)";
+    private static final String SP_FIND_ORDER_BY_NAME = "call find_order_by_name_customer(?)";
 
     @Override
     public List<Order> getAll() {
@@ -115,4 +116,52 @@ public class OrderRepository implements IOrderRepository {
         return orders;
 
     }
+
+    @Override
+    public List<Order> getOrderByNameCustomer(String name_customer) {
+        List<Order> list = new ArrayList<>();
+        Connection connection = BaseConnection.getConnection();
+        try {
+            CallableStatement callableStatement = connection.prepareCall(SP_FIND_ORDER_BY_NAME);
+            callableStatement.setString(1,name_customer);
+            ResultSet resultSet = callableStatement.executeQuery();
+            while (resultSet.next()){
+                int id = resultSet.getInt("order_id");
+                String nameEmployee = resultSet.getString("employee_name");
+                String nameCustomer = resultSet.getString("customer_name");
+                String date = resultSet.getString("order_date");
+                String status = resultSet.getString("order_status");
+                Customer customer = new Customer(nameCustomer);
+                Employee employee = new Employee(nameEmployee);
+                Order order = new Order(id, date, customer, employee, status);
+                list.add(order);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+//    @Override
+//    public List<Order> getAll() {
+//        Connection connection = BaseConnection.getConnection();
+//        List<Order> list = new ArrayList<>();
+//        try {
+//            CallableStatement callableStatement = connection.prepareCall(SP_ORDER_MANAGEMENT);
+//            ResultSet resultSet = callableStatement.executeQuery();
+//            while (resultSet.next()) {
+//                int id = resultSet.getInt("order_id");
+//                String nameEmployee = resultSet.getString("employee_name");
+//                String nameCustomer = resultSet.getString("customer_name");
+//                String date = resultSet.getString("order_date");
+//                String status = resultSet.getString("order_status");
+//                Customer customer = new Customer(nameCustomer);
+//                Employee employee = new Employee(nameEmployee);
+//                Order order = new Order(id, date, customer, employee, status);
+//                list.add(order);
+//            }
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//        return list;
+//    }
 }

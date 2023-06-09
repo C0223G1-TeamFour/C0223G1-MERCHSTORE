@@ -34,4 +34,9 @@ public class OrderService implements IOrderService {
     public List<Order> getAllFromACustomer(int customerId) {
         return orderRepository.getAllFromACustomer(customerId);
     }
+
+    @Override
+    public List<Order> getOrderByNameCustomer(String name_customer) {
+        return orderRepository.getOrderByNameCustomer(name_customer);
+    }
 }
