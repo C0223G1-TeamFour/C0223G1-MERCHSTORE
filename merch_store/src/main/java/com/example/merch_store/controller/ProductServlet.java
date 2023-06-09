@@ -115,6 +115,7 @@ public class ProductServlet extends HttpServlet {
         if(name == null){
             name = "";
         }
+
         List<Product> productList =productService.searchProduct(name,price);
         request.setAttribute("productList",productList);
         RequestDispatcher requestDispatcher = request.getRequestDispatcher("/view/product/list.jsp");

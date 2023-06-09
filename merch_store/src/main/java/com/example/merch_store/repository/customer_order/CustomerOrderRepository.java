@@ -64,7 +64,7 @@ public class CustomerOrderRepository implements ICustomerOrderRepository {
     public boolean deleteOrder(int orderId, int customerId) {
         boolean rowDeleted = false;
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement(BaseConnection.DELETE_ORDER);
+            PreparedStatement preparedStatement = connection.prepareStatement(BaseConnection.DELETE_ORDER_FROM_CUSTOMER);
             preparedStatement.setInt(1, orderId);
             preparedStatement.setInt(2, customerId);
             rowDeleted = preparedStatement.executeUpdate() > 0;

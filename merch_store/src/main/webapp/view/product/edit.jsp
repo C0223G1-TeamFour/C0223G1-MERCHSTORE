@@ -43,7 +43,7 @@
             </div>
             <div class="mb-3">
                 <label for="image" class="form-label"><span class="text-content">Image</span></label>
-                <input type="text" class="form-control" name="image" id="image" value="${productById.image}${productById.id}">
+                <input type="text" class="form-control" name="image" id="image" value="${productById.image}">
             </div>
             <div class="mb-3">
                 <label for="name" class="form-label"><span class="text-content">Name</span> </label>

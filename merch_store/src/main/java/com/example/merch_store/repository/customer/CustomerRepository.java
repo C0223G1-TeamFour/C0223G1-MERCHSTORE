@@ -28,6 +28,7 @@ public class CustomerRepository implements ICustomerRepository {
     private static final String INSERT_ACCOUNT_USER = "insert into account_users(user_email, user_password) value (?,?)";
     private static final String INSERT_CUSTOMER = "call addCustomer(?,?,?,?,?)";
     private static final String FIND_CUSTOMER = "call findCustomer(?,?)";
+    private static final String SELECT_USER_NAME = "select account_users.user_email from account_users";
 
     @Override
     public List<Customer> getListCustomer() {
@@ -239,5 +240,28 @@ public class CustomerRepository implements ICustomerRepository {
             e.printStackTrace();
         }
         return rowEdited;
+    }
+    @Override
+    public List<String> getUserName() {
+        Connection connection = BaseConnection.getConnection();
+        List<String> listUserName = new ArrayList<>();
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_USER_NAME);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                String userName = resultSet.getString("user_email");
+                listUserName.add(userName);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return listUserName;
     }
 }

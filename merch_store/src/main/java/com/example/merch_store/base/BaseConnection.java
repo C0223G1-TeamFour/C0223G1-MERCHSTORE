@@ -41,7 +41,7 @@ public class BaseConnection {
     public static final String DELETE_ACCOUNT = "call delete_account_user(?);";
 
     public static final String SELECT_ALL_ORDERS = "select * from orders where customer_id = ?;";
-    public static final String DELETE_ORDER = "call delete_order(?,?);";
+    public static final String DELETE_ORDER_FROM_CUSTOMER = "call delete_order_from_customer(?,?);";
     public static final String CHECK_ORDER_ID = "select * from orders where order_id = ? and customer_id = ?;";
 
     public static final String SELECT_ORDER_MANAGEMENT = "call show_order_management();";
