@@ -19,13 +19,15 @@
           integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 </head>
 <style>
-    .pagination{
+    .pagination {
         float: right;
     }
-    .content{
+
+    .content {
         margin-left: 50px;
         margin-right: 50px;
     }
+
     table {
         border-collapse: collapse;
         margin: 0;
@@ -42,18 +44,22 @@
     table tr {
         padding: .35em;
     }
+
     table th,
     table td {
         padding: .625em;
         text-align: center;
     }
+
     @media screen and (max-width: 600px) {
         table {
             border: 0;
         }
-        .content{
+
+        .content {
             margin: 0;
         }
+
         table thead {
             border: none;
             clip: rect(0 0 0 0);
@@ -92,7 +98,8 @@
         table td:last-child {
             border-bottom: 0;
         }
-        .search{
+
+        .search {
             margin-top: 20px;
         }
     }
@@ -101,79 +108,79 @@
 <body>
 <%@include file="/view/carts/store-header.jsp" %>
 <div class="container px-2">
-<div class=" row mb-4">
-    <div class="col-md-2 col-sm-6">
-        <a href="/customer?action=create">
-            <button type="button" class="btn btn-success">
-                ADD CUSTOMER
-            </button>
-        </a>
-    </div>
-    <div class="col-md-2 col-sm-0"></div>
-    <form class="col-md-8 col-sm-10" action="/employee?action=search" method="post">
-        <div class="row">
-            <div class="col-xl-2 col-md-3">
-                <label for="inputPassword6" class="col-form-label"><span>Name</span></label>
-            </div>
-            <div class="col-xl-3 col-md-8">
-                <input type="name" id="inputPassword6" class="form-control" name="name">
-            </div>
-            <div class="col-xl-2 col-md-3">
-                <label for="address" class="col-form-label"><span>Address</span></label>
-            </div>
-            <div class="col-xl-3 col-md-8">
-                <input type="text" name="address" id="address" class="form-control"
-                       aria-describedby="passwordHelpInline">
-            </div>
-            <div class="col-xl-2 col-md-1 search">
-                <button type="submit" class="btn btn-primary"><i class="fa-solid fa-magnifying-glass"></i>
+    <div class=" row mb-4">
+        <div class="col-md-2 col-sm-6">
+            <a href="/customer?action=create">
+                <button type="button" class="btn btn-success">
+                    ADD CUSTOMER
                 </button>
-            </div>
+            </a>
         </div>
-    </form>
-</div>
-<table class="table table-bordered "  id="tableUser">
-    <thead class="table-dark ">
-    <tr>
-        <th scope="col">STT</th>
-        <th scope="col">Id Customer</th>
-        <th scope="col">Name</th>
-        <th scope="col">Email</th>
-        <th scope="col">Address</th>
-        <th scope="col">Action</th>
-    </tr>
-    </thead>
-    <tbody>
-    <c:forEach items="${customerList}" var="customer" varStatus="status">
-        <tr>
-            <td>
-                <c:out value="${status.count}"></c:out>
-            </td>
-            <td>
-                <c:out value="${customer.getId()}"></c:out>
-            </td>
-            <td>
-                <c:out value="${customer.getName()}"></c:out>
-            </td>
-            <td>
-                <c:out value="${customer.getEmail()}"></c:out>
-            </td>
-            <td>
-                <c:out value="${customer.getAddress()}"></c:out>
-            </td>
-            <td>
-                <div class="row">
-                    <div class="col-auto">
-                        <button type="button" onclick="isDelete('${customer.getId()}','${customer.getName()}')"
-                                class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#button-delete">DELETE
-                        </button>
-                    </div>
+        <div class="col-md-2 col-sm-0"></div>
+        <form class="col-md-8 col-sm-10" action="/employee?action=search" method="post">
+            <div class="row">
+                <div class="col-xl-2 col-md-3">
+                    <label for="inputPassword6" class="col-form-label"><span>Name</span></label>
                 </div>
-            </td>
+                <div class="col-xl-3 col-md-8">
+                    <input type="name" id="inputPassword6" class="form-control" name="name">
+                </div>
+                <div class="col-xl-2 col-md-3">
+                    <label for="address" class="col-form-label"><span>Address</span></label>
+                </div>
+                <div class="col-xl-3 col-md-8">
+                    <input type="text" name="address" id="address" class="form-control"
+                           aria-describedby="passwordHelpInline">
+                </div>
+                <div class="col-xl-2 col-md-1 search">
+                    <button type="submit" class="btn btn-primary"><i class="fa-solid fa-magnifying-glass"></i>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <table class="table table-bordered " id="tableUser">
+        <thead class="table-dark ">
+        <tr>
+            <th scope="col">STT</th>
+            <th scope="col">Id Customer</th>
+            <th scope="col">Name</th>
+            <th scope="col">Email</th>
+            <th scope="col">Address</th>
+            <th scope="col">Action</th>
         </tr>
-    </c:forEach>
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+        <c:forEach items="${customerList}" var="customer" varStatus="status">
+            <tr>
+                <td>
+                    <c:out value="${status.count}"></c:out>
+                </td>
+                <td>
+                    <c:out value="${customer.getId()}"></c:out>
+                </td>
+                <td>
+                    <c:out value="${customer.getName()}"></c:out>
+                </td>
+                <td>
+                    <c:out value="${customer.getEmail()}"></c:out>
+                </td>
+                <td>
+                    <c:out value="${customer.getAddress()}"></c:out>
+                </td>
+                <td>
+                    <div class="row">
+                        <div class="col-auto">
+                            <button type="button" onclick="isDelete('${customer.getId()}','${customer.getName()}')"
+                                    class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#button-delete">DELETE
+                            </button>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </c:forEach>
+        </tbody>
+    </table>
 </div>
 <div class="modal " tabindex="-1" id="button-delete">
     <div class="modal-dialog">
