@@ -1,6 +1,5 @@
 package com.example.merch_store.repository;
 
-import com.example.merch_store.model.AccountUser;
 import com.example.merch_store.model.Customer;
 
 import java.util.List;
@@ -24,4 +23,5 @@ public interface ICustomerRepository {
 
     boolean checkAccountExistence(String email);
     void addNewCustomerAccount(Customer newCustomer);
+    boolean updateShippingInfo(int customerId, String phoneNumber, String address);
 }

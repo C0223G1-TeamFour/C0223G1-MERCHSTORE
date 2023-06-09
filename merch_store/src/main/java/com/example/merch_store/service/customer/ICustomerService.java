@@ -22,4 +22,5 @@ public interface ICustomerService {
 
     boolean checkAccountExistence(String email);
     void addNewCustomerAccount(Customer newCustomer);
+    boolean updateShippingInfo(int customerId, String phoneNumber, String address);
 }

@@ -55,4 +55,9 @@ public class CustomerService implements ICustomerService {
     public void addNewCustomerAccount(Customer newCustomer) {
         customerRepository.addNewCustomerAccount(newCustomer);
     }
+
+    @Override
+    public boolean updateShippingInfo(int customerId, String phoneNumber, String address) {
+        return customerRepository.updateShippingInfo(customerId,phoneNumber,address);
+    }
 }
