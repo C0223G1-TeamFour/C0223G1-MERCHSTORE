@@ -49,4 +49,9 @@ public class ProductService implements IProductService {
     public List<Product> showAllMusic() {
         return iProductRepository.showAllMusic();
     }
+
+    @Override
+    public List<Product> searchProduct(String name, double price) {
+        return iProductRepository.searchProduct(name, price);
+    }
 }
