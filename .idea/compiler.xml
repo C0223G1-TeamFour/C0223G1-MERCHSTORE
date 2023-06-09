@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <bytecodeTargetLevel>
+      <module name="merch" target="1.8" />
+      <module name="merch.main" target="1.8" />
+      <module name="merch.test" target="1.8" />
+      <module name="merch_store" target="1.8" />
+      <module name="merch_store.main" target="1.8" />
+      <module name="merch_store.test" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

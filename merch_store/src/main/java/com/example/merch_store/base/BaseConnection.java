@@ -7,7 +7,7 @@ import java.sql.SQLException;
 public class BaseConnection {
     static String jdbcURL = "jdbc:mysql://localhost:3306/team4";
     static String jdbcUsername = "root";
-    static String jdbcPassword = "codegym";
+    static String jdbcPassword = "bigbang23";
 
     public static final String CHECK_ACCOUNT = "call check_account(?, ?);";
     public static final String CHECK_ROLE = "call check_role(?); ";

@@ -220,4 +220,19 @@ public class CustomerRepository implements ICustomerRepository {
             e.printStackTrace();
         }
     }
+
+    @Override
+    public boolean updateShippingInfo(int customerId, String phoneNumber, String address) {
+        boolean rowEdited = false;
+        try {
+            PreparedStatement preparedStatement = BaseConnection.getConnection().prepareStatement(BaseConnection.UPDATE_SHIPPING_INFO);
+            preparedStatement.setString(1, phoneNumber);
+            preparedStatement.setString(2, address);
+            preparedStatement.setInt(3, customerId);
+            rowEdited = preparedStatement.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return rowEdited;
+    }
 }
