@@ -135,7 +135,7 @@
 
 <div class="header">
     <div class="message-header">
-        <p class="fs-6">
+        <p>
             NO ADDITIONAL CUSTOM FEES OR TAXES FOR OUR ASIA CUSTOMERS
         </p>
     </div>

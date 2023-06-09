@@ -13,20 +13,29 @@
     <link rel="stylesheet" href="bootstrap520/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="datatables/css/dataTables.bootstrap5.min.css"/>
     <style>
-        .links {
-            font-size: 1.5rem;
-            margin-left: 1.5rem;
-            padding: 0;
-            color: gray;
-            font-weight: lighter;
+        #modal-body {
+
         }
     </style>
     <c:import url="/view/carts/store-header.jsp"></c:import>
 </head>
 <body>
-<div class="container-fluid">
-    <div>
-        <p class="links">HISTORY ORDER LIST</p>
+<div class="container px-2">
+    <div class=" row mb-4">
+        <form class="col-md-8 col-sm-10" action="/orders?action=search" method="post">
+            <div class="row">
+                <div class="col-xl-2 col-md-3">
+                    <label for="inputPassword6" class="col-form-label"><span>Name</span></label>
+                </div>
+                <div class="col-xl-3 col-md-8">
+                    <input type="name" id="inputPassword6" class="form-control" name="name">
+                </div>
+                <div class="col-xl-2 col-md-1 search">
+                    <button type="submit" class="btn btn-primary"><i class="fa-solid fa-magnifying-glass"></i>
+                    </button>
+                </div>
+            </div>
+        </form>
     </div>
 </div>
 <table class="table table-bordered" id="tableOrder">
@@ -81,8 +90,8 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <h3>ARE YOU SURE ?
-                    <span style="color:red" id="nameDelete"></span>
+                <h3>Are You Sure Delete The Order With The Name:
+                    <span style="color:red" id="nameDelete">?</span>
                 </h3>
             </div>
             <div class="modal-footer">
@@ -105,14 +114,16 @@
 <script>
     $(document).ready(function () {
         $('#tableOrder').dataTable({
+            "bInfo": false,
             "dom": 'lrtip',
             "lengthChange": false,
             "pageLength": 5
         });
     });
 
-    function remove(id) {
+    function remove(id, name) {
         document.getElementById("idDelete").value = id;
+        document.getElementById("nameDelete").innerText = name;
     }
 </script>
 <c:import url="/view/carts/footer.jsp"></c:import>
