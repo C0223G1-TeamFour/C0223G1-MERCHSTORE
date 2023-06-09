@@ -22,6 +22,9 @@ public interface ICustomerRepository {
     Customer findCustomerByAccountId(int accountId);
 
     boolean checkAccountExistence(String email);
+
     void addNewCustomerAccount(Customer newCustomer);
+
     boolean updateShippingInfo(int customerId, String phoneNumber, String address);
+    List<String> getUserName();
 }

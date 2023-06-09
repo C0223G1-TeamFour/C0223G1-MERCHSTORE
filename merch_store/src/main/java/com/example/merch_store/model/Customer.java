@@ -46,11 +46,18 @@ public class Customer {
         this.accountUser = accountUser;
     }
 
-    public Customer(int id_customer, String name_customer, String email, String phone, String nameCustomer) {
+//    public Customer(int id_customer, String name_customer, String email, String phone, String nameCustomer) {
+//        this.id = id_customer;
+//        this.name = name_customer;
+//        this.email = email;
+//        this.phoneNumber = phone;
+//    }
+    public Customer(int id_customer, String name_customer, String email, String phone, String address) {
         this.id = id_customer;
         this.name = name_customer;
         this.email = email;
         this.phoneNumber = phone;
+        this.address = address;
     }
 
     public Customer(String name, String phone, String address) {

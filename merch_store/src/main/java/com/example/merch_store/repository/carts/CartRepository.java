@@ -11,7 +11,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CartRepository implements ICartRepository{
+public class CartRepository implements ICartRepository {
     Connection connection = BaseConnection.getConnection();
 
     @Override

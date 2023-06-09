@@ -25,6 +25,7 @@ public class CustomerOrderServlet extends HttpServlet {
     ICartService iCartService = new CartService();
     ICustomerOrderDetailsService iCustomerOrderDetailsService = new CustomerOrderDetailsService();
     ICustomerService iCustomerService = new CustomerService();
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();

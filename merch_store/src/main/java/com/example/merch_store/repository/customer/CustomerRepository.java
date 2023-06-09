@@ -24,10 +24,11 @@ public class CustomerRepository implements ICustomerRepository {
     private static final String Edit_Customer = "update customers set customer_name=?,phone_number=?,address=? where customer_id=? and is_delete=0";
     private static final String CREATE_CUSTOMER = "insert into customers(customer_name,email,phone_number,address,account_id) " +
             "values (?,?,?,?,?)";
-    private static final String SELECT_CUSTOMER_BY_ID ="select * from customers join account_users on account_users.account_id=customers.account_id where is_delete=0 and customers.customer_id=?";
-    private  static final  String INSERT_ACCOUNT_USER="insert into account_users(user_email, user_password) value (?,?)";
-    private static final  String INSERT_CUSTOMER="call addCustomer(?,?,?,?,?)";
-    private  static  final String FIND_CUSTOMER="call findCustomer(?,?)";
+    private static final String SELECT_CUSTOMER_BY_ID = "select * from customers join account_users on account_users.account_id=customers.account_id where is_delete=0 and customers.customer_id=?";
+    private static final String INSERT_ACCOUNT_USER = "insert into account_users(user_email, user_password) value (?,?)";
+    private static final String INSERT_CUSTOMER = "call addCustomer(?,?,?,?,?)";
+    private static final String FIND_CUSTOMER = "call findCustomer(?,?)";
+    private static final String SELECT_USER_NAME = "select account_users.user_email from account_users";
 
     @Override
     public List<Customer> getListCustomer() {
@@ -43,8 +44,8 @@ public class CustomerRepository implements ICustomerRepository {
                 String phone = resultSet.getString("phone_number");
                 String address = resultSet.getString("address");
                 String password = resultSet.getString("user_password");
-                AccountUser accountUser = new AccountUser(email,password);
-                Customer customer = new Customer(id_customer, name,email, phone,address,accountUser);
+                AccountUser accountUser = new AccountUser(email, password);
+                Customer customer = new Customer(id_customer, name, email, phone, address, accountUser);
                 customerList.add(customer);
             }
         } catch (SQLException throwables) {
@@ -121,11 +122,11 @@ public class CustomerRepository implements ICustomerRepository {
                 String address = resultSet.getString("address");
                 String user_password = resultSet.getString("user_password");
                 AccountUser accountID = new AccountUser(email, user_password);
-                customer = new Customer(id,name,email,phone,address,accountID);
+                customer = new Customer(id, name, email, phone, address, accountID);
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             try {
                 connection.close();
             } catch (SQLException e) {
@@ -142,9 +143,9 @@ public class CustomerRepository implements ICustomerRepository {
             CallableStatement callableStatement = connection.prepareCall(INSERT_CUSTOMER);
             callableStatement.setString(1, customer.getName());
             callableStatement.setString(2, customer.getPhoneNumber());
-            callableStatement.setString(3,customer.getEmail());
-            callableStatement.setString(4,customer.getAddress());
-            callableStatement.setString(5,customer.getAccountUser().getUserPassword());
+            callableStatement.setString(3, customer.getEmail());
+            callableStatement.setString(4, customer.getAddress());
+            callableStatement.setString(5, customer.getAccountUser().getUserPassword());
             callableStatement.executeUpdate();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -157,16 +158,16 @@ public class CustomerRepository implements ICustomerRepository {
         Connection connection = BaseConnection.getConnection();
         try {
             CallableStatement callableStatement = connection.prepareCall(FIND_CUSTOMER);
-            callableStatement.setString(1,name);
-            callableStatement.setString(2,address);
-            ResultSet resultSet= callableStatement.executeQuery();
-            while (resultSet.next()){
+            callableStatement.setString(1, name);
+            callableStatement.setString(2, address);
+            ResultSet resultSet = callableStatement.executeQuery();
+            while (resultSet.next()) {
                 int id_customer = resultSet.getInt("customer_id");
-                String name_customer= resultSet.getString("customer_name");
-                String email= resultSet.getString("email");
-                String phone= resultSet.getString("phone_number");
-                String address_customer= resultSet.getString("address");
-                Customer customer =new  Customer(id_customer,name_customer,email,phone,address_customer);
+                String name_customer = resultSet.getString("customer_name");
+                String email = resultSet.getString("email");
+                String phone = resultSet.getString("phone_number");
+                String address_customer = resultSet.getString("address");
+                Customer customer = new Customer(id_customer, name_customer, email, phone, address_customer);
                 customerList.add(customer);
             }
         } catch (SQLException throwables) {
@@ -198,6 +199,7 @@ public class CustomerRepository implements ICustomerRepository {
 
         return customer;
     }
+
     @Override
     public boolean checkAccountExistence(String email) {
         try {
@@ -210,6 +212,7 @@ public class CustomerRepository implements ICustomerRepository {
         }
         return false;
     }
+
     @Override
     public void addNewCustomerAccount(Customer newCustomer) {
         try {
@@ -237,5 +240,28 @@ public class CustomerRepository implements ICustomerRepository {
             e.printStackTrace();
         }
         return rowEdited;
+    }
+    @Override
+    public List<String> getUserName() {
+        Connection connection = BaseConnection.getConnection();
+        List<String> listUserName = new ArrayList<>();
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_USER_NAME);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                String userName = resultSet.getString("user_email");
+                listUserName.add(userName);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return listUserName;
     }
 }

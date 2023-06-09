@@ -21,19 +21,103 @@
     <link rel="stylesheet" href="datatables/css/dataTables.bootstrap5.min.css"/>
     <c:import url="/view/carts/store-header.jsp"></c:import>
 </head>
+<style>
+    .pagination {
+        float: right;
+    }
+
+    .content {
+        margin-left: 50px;
+        margin-right: 50px;
+    }
+
+    table {
+        border-collapse: collapse;
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        table-layout: fixed;
+    }
+
+    table caption {
+        font-size: 1.5em;
+        margin: .5em 0 .75em;
+    }
+
+    table tr {
+        padding: .35em;
+    }
+
+    table th,
+    table td {
+        padding: .625em;
+        text-align: center;
+    }
+
+    @media screen and (max-width: 600px) {
+        table {
+            border: 0;
+        }
+
+        .content {
+            margin: 0;
+        }
+
+        table thead {
+            border: none;
+            clip: rect(0 0 0 0);
+            height: 1px;
+            margin: -1px;
+            overflow: hidden;
+            padding: 0;
+            position: absolute;
+            width: 1px;
+        }
+
+        table tr {
+            border-bottom: 3px solid #ddd;
+            display: block;
+            margin-bottom: .625em;
+        }
+
+        table td {
+            border-bottom: 1px solid #ddd;
+            display: block;
+            font-size: .8em;
+            text-align: right;
+        }
+
+        table td::before {
+            /*
+            * aria-label has no advantage, it won't be read inside a table
+            content: attr(aria-label);
+            */
+            content: attr(data-label);
+            float: left;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        table td:last-child {
+            border-bottom: 0;
+        }
+
+        .search {
+            margin-top: 20px;
+        }
+    }
+
+</style>
 <body>
-<div class="container-fluid">
-    <h2 style="text-align: center">
-        ORDER DETAILS LIST
-    </h2>
-    <table class="table table-bordered" id="tableOrderDetails">
+<div class="container px-2">
+    <table class="table table-bordered col-10" id="tableOrderDetails">
         <thead class="table-dark">
         <tr>
-            <th>STT</th>
-            <th>ORDER DETAILS ID</th>
-            <th>NAME PRODUCTS</th>
-            <th>PRICE</th>
-            <th>QUANTITY</th>
+            <th scope="col">STT</th>
+            <th scope="col">ORDER DETAILS ID</th>
+            <th scope="col">NAME PRODUCTS</th>
+            <th scope="col">PRICE</th>
+            <th scope="col">QUANTITY</th>
         </tr>
         </thead>
         <tbody>
@@ -57,6 +141,7 @@
 <script>
     $(document).ready(function () {
         $('#tableOrderDetails').dataTable({
+            "bInfo": false,
             "dom": 'lrtip',
             "lengthChange": false,
             "pageLength": 5

@@ -9,6 +9,7 @@ public interface ICustomerOrderRepository {
     void addNewOrder(int customerId);
 
     int getLatestOrderId();
+
     List<CustomerOrder> getAllOrders(int customerId);
 
     boolean deleteOrder(int orderId, int customerId);

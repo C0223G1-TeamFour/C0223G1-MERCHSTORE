@@ -7,8 +7,9 @@ import com.example.merch_store.repository.carts.ICartRepository;
 
 import java.util.List;
 
-public class CartService implements ICartService{
+public class CartService implements ICartService {
     ICartRepository iCartRepository = new CartRepository();
+
     @Override
     public void addCart(Cart cart) {
         iCartRepository.addCart(cart);

@@ -21,4 +21,6 @@ public interface IProductService {
     List<Product> showAllMerch();
 
     List<Product> showAllMusic();
+    List<Product> searchProduct(String name, double price);
+
 }
