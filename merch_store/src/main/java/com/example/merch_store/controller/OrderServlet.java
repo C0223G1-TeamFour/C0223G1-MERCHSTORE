@@ -81,10 +81,11 @@ public class OrderServlet extends HttpServlet {
 
     private void searchOrder(HttpServletRequest request, HttpServletResponse response) {
         String name = request.getParameter("name").trim();
+        String status = request.getParameter("status");
         if (name == null) {
             name = "";
         }
-        List<Order> orderManagement = orderService.getOrderByNameCustomer(name);
+        List<Order> orderManagement = orderService.getOrderByNameCustomer(name,status);
         request.setAttribute("orderManagement", orderManagement);
         Map<Integer, Integer> integerMap = orderService.getTotalPrice();
         request.setAttribute("integerMap", integerMap);

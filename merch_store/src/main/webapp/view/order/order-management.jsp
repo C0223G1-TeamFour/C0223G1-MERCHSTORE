@@ -115,16 +115,25 @@
                     <label for="inputPassword6" class="col-form-label"><span>Name</span></label>
                 </div>
                 <div class="col-xl-3 col-md-8">
-                    <input type="name" id="inputPassword6" class="form-control" name="name">
+                    <input type="name" id="inputPassword6" class="form-control border-2 border-dark btn-primary" name="name">
+                </div>
+                <div class="col-xl-1 col-md-3">
+                    <label for="status" class="col-form-label"><span>Status</span></label>
+                </div>
+                <div class="col-xl-3 col-md-8 m-lg-0">
+                    <select name="status" class="form-select border-2 border-dark btn-primary" id="status" aria-label="Default select example">
+                        <option value="processing">Processing</option>
+                        <option value="complete">Complete</option>
+                    </select>
                 </div>
                 <div class="col-xl-2 col-md-1 search">
-                    <button type="submit" class="btn btn-primary"><i class="fa-solid fa-magnifying-glass"></i>
+                    <button type="submit" class="btn btn-dark"><i class="fa-solid fa-magnifying-glass"></i>
                     </button>
                 </div>
             </div>
         </form>
     </div>
-
+    <h2 class="mt-3"> ORDERS LIST </h2>
 <table class="table table-bordered" id="tableOrder">
     <thead class="table-dark">
     <tr>

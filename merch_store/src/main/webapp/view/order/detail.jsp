@@ -110,6 +110,7 @@
 </style>
 <body>
 <div class="container px-2">
+    <h2 class="mt-3"> DETAILS LIST </h2>
     <table class="table table-bordered col-10" id="tableOrderDetails">
         <thead class="table-dark">
         <tr>

@@ -33,7 +33,7 @@
         border: 2px solid blue;
         border-radius: 10px;
         padding: 10px;
-        background-color: rgba(6, 10, 12, 0.76);
+        background-color: black;
     }
 
     .text-content {
@@ -48,9 +48,6 @@
 </style>
 <body>
 <%@include file="/view/carts/store-header.jsp" %>
-<a href="/products">
-    <button type="submit" class="btn btn-primary bg-secondary text-white">Back</button>
-</a><br>
 <%--<h2 id="success">--%>
 <%--    <c:if test="${requestScope['message'] != null}">--%>
 <%--        <span style="color: blue"><i class="fa-solid fa-square-check"></i>${requestScope['message']}</span>--%>
@@ -120,8 +117,8 @@
 
             </div>
             <div style="text-align: center ">
-                <button type="submit" form="form-1" class="btn btn-secondary "><span
-                        style="font-weight: bold;color:white">Add new product</span></button>
+                <button type="submit" form="form-1" class="btn btn-primary "><span
+                        style="font-weight: bold;color:white">Add New Product</span></button>
             </div>
         </form>
     </div>
