@@ -26,4 +26,8 @@ public interface ICustomerService {
     void addNewCustomerAccount(Customer newCustomer);
 
     boolean updateShippingInfo(int customerId, String phoneNumber, String address);
+
+    boolean editAccount(int customerId, Customer newCustomer);
+
+    boolean deleteAccount(int accountId);
 }

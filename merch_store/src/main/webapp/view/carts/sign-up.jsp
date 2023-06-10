@@ -45,7 +45,7 @@
                             type="text"
                             id="email"
                             class="form-control"
-                            pattern="^\w+@\w+.\w+"
+                            pattern="^\w+@\w+[.]\w+"
                             title="e.g: hannah@gmail.com (Must contain no spaces!)"
                             placeholder="Place your email here"
                             required

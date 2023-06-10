@@ -1,4 +1,5 @@
-<%--
+<%@ page import="java.util.Map" %>
+<%@ page import="java.util.HashMap" %><%--
   Created by IntelliJ IDEA.
   User: ADMIN
   Date: 6/6/2023
@@ -6,6 +7,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
     <link
@@ -44,7 +46,7 @@
 
 <body>
 <%--<% List<Cart> cartList = (List<Cart>) session.getAttribute("cartList"); %>--%>
-<%@include file="/view/carts/header.jsp" %>
+<%@include file="/view/carts/store-header.jsp" %>
 
 <section class="overlay--main d-md-none" style="display: none">
     <table class="table table-hover">
@@ -65,31 +67,49 @@
         <form action="/customer?action=create" method="post" class="form-1" id="form-1">
             <h4 style="text-align: center;color: white">Create Customer Account </h4>
             <div class="mb-3">
-                <label for="name" class="form-label"><span class="text-content">Name</span> </label>
-                <input type="text" class="form-control" id="name" name="name"
-                       pattern="^([\p{Lu}][\p{Ll}]{1,8})(\s([\p{Lu}]|[\p{Lu}][\p{Ll}]{1,10})){0,5}$">
+                <label for="name" class="form-label"><span class="text-content" >Name</span> </label>
+                <input type="text" class="form-control" id="name" name="name" aria-describedby="nameHelp">
+                <div id="nameHelp" class="form-text " style="color: white">
+                    ${map.get("name")}
+                </div>
             </div>
             <div class="mb-3">
                 <label for="email" class="form-label"><span class="text-content">Email Address</span></label>
-                <input type="email" class="form-control" id="email" name="email" aria-describedby="emailHelp"
-                       pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$">
+                <input type="text" class="form-control" id="email" name="email" aria-describedby="emailHelp">
+                <div id="emailHelp" class="form-text " style="color: white">
+                    ${map.get("email")}
+                </div>
             </div>
             <div class="mb-3">
                 <label for="phone" class="form-label"><span class="text-content">Phone</span></label>
-                <input type="text" class="form-control" id="phone" name="phone" aria-describedby="emailHelp"
-                       pattern="^[0][0-9]{9}$">
+                <input type="text" class="form-control" id="phone" name="phone" aria-describedby="phoneHelp">
+                <div id="phoneHelp" class="form-text " style="color: white">
+                    ${map.get("phone")}
+                </div>
             </div>
             <div class="mb-3">
                 <label for="address" class="form-label"><span class="text-content">Address</span></label>
-                <input type="text" class="form-control" name="address" id="address">
+                <input type="text" class="form-control" name="address" id="address" aria-describedby="addressHelp">
+                <div id="addressHelp" class="form-text " style="color: white">
+                    ${map.get("address")}
+                </div>
             </div>
             <div class="mb-3">
                 <label for="password" class="form-label"><span class="text-content">Password</span></label>
-                <input type="password" class="form-control" id="password" name="password"
-                       pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}">
+                <input type="password" class="form-control" id="password" name="password" aria-describedby="passwordHelp">
+                <div id="passwordHelp" class="form-text " style="color: white">
+                    ${map.get("password")}
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="repeatPassword" class="form-label"><span class="text-content">Confirm Password</span></label>
+                <input type="password" class="form-control" id="repeatPassword" name="repeatPassword" aria-describedby="re_passwordHelp">
+                <div id="re_passwordHelp" class="form-text " style="color: white">
+                    ${map.get("re_password")}
+                </div>
             </div>
             <div style="text-align: center ">
-            <button type="submit" form="form-1" class="btn btn-primary " ><span style="font-weight: bold;color:black">Register</span></button>
+                <button type="submit" form="form-1"  class="btn btn-primary " ><span style="font-weight: bold;color:black">Register</span></button>
             </div>
         </form>
     </div>

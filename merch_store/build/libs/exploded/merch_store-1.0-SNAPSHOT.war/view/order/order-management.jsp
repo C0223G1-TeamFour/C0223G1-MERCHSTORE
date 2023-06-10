@@ -13,34 +13,138 @@
     <link rel="stylesheet" href="bootstrap520/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="datatables/css/dataTables.bootstrap5.min.css"/>
     <style>
-        .links {
-            font-size: 1.5rem;
-            margin-left: 1.5rem;
-            padding: 0;
-            color: gray;
-            font-weight: lighter;
+        #modal-body {
+
         }
     </style>
     <c:import url="/view/carts/store-header.jsp"></c:import>
+    <style>
+        .pagination {
+            float: right;
+        }
+
+        .content {
+            margin-left: 50px;
+            margin-right: 50px;
+        }
+
+        table {
+            border-collapse: collapse;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            table-layout: fixed;
+        }
+
+        table caption {
+            font-size: 1.5em;
+            margin: .5em 0 .75em;
+        }
+
+        table tr {
+            padding: .35em;
+        }
+
+        table th,
+        table td {
+            padding: .625em;
+            text-align: center;
+        }
+
+        @media screen and (max-width: 600px) {
+            table {
+                border: 0;
+            }
+
+            .content {
+                margin: 0;
+            }
+
+            table thead {
+                border: none;
+                clip: rect(0 0 0 0);
+                height: 1px;
+                margin: -1px;
+                overflow: hidden;
+                padding: 0;
+                position: absolute;
+                width: 1px;
+            }
+
+            table tr {
+                border-bottom: 3px solid #ddd;
+                display: block;
+                margin-bottom: .625em;
+            }
+
+            table td {
+                border-bottom: 1px solid #ddd;
+                display: block;
+                font-size: .8em;
+                text-align: right;
+            }
+
+            table td::before {
+                /*
+                * aria-label has no advantage, it won't be read inside a table
+                content: attr(aria-label);
+                */
+                content: attr(data-label);
+                float: left;
+                font-weight: bold;
+                text-transform: uppercase;
+            }
+
+            table td:last-child {
+                border-bottom: 0;
+            }
+
+            .search {
+                margin-top: 20px;
+            }
+        }
+
+    </style>
 </head>
 <body>
-<div class="container-fluid">
-    <div>
-        <p class="links">HISTORY ORDER LIST</p>
+<div class="container px-2">
+    <div class="row mb-4">
+        <form class="col-md-8 col-sm-10" action="/orders?action=search" method="post" >
+            <div class="row">
+                <div class="col-xl-2 col-md-3">
+                    <label for="inputPassword6" class="col-form-label"><span>Name</span></label>
+                </div>
+                <div class="col-xl-3 col-md-8">
+                    <input type="name" id="inputPassword6" class="form-control border-2 border-dark btn-primary" name="name">
+                </div>
+                <div class="col-xl-1 col-md-3">
+                    <label for="status" class="col-form-label"><span>Status</span></label>
+                </div>
+                <div class="col-xl-3 col-md-8 m-lg-0">
+                    <select name="status" class="form-select border-2 border-dark btn-primary" id="status" aria-label="Default select example">
+                        <option value="processing">Processing</option>
+                        <option value="complete">Complete</option>
+                    </select>
+                </div>
+                <div class="col-xl-2 col-md-1 search">
+                    <button type="submit" class="btn btn-dark"><i class="fa-solid fa-magnifying-glass"></i>
+                    </button>
+                </div>
+            </div>
+        </form>
     </div>
-</div>
+    <h2 class="mt-3"> ORDERS LIST </h2>
 <table class="table table-bordered" id="tableOrder">
     <thead class="table-dark">
     <tr>
-        <th>STT</th>
-        <th>ORDER ID</th>
-        <th>ORDER DATE</th>
-        <th>CUSTOMER NAME</th>
-        <th>EMPLOYEE NAME</th>
-        <th>STATUS</th>
-        <th>TOTAL PRICE</th>
-        <th>ORDER DETAIL</th>
-        <th>DELETE</th>
+        <th scope="col">STT</th>
+        <th scope="col">ORDER ID</th>
+        <th scope="col">ORDER DATE</th>
+        <th scope="col">CUSTOMER</th>
+        <th scope="col">STATUS</th>
+        <th scope="col">TOTAL PRICE</th>
+        <th scope="col">ORDER DETAIL</th>
+        <th scope="col">DELETE</th>
     </tr>
     </thead>
     <tbody>
@@ -50,7 +154,6 @@
             <td>${orders.id}</td>
             <td>${orders.date}</td>
             <td>${orders.customer.getName()}</td>
-            <td>${orders.employee.getName()}</td>
             <td>${orders.status}</td>
             <td>${integerMap.get(orders.id)} EUR</td>
             <td>
@@ -72,6 +175,7 @@
     </tbody>
 </table>
 
+</div>
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -81,8 +185,8 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <h3>ARE YOU SURE ?
-                    <span style="color:red" id="nameDelete"></span>
+                <h3>Are You Sure Delete The Order With The Name:
+                    <span style="color:red" id="nameDelete">?</span>
                 </h3>
             </div>
             <div class="modal-footer">
@@ -105,17 +209,20 @@
 <script>
     $(document).ready(function () {
         $('#tableOrder').dataTable({
+            "bInfo": false,
             "dom": 'lrtip',
             "lengthChange": false,
             "pageLength": 5
         });
     });
 
-    function remove(id) {
+    function remove(id, name) {
         document.getElementById("idDelete").value = id;
+        document.getElementById("nameDelete").innerText = name;
     }
 </script>
 <c:import url="/view/carts/footer.jsp"></c:import>
+</div>
 </body>
 
 </html>
