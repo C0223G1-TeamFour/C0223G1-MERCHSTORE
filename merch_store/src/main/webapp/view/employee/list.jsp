@@ -104,8 +104,8 @@
     <div class=" row mb-4">
         <div class="col-md-2 col-sm-6">
             <a href="/customer?action=create">
-                <button type="button" class="btn btn-success">
-                    ADD CUSTOMER
+                <button type="button" class="btn btn-dark">
+                    ADD NEW CUSTOMER
                 </button>
             </a>
         </div>
@@ -116,22 +116,23 @@
                     <label for="inputPassword6" class="col-form-label"><span>Name</span></label>
                 </div>
                 <div class="col-xl-3 col-md-8">
-                    <input type="name" id="inputPassword6" class="form-control" name="name">
+                    <input type="name" id="inputPassword6" class="form-control border-2 border-dark btn-primary" name="name">
                 </div>
                 <div class="col-xl-2 col-md-3">
                     <label for="address" class="col-form-label"><span>Address</span></label>
                 </div>
                 <div class="col-xl-3 col-md-8">
-                    <input type="text" name="address" id="address" class="form-control"
+                    <input type="text" name="address" id="address" class="form-control border-2 border-dark btn-primary"
                            aria-describedby="passwordHelpInline">
                 </div>
                 <div class="col-xl-2 col-md-1 search">
-                    <button type="submit" class="btn btn-primary"><i class="fa-solid fa-magnifying-glass"></i>
+                    <button type="submit" class="btn btn-dark"><i class="fa-solid fa-magnifying-glass"></i>
                     </button>
                 </div>
             </div>
         </form>
     </div>
+    <h2 class="mt-3"> CUSTOMERS LIST </h2>
     <table class="table table-bordered "  id="tableUser">
         <thead class="table-dark ">
         <tr>

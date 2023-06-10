@@ -136,8 +136,8 @@
     <div class="d-flex">
         <div class="col-6 mb-3">
             <a href="/products?action=create">
-                <button type="submit" class="btn btn-primary bg-black text-white">
-                    Add new products
+                <button type="submit" class="btn btn-dark">
+                    ADD NEW PRODUCT
                 </button>
             </a>
         </div>
@@ -147,14 +147,17 @@
                     <label for="inputPassword6" class="col-form-label"><span>Name</span></label>
                 </div>
                 <div class="col-xl-6 col-md-8 m-lg-0">
-                    <input type="name" id="inputPassword6" class="form-control" name="name">
+                    <input type="name" id="inputPassword6" class="form-control border-2 border-dark btn-primary" name="name">
                 </div>
                 <div class="col-xl-1 col-md-3">
                     <label for="price" class="col-form-label"><span>Price</span></label>
                 </div>
                 <div class="col-xl-3 col-md-8 m-lg-0">
-                    <input type="number" name="price" id="price" class="form-control"
-                           aria-describedby="passwordHelpInline">
+                    <select name="price" class="form-select border-2 border-dark btn-primary" id="price" aria-label="Default select example">
+                        <option value="30">0-50 €</option>
+                        <option value="75">51-100 €</option>
+                        <option value="110">> 100 €</option>
+                    </select>
                 </div>
                 <div class="col-xl-1 col-md-3 search">
                     <button type="submit" class="btn btn-dark"><i class="fa-solid fa-magnifying-glass"></i>

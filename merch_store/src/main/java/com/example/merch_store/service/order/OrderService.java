@@ -36,7 +36,7 @@ public class OrderService implements IOrderService {
     }
 
     @Override
-    public List<Order> getOrderByNameCustomer(String name_customer) {
-        return orderRepository.getOrderByNameCustomer(name_customer);
+    public List<Order> getOrderByNameCustomer(String name_customer,String status) {
+        return orderRepository.getOrderByNameCustomer(name_customer,status);
     }
 }
