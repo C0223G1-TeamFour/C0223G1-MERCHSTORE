@@ -11,7 +11,7 @@ public interface ICustomerService {
 
     void deleteCustomer(int id);
 
-    void editCustomer(int id, Customer customer);
+    Map<String,String> editCustomer(Customer customer);
 
     Customer getCustomer(int id_customer);
 

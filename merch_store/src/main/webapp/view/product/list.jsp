@@ -141,68 +141,34 @@
                 </button>
             </a>
         </div>
-        <form class="col-6 d-flex" role="search" action="/products?action=search" method="post">
+        <form class="col-6 mb-3" role="search" action="/products?action=search" method="post">
             <div class="row">
                 <div class="col-xl-1 col-md-3">
                     <label for="inputPassword6" class="col-form-label"><span>Name</span></label>
                 </div>
-                <div class="col-xl-6 col-md-8 m-lg-0">
+                <div class="col-xl-4 col-md-8 m-lg-0">
                     <input type="name" id="inputPassword6" class="form-control border-2 border-dark btn-primary" name="name">
                 </div>
                 <div class="col-xl-1 col-md-3">
                     <label for="price" class="col-form-label"><span>Price</span></label>
                 </div>
-                <div class="col-xl-3 col-md-8 m-lg-0">
+                <div class="col-xl-4 col-md-8 m-lg-0">
                     <select name="price" class="form-select border-2 border-dark btn-primary" id="price" aria-label="Default select example">
-                        <option value="30">0-50 €</option>
-                        <option value="75">51-100 €</option>
-                        <option value="110">> 100 €</option>
+                        <option value="30">0-50 EUR</option>
+                        <option value="75">51-100 EUR</option>
+                        <option value="110">> 100 EUR</option>
                     </select>
                 </div>
-                <div class="col-xl-1 col-md-3 search">
+                <div class="col-xl-2 col-md-3 search">
                     <button type="submit" class="btn btn-dark"><i class="fa-solid fa-magnifying-glass"></i>
                     </button>
                 </div>
             </div>
         </form>
-        <%--            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">--%>
-        <%--            <button class="btn btn-outline-success bg-black text-white" type="submit">Search</button>--%>
         </form>
     </div>
-    <%--    <div id="success">--%>
-    <%--        <p >--%>
-    <%--            <c:if test="${requestScope['message'] != null}">--%>
-    <%--                <span style="color: blue"><i class="fa-solid fa-square-check">${requestScope['message']}</span>--%>
-    <%--            </c:if>--%>
-    <%--        </p>--%>
-    <%--    </div>--%>
-    <div class="modal fade" id="modal-success" tabindex="-1" aria-labelledby="exampleModalLabel3" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header text-bg-success">
-                    <h4><i class="fa-solid fa-square-check"></i>${message}</h4>
-                </div>
-                <div class="modal-footer">
-                    <button name="no" type="button" class="btn btn-info" data-bs-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
 
 
-    <c:if test="${message != null}">
-        <script>
-            // Get the modal element
-            let myModal = document.querySelector("#modal-success");
-
-            // Create a new Modal instance
-            let modal = new bootstrap.Modal(myModal);
-
-            // Show the modal
-            modal.show();
-        </script>
-
-    </c:if>
     <%--    table--%>
     <h2 class="mt-3"> PRODUCTS LIST </h2>
     <table class="container table table-bordered mt-0" id="tableStudent">
@@ -241,7 +207,7 @@
                     <c:out value="${product.productTypeId.productTypeName}"></c:out>
                 </td>
                 <td class="center">
-                    <c:out value="${product.price} €"></c:out>
+                    <c:out value="${product.price} EUR"></c:out>
                 </td>
                 <td>
                     <a href="/products?action=edit&id=${product.id}">
@@ -250,7 +216,7 @@
                     </a>
                 </td>
                 <td>
-                    <button type="button" class="btn btn-primary" style="background-color: red"
+                    <button type="button" class="btn btn-danger"
                             data-bs-toggle="modal" data-bs-target="#exampleModal"
                             onclick="remove(${product.id},'${product.name}')">
                         <i class="fa-solid fa-trash-can"></i>
@@ -265,33 +231,59 @@
 
 
 <!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel5" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header bg-dark">
-                <h1 class="modal-title fs-1  text-white " id="exampleModalLabel">Delete Product</h1>
+            <div class="modal-header ">
+                <h1 class="modal-title fs-5" id="exampleModalLabel5">DELETE PRODUCT</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body ">
-                <h3>Confirm Delete
-                    <span style="color:#e02d2d; font-size: 30px" id="nameDelete"></span>
+            <div class="modal-body">
+                <h3>Are You Sure Delete The Product With The Name:
+                    <span style="color:red" id="nameDelete"></span>
                 </h3>
             </div>
-            <div class="modal-footer ">
+            <div class="modal-footer">
                 <form action="/products?action=delete" method="post">
                     <input type="hidden" name="idDelete" id="idDelete">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
-                    <button type="submit" class="btn btn-primary">Yes</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Delete</button>
                 </form>
             </div>
         </div>
     </div>
 </div>
+<%---- modol suss----%>
+<div class="modal fade" id="modal-success" tabindex="-1" aria-labelledby="exampleModalLabel3" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header text-bg-primary-primary">
+                <h4><i class="fa-solid fa-square-check"></i> ${message}</h4>
+            </div>
+            <div class="modal-footer">
+                <button name="no" type="button" class="btn btn-info" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 
-<script src="jquery/jquery-3.5.1.min.js"></script>
-<script src="datatables/js/jquery.dataTables.min.js"></script>
-<script src="datatables/js/dataTables.bootstrap5.min.js"></script>
-<script src="bootstrap520/js/bootstrap.bundle.js"></script>
+
+<c:if test="${message != null}">
+    <script>
+        // Get the modal element
+        let myModal = document.querySelector("#modal-success");
+
+        // Create a new Modal instance
+        let modal = new bootstrap.Modal(myModal);
+
+        // Show the modal
+        modal.show();
+    </script>
+</c:if>
+
+<script src="../../jquery/jquery-3.5.1.min.js"></script>
+<script src="../../datatables/js/jquery.dataTables.min.js"></script>
+<script src="../../datatables/js/dataTables.bootstrap5.min.js"></script>
 <script>
     $(document).ready(function () {
         $('#tableStudent').dataTable({

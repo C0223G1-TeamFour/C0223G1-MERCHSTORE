@@ -108,6 +108,9 @@
                     ${map.get("re_password")}
                 </div>
             </div>
+            <div class="mb-3">
+                <input type="checkbox" onclick="myFunction()"><span style="color: white;font-weight: bold">Show Password</span>
+            </div>
             <div style="text-align: center ">
                 <button type="submit" form="form-1"  class="btn btn-primary " ><span style="font-weight: bold;color:black">Register</span></button>
             </div>
@@ -117,6 +120,17 @@
 </div>
 <%@include file="/view/carts/footer.jsp" %>
 <script>
+    function myFunction() {
+        var x = document.getElementById("password");
+        var y = document.getElementById("repeatPassword");
+        if (x.type === "password" && y.type === "password") {
+            x.type = "text";
+            y.type = "text";
+        } else {
+            x.type = "password";
+            y.type = "password";
+        }
+    }
     function switcher() {
         let overlayMain = document.querySelector(".overlay--main");
         if (overlayMain.style.display === "none") {

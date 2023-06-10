@@ -16,7 +16,7 @@ public class OrderService implements IOrderService {
     }
 
     @Override
-    public Map<Integer, Integer> getTotalPrice() {
+    public Map<Integer, Double> getTotalPrice() {
         return orderRepository.getTotalPrice();
     }
 

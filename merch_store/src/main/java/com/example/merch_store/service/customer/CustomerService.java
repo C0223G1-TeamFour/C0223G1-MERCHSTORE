@@ -25,8 +25,41 @@ public class CustomerService implements ICustomerService {
     }
 
     @Override
-    public void editCustomer(int id, Customer customer) {
-        customerRepository.editCustomer(id, customer);
+    public Map editCustomer(Customer customer) {
+        boolean flag = true;
+        String x = "";
+        Map<String, String> mapValidation = new HashMap<>();
+        if (customer.getName().matches("^([\\p{Lu}][\\p{Ll}]{1,8})(\\s([\\p{Lu}]|[\\p{Lu}][\\p{Ll}]{1,10})){0,5}$")) {
+            mapValidation.put("name", x);
+        } else {
+            mapValidation.put("name", "Incorrect format!");
+            flag = false;
+        }
+        if (customer.getAddress().matches("^[A-Za-z -]*$")) {
+            mapValidation.put("address", x);
+        } else {
+            mapValidation.put("address", "Incorrect format!");
+            flag = false;
+        }
+
+        if (customer.getPhoneNumber().matches("^[0][0-9]{9}$")) {
+            mapValidation.put("phone", x);
+        } else {
+            mapValidation.put("phone", "Incorrect format!");
+            flag = false;
+        }
+
+        if (customer.getAccountUser().getUserPassword().matches("(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,}")) {
+            mapValidation.put("password", x);
+        } else {
+            mapValidation.put("password", "Incorrect format!");
+            flag = false;
+        }
+        if (flag) {
+            customerRepository.editCustomer(customer);
+
+        }
+        return mapValidation;
     }
 
     @Override

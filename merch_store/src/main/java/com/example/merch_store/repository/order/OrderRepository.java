@@ -36,15 +36,15 @@ public class OrderRepository implements IOrderRepository {
     }
 
     @Override
-    public Map<Integer, Integer> getTotalPrice() {
-        Map<Integer, Integer> integerMap = new LinkedHashMap<>();
+    public Map<Integer, Double> getTotalPrice() {
+        Map<Integer, Double> integerMap = new LinkedHashMap<>();
         Connection connection = BaseConnection.getConnection();
         try {
             CallableStatement callableStatement = connection.prepareCall(SP_TOTAL_PRICE);
             ResultSet resultSet = callableStatement.executeQuery();
             while (resultSet.next()) {
                 int orderId = resultSet.getInt("order_id");
-                int totalPrice = resultSet.getInt("total_price");
+                double totalPrice = resultSet.getDouble("total_price");
                 integerMap.put(orderId, totalPrice);
             }
         } catch (SQLException e) {

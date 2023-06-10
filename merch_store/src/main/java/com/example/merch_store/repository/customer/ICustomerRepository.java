@@ -11,7 +11,7 @@ public interface ICustomerRepository {
 
     void createCustomer(Customer customer);
 
-    void editCustomer(int id, Customer customer);
+    void editCustomer(Customer customer);
 
     Customer getCustomer(int id);
 
@@ -26,7 +26,9 @@ public interface ICustomerRepository {
     void addNewCustomerAccount(Customer newCustomer);
 
     boolean updateShippingInfo(int customerId, String phoneNumber, String address);
+
     List<String> getUserName();
+
     boolean editAccount(int customerId, Customer newCustomer);
 
     boolean deleteAccount(int accountId);
