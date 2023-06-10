@@ -102,7 +102,7 @@
                 </div>
             </div>
             <div class="mb-3">
-                <label for="repeatPassword" class="form-label"><span class="text-content">Password</span></label>
+                <label for="repeatPassword" class="form-label"><span class="text-content">Confirm Password</span></label>
                 <input type="password" class="form-control" id="repeatPassword" name="repeatPassword" aria-describedby="re_passwordHelp">
                 <div id="re_passwordHelp" class="form-text " style="color: white">
                     ${map.get("re_password")}
