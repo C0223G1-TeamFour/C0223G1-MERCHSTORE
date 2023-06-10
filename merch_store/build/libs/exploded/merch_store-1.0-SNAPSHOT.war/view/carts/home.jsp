@@ -33,13 +33,13 @@
 <body>
 <style>
     img:hover{
-        transform: scale(1.15);
+        transform: scale(1.1);
     }
 </style>
 <%@include file="header.jsp" %>
 <section>
-    <div class="container mt-2">
-        <div class="row row-cols-md-3 row-cols-2 justify-content-center gy-2 gx-3" id="tableStudent">
+    <div class="container mt-4 mt-sm-2">
+        <div class="row row-cols-md-3 row-cols-2 justify-content-center gy-2 gx-3">
 
             <c:forEach var="product" items="${products}">
                 <div class="col">

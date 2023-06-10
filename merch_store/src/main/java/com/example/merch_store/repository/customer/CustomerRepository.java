@@ -264,4 +264,33 @@ public class CustomerRepository implements ICustomerRepository {
         }
         return listUserName;
     }
+
+    @Override
+    public boolean editAccount(int customerId, Customer newCustomer) {
+        boolean rowEdited = false;
+        try {
+            PreparedStatement preparedStatement = BaseConnection.getConnection().prepareStatement(BaseConnection.UPDATE_ACCOUNT_INFO);
+            preparedStatement.setString(1, newCustomer.getName());
+            preparedStatement.setString(2, newCustomer.getPhoneNumber());
+            preparedStatement.setString(3, newCustomer.getAddress());
+            preparedStatement.setInt(4, customerId);
+            rowEdited = preparedStatement.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return rowEdited;
+    }
+
+    @Override
+    public boolean deleteAccount(int accountId) {
+        boolean rowDeleted = false;
+        try {
+            PreparedStatement preparedStatement = BaseConnection.getConnection().prepareStatement(BaseConnection.DELETE_ACCOUNT);
+            preparedStatement.setInt(1, accountId);
+            rowDeleted = preparedStatement.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return rowDeleted;
+    }
 }

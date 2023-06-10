@@ -14,6 +14,7 @@ public class LogoutServlet extends HttpServlet {
 //        session.invalidate();
         session.removeAttribute("accountId");
         session.removeAttribute("cartList");
+        session.removeAttribute("currentCustomer");
         if (session.getAttribute("accountId") == null) response.sendRedirect("/home");
 
     }

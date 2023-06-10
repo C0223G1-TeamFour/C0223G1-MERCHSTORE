@@ -19,15 +19,13 @@
           integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 </head>
 <style>
-    .pagination {
+    .pagination{
         float: right;
     }
-
-    .content {
+    .content{
         margin-left: 50px;
         margin-right: 50px;
     }
-
     table {
         border-collapse: collapse;
         margin: 0;
@@ -44,22 +42,18 @@
     table tr {
         padding: .35em;
     }
-
     table th,
     table td {
         padding: .625em;
         text-align: center;
     }
-
     @media screen and (max-width: 600px) {
         table {
             border: 0;
         }
-
-        .content {
+        .content{
             margin: 0;
         }
-
         table thead {
             border: none;
             clip: rect(0 0 0 0);
@@ -98,8 +92,7 @@
         table td:last-child {
             border-bottom: 0;
         }
-
-        .search {
+        .search{
             margin-top: 20px;
         }
     }
@@ -139,7 +132,7 @@
             </div>
         </form>
     </div>
-    <table class="table table-bordered " id="tableUser">
+    <table class="table table-bordered "  id="tableUser">
         <thead class="table-dark ">
         <tr>
             <th scope="col">STT</th>
@@ -171,8 +164,15 @@
                 <td>
                     <div class="row">
                         <div class="col-auto">
+                            <a href="/customer?action=edit&id=${customer.getId()}">
+                                <button type="submit" class="btn btn-primary" ><i class="fa-solid fa-pen-to-square"></i>
+                                </button>
+                            </a>
+                        </div>
+                        <div class="col-auto">
                             <button type="button" onclick="isDelete('${customer.getId()}','${customer.getName()}')"
-                                    class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#button-delete">DELETE
+                                    class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#button-delete">
+                                <i class="fa-solid fa-trash-can"></i>
                             </button>
                         </div>
                     </div>

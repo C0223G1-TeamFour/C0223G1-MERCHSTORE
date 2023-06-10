@@ -122,4 +122,14 @@ public class CustomerService implements ICustomerService {
     public boolean updateShippingInfo(int customerId, String phoneNumber, String address) {
         return customerRepository.updateShippingInfo(customerId, phoneNumber, address);
     }
+
+    @Override
+    public boolean editAccount(int customerId, Customer newCustomer) {
+        return customerRepository.editAccount(customerId, newCustomer);
+    }
+
+    @Override
+    public boolean deleteAccount(int accountId) {
+        return customerRepository.deleteAccount(accountId);
+    }
 }

@@ -27,4 +27,7 @@ public interface ICustomerRepository {
 
     boolean updateShippingInfo(int customerId, String phoneNumber, String address);
     List<String> getUserName();
+    boolean editAccount(int customerId, Customer newCustomer);
+
+    boolean deleteAccount(int accountId);
 }

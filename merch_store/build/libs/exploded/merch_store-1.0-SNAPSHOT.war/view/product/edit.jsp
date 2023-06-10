@@ -38,12 +38,12 @@
         <form action="/products?action=edit" method="post" class="form-1" id="form-1">
             <h4 style="text-align: center;color:wheat ">Create Product Account </h4>
             <div class="mb-3">
-                <label for="id" class="form-label"><span class="text-content">Image</span></label>
-                <input type="text" class="form-control" name="id" id="id" value="${productById.id}">
+                <label for="id" class="form-label"><span class="text-content">ID</span></label>
+                <input type="text" class="form-control" name="id" id="id" value="${productById.id}" readonly>
             </div>
             <div class="mb-3">
                 <label for="image" class="form-label"><span class="text-content">Image</span></label>
-                <input type="text" class="form-control" name="image" id="image" value="${productById.image}${productById.id}">
+                <input type="text" class="form-control" name="image" id="image" value="${productById.image}">
             </div>
             <div class="mb-3">
                 <label for="name" class="form-label"><span class="text-content">Name</span> </label>
@@ -63,7 +63,6 @@
             <div class="mb-3">
                 <label for="productType" class="form-label"><span class="text-content">Product Type</span></label>
                 <select name="productType" class="form-select" id="productType" aria-label="Default select example">
-                    <option value="0">Product Type</option>
                     <c:forEach var="productType" items="${productTypeList}">
                         <option value="${productType.productTypeId}">${productType.productTypeName}</option>
                     </c:forEach>
@@ -72,49 +71,12 @@
             </div>
             <div style="text-align: center ">
                 <button type="submit" form="form-1" class="btn btn-secondary "><span
-                        style="font-weight: bold;color:white">Add new product</span></button>
+                        style="font-weight: bold;color:white">Update product</span></button>
             </div>
         </form>
     </div>
     <div class="col-md-4 col-sm-0"></div>
 </div>
-<%--<div class="d-flex" style="justify-content: space-between">--%>
-<%--    <form method="post" action="/products?action=edit" class="row row-cols-lg-auto g-3 align-items-center">--%>
-<%--        <div class="col-12 mb-3">--%>
-<%--            <input value="${productById.id}" name="id" type="text" class="form-control" id="formGroupExampleInput">--%>
-<%--        </div>--%>
-<%--        <div class="col-12 mb-3">--%>
-<%--            <input value="${productById.name}" name="name" type="text" class="form-control"--%>
-<%--                   placeholder="Product's name">--%>
-<%--        </div>--%>
-<%--        <div class="col-12 col-auto form-check mb-3">--%>
-<%--            <input value="${productById.description}" name="description" type="text" class="form-control"--%>
-<%--                   placeholder="Product Description">--%>
-<%--        </div>--%>
-<%--        <div class="col-12 mb-3">--%>
-<%--            <div class="input-group ">--%>
-<%--                <input value="${productById.price}" name="price" type="text" class="form-control" placeholder="Product price">--%>
-<%--                <span class="input-group-text">€</span>--%>
-<%--            </div>--%>
-<%--        </div>--%>
-<%--        <div class="col-12 ">--%>
-<%--            <div class="input-group mb-3">--%>
-<%--                <input name="image" type="text" class="form-control" value="${productById.image}"> >--%>
-<%--                <label class="input-group-text" >Image</label>--%>
-<%--            </div>--%>
-<%--        </div>--%>
-<%--        <div class="col-12 col-auto form-check mb-3">--%>
-<%--            <select name="productType" class="form-select" aria-label="Default select example">--%>
-<%--                <c:forEach var="productType" items="${productTypeList}">--%>
-<%--                    <option value="${productType.productTypeId}">${productType.productTypeName}</option>--%>
-<%--                </c:forEach>--%>
-<%--            </select>--%>
-<%--        </div>--%>
-<%--        <div class="col-12 mb-3">--%>
-<%--            <button type="submit" class="btn btn-primary bg-black text-white">Update products</button>--%>
-<%--        </div>--%>
-<%--    </form>--%>
-<%--</div>--%>
 <%@include file="/view/carts/footer.jsp" %>
 </body>
 </html>
