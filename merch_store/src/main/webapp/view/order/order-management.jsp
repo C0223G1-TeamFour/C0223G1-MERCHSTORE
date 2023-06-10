@@ -102,26 +102,59 @@
             .search {
                 margin-top: 20px;
             }
+
         }
 
     </style>
 </head>
+<%--<div class=" row mb-4">--%>
+<%--    <div class="col-md-2 col-sm-6">--%>
+<%--
+<%--    </div>--%>
+<%--    <div class="col-md-2 col-sm-0"></div>--%>
+<%--    <form class="col-md-8 col-sm-10" action="/employee?action=search" method="post">--%>
+<%--        <div class="row">--%>
+<%--            <div class="col-xl-2 col-md-3">--%>
+<%--                <label for="inputPassword6" class="col-form-label"><span>Name</span></label>--%>
+<%--            </div>--%>
+<%--            <div class="col-xl-3 col-md-8">--%>
+<%--                <input type="name" id="inputPassword6" class="form-control border-2 border-dark btn-primary" name="name">--%>
+<%--            </div>--%>
+<%--            <div class="col-xl-2 col-md-3">--%>
+<%--                <label for="address" class="col-form-label"><span>Address</span></label>--%>
+<%--            </div>--%>
+<%--            <div class="col-xl-3 col-md-8">--%>
+<%--                <input type="text" name="address" id="address" class="form-control border-2 border-dark btn-primary"--%>
+<%--                       aria-describedby="passwordHelpInline">--%>
+<%--            </div>--%>
+<%--            <div class="col-xl-2 col-md-1 search">--%>
+<%--                <button type="submit" class="btn btn-dark"><i class="fa-solid fa-magnifying-glass"></i>--%>
+<%--                </button>--%>
+<%--            </div>--%>
+<%--        </div>--%>
+<%--    </form>--%>
+<%--</div>--%>
 <body>
 <div class="container px-2">
     <div class="row mb-4">
-        <form class="col-md-8 col-sm-10" action="/orders?action=search" method="post" >
+        <div class="col-md-2 col-sm-6">
+
+        </div>
+        <form class="col-md-8 col-sm-10" action="/orders?action=search" method="post">
             <div class="row">
                 <div class="col-xl-2 col-md-3">
                     <label for="inputPassword6" class="col-form-label"><span>Name</span></label>
                 </div>
                 <div class="col-xl-3 col-md-8">
-                    <input type="name" id="inputPassword6" class="form-control border-2 border-dark btn-primary" name="name">
+                    <input type="name" id="inputPassword6" class="form-control border-2 border-dark btn-primary"
+                           name="name">
                 </div>
                 <div class="col-xl-1 col-md-3">
                     <label for="status" class="col-form-label"><span>Status</span></label>
                 </div>
                 <div class="col-xl-3 col-md-8 m-lg-0">
-                    <select name="status" class="form-select border-2 border-dark btn-primary" id="status" aria-label="Default select example">
+                    <select name="status" class="form-select border-2 border-dark btn-primary" id="status"
+                            aria-label="Default select example">
                         <option value="processing">Processing</option>
                         <option value="complete">Complete</option>
                     </select>
@@ -134,46 +167,46 @@
         </form>
     </div>
     <h2 class="mt-3"> ORDERS LIST </h2>
-<table class="table table-bordered" id="tableOrder">
-    <thead class="table-dark">
-    <tr>
-        <th scope="col">STT</th>
-        <th scope="col">ORDER ID</th>
-        <th scope="col">ORDER DATE</th>
-        <th scope="col">CUSTOMER</th>
-        <th scope="col">STATUS</th>
-        <th scope="col">TOTAL PRICE</th>
-        <th scope="col">ORDER DETAIL</th>
-        <th scope="col">DELETE</th>
-    </tr>
-    </thead>
-    <tbody>
-    <c:forEach items="${orderManagement}" var="orders" varStatus="loop">
+    <table class="table table-bordered" id="tableOrder">
+        <thead class="table-dark">
         <tr>
-            <td>${loop.count}</td>
-            <td>${orders.id}</td>
-            <td>${orders.date}</td>
-            <td>${orders.customer.getName()}</td>
-            <td>${orders.status}</td>
-            <td>${integerMap.get(orders.id)} EUR</td>
-            <td>
-                <button type="submit" class="btn">
-                    <a class="btn btn-outline-secondary"
-                       href="/orders?action=details&id=${orders.id}">DETAILS</a>
-                </button>
-
-            <td>
-                <button type="button" class="btn btn-primary" style="background-color: red; align-content: center"
-                        data-bs-toggle="modal" data-bs-target="#exampleModal"
-                        onclick="remove(${orders.id},'${orders.customer.getName()}')">
-                    <i class="fa-solid fa-trash-can"></i>
-                </button>
-
-            </td>
+            <th scope="col">STT</th>
+            <th scope="col">ORDER ID</th>
+            <th scope="col">ORDER DATE</th>
+            <th scope="col">CUSTOMER</th>
+            <th scope="col">STATUS</th>
+            <th scope="col">TOTAL PRICE</th>
+            <th scope="col">ORDER DETAIL</th>
+            <th scope="col">DELETE</th>
         </tr>
-    </c:forEach>
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+        <c:forEach items="${orderManagement}" var="orders" varStatus="loop">
+            <tr>
+                <td>${loop.count}</td>
+                <td>${orders.id}</td>
+                <td>${orders.date}</td>
+                <td>${orders.customer.getName()}</td>
+                <td>${orders.status}</td>
+                <td>${integerMap.get(orders.id)} EUR</td>
+                <td>
+                    <button type="submit" class="btn">
+                        <a class="btn btn-outline-secondary"
+                           href="/orders?action=details&id=${orders.id}">DETAILS</a>
+                    </button>
+
+                <td>
+                    <button type="button" class="btn btn-primary" style="background-color: red; align-content: center"
+                            data-bs-toggle="modal" data-bs-target="#exampleModal"
+                            onclick="remove(${orders.id},'${orders.customer.getName()}')">
+                        <i class="fa-solid fa-trash-can"></i>
+                    </button>
+
+                </td>
+            </tr>
+        </c:forEach>
+        </tbody>
+    </table>
 
 </div>
 <!-- Modal -->
