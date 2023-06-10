@@ -10,7 +10,7 @@ import java.util.Map;
 public interface IOrderRepository {
     List<Order> getAll();
 
-    Map<Integer, Integer> getTotalPrice();
+    Map<Integer, Double> getTotalPrice();
 
     List<OrderDetail> getDetails(int id);
 

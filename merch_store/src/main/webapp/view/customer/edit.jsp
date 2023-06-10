@@ -1,10 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: ADMIN
-  Date: 6/1/2023
-  Time: 6:42 AM
-  To change this template use File | Settings | File Templates.
---%>
 
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -177,26 +170,56 @@
     </div>
     <div class="col-md-7 ">
         <div class="card mb-3">
-            <form method="post" action="/customer?action=edit&id=${customer.getId()}">
+            <form method="post" action="/customer?action=edit" id="form-2">
                 <fieldset >
-                    <legend>Thay Đổi Thông Tin</legend>
+                    <input type="hidden" name="account" value="${customer.getAccountUser().getId()}">
+                    <input type="hidden" name="id" value="${customer.getId()}">
+                    <legend style="text-align: center;">Change Information</legend>
                     <div class="mb-3">
-                        <label for="name" class="form-label">Name :</label>
-                        <input type="text" name="name" id="name" class="form-control" placeholder="${customer.getName()}">
+                        <label for="name" class="form-label"><span class="text-content" >Name</span> </label>
+                        <input placeholder="${customer.getName()}" type="text" class="form-control" id="name" name="name" aria-describedby="nameHelp">
+                        <div id="nameHelp" class="form-text " style="color: black">
+                            ${map.get("name")}
+                        </div>
                     </div>
                     <div class="mb-3">
-                        <label for="email" class="form-label">Email :</label>
-                        <input type="email" name="email" id="email" class="form-control" placeholder="${customer.getEmail()}">
+                        <label for="email" class="form-label"><span class="text-content" >Email</span> </label>
+                        <input type="text" class="form-control" id="email" name="email" readonly value="${customer.getEmail()}">
                     </div>
                     <div class="mb-3">
-                        <label for="phone" class="form-label">Phone :</label>
-                        <input type="text" name="phone" id="phone" class="form-control" placeholder="${customer.getPhoneNumber()}">
+                        <label for="phone" class="form-label"><span class="text-content">Phone</span></label>
+                        <input placeholder="${customer.getPhoneNumber()}" type="text" class="form-control" id="phone" name="phone" aria-describedby="phoneHelp">
+                        <div id="phoneHelp" class="form-text " style="color: black">
+                            ${map.get("phone")}
+                        </div>
                     </div>
                     <div class="mb-3">
-                        <label for="address" class="form-label">Address :</label>
-                        <input type="text" name="address" id="address" class="form-control" placeholder="${customer.getAddress()}">
+                        <label for="address" class="form-label"><span class="text-content">Address</span></label>
+                        <input placeholder="${customer.getAddress()}" type="text" class="form-control" name="address" id="address" aria-describedby="addressHelp">
+                        <div id="addressHelp" class="form-text " style="color: black">
+                            ${map.get("address")}
+                        </div>
                     </div>
-                    <button type="submit" class="btn btn-primary">Save Change</button>
+                    <div class="mb-3">
+                        <label for="password" class="form-label"><span class="text-content">Password</span></label>
+                        <input type="password" class="form-control" id="password" name="password" aria-describedby="passwordHelp">
+                        <div id="passwordHelp" class="form-text " style="color: black">
+                            ${map.get("password")}
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="repeatPassword" class="form-label"><span class="text-content">Password</span></label>
+                        <input type="password" class="form-control" id="repeatPassword" name="repeatPassword"  aria-describedby="re_passwordHelp">
+                        <div id="re_passwordHelp" class="form-text " style="color: black">
+                            ${map.get("re_password")}
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <input type="checkbox" onclick="myFunction()">Show Password
+                    </div>
+                    <div style="text-align: center ">
+                        <button type="submit" for="form-2" onclick="giveChange('${customer.getName()}','${customer.getPhoneNumber()}','${customer.getAddress()}','${customer.getAccountUser().getUserPassword()}',)"   class="btn btn-primary " ><span style="font-weight: bold;color:black">Register</span></button>
+                    </div>
                 </fieldset>
             </form>
         </div>
@@ -231,6 +254,42 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
         crossorigin="anonymous"></script>
+<script>
+    function myFunction() {
+        var x = document.getElementById("password");
+        var y = document.getElementById("repeatPassword");
+        if (x.type === "password" && y.type === "password") {
+            x.type = "text";
+            y.type = "text";
+        } else {
+            x.type = "password";
+            y.type = "password";
+        }
+    }
+
+</script>
+<script>
+    function giveChange(x,y,z,h){
+        let repeatPassword=document.getElementById("repeatPassword").value;
+        let name=document.getElementById("name").value;
+        if(name===""){
+            document.getElementById("name").value=x;
+        }
+        let phone=document.getElementById("phone").value;
+        if(phone===""){
+            document.getElementById("phone").value=y;
+        }
+        let address=document.getElementById("address").value;
+        if(address===""){
+            document.getElementById("address").value=z;
+        }
+        let password=document.getElementById("password").value;
+        if(password==="" && repeatPassword===""){
+            document.getElementById("password").value=h;
+            document.getElementById("repeatPassword").value=h;
+        }
+    }
+</script>
 </body>
 </html>
 

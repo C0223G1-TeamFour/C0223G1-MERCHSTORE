@@ -9,7 +9,7 @@ import java.util.Map;
 public interface IOrderService {
     List<Order> getAll();
 
-    Map<Integer, Integer> getTotalPrice();
+    Map<Integer, Double> getTotalPrice();
 
     List<OrderDetail> getDetails(int id);
 

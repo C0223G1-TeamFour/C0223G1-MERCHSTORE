@@ -47,7 +47,7 @@ public class OrderServlet extends HttpServlet {
 
     private void showList(HttpServletRequest request, HttpServletResponse response) {
         List<Order> orderManagement = orderService.getAll();
-        Map<Integer, Integer> integerMap = orderService.getTotalPrice();
+        Map<Integer, Double> integerMap = orderService.getTotalPrice();
         request.setAttribute("integerMap", integerMap);
         request.setAttribute("orderManagement", orderManagement);
         RequestDispatcher requestDispatcher = request.getRequestDispatcher("view/order/order-management.jsp");
@@ -87,7 +87,7 @@ public class OrderServlet extends HttpServlet {
         }
         List<Order> orderManagement = orderService.getOrderByNameCustomer(name,status);
         request.setAttribute("orderManagement", orderManagement);
-        Map<Integer, Integer> integerMap = orderService.getTotalPrice();
+        Map<Integer, Double> integerMap = orderService.getTotalPrice();
         request.setAttribute("integerMap", integerMap);
         RequestDispatcher requestDispatcher = request.getRequestDispatcher("/view/order/order-management.jsp");
         try {
@@ -103,10 +103,16 @@ public class OrderServlet extends HttpServlet {
     private void deleteOrder(HttpServletRequest request, HttpServletResponse response) {
         int id = Integer.parseInt(request.getParameter("idDelete"));
         orderService.deleteOrder(id);
+        request.setAttribute("message", "Delete success");
+        request.setAttribute("orderManagement", orderService.getAll());
         try {
-            response.sendRedirect("/orders");
+            request.getRequestDispatcher("/view/order/order-management.jsp").forward(request,response);
+        } catch (ServletException e) {
+            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+
     }
 }
