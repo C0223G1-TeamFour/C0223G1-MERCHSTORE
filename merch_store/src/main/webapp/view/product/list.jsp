@@ -262,21 +262,8 @@
         </tbody>
     </table>
 </div>
-<script
-        defer
-        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js"
-        integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ"
-        crossorigin="anonymous"
-></script>
-<script
-        src="https://kit.fontawesome.com/4bf93b0ca4.js"
-        crossorigin="anonymous"
 
-></script>
-<script src="../../bootstrap-5.1.3-dist/js/bootstrap.bundle.js"></script>
-<script>
-    document.getElementById()
-</script>
+
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">

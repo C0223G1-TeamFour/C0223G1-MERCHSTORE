@@ -131,11 +131,12 @@
 </style>
 
 <body>
-<% List<Cart> cartList = (List<Cart>) session.getAttribute("cartList"); %>
+<% List<Cart> cartList = (List<Cart>) session.getAttribute("cartList");
+%>
 
 <div class="header">
     <div class="message-header">
-        <p class="fs-6">
+        <p>
             NO ADDITIONAL CUSTOM FEES OR TAXES FOR OUR ASIA CUSTOMERS
         </p>
     </div>
@@ -162,8 +163,11 @@
             </div>
 
             <div class="col col-auto">
-                <a href="/view/customer/edit.jsp" class="text-dark p-0"><i class="fa-solid fa-user-pen"></i></a>
-                <a href="/login" class="text-dark p-0 mx-3"><i class="fa-solid fa-wallet"></i></a>
+                <c:if test="${currentCustomer != null}">
+                    <span class="fw-semibold d-lg-inline-block d-none">${currentCustomer.getName().toUpperCase()}</span>
+                </c:if>
+                <a href="/login" class="text-dark p-0" style="margin-right: 15px; margin-left: 7px">
+                    <i class="fa-solid fa-user-astronaut"></i></a>
                 <a href="/cart" class="text-dark p-0">
                     <i class="fa-solid fa-cart-arrow-down position-relative">
                         <c:if test="${cartList.size() > 0}">

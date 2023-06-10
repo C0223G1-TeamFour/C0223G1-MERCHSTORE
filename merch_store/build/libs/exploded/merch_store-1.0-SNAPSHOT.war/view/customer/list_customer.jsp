@@ -162,11 +162,11 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Xóa Khách Hàng</h5>
+                <h5 class="modal-title">DELETE CUSTOMER</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <h4>Bạn muốn xóa khách hàng tên <span id="alert_delete"></span></h4>
+                <h4>Are You Sure To Delete Customer with the name: <span id="alert_delete"></span></h4>
             </div>
             <div class="modal-footer">
                 <form action="/customer?action=delete" method="post">

@@ -5,6 +5,7 @@
   Time: 20:41
   To change this template use File | Settings | File Templates.
 --%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
     <link
@@ -149,8 +150,8 @@
     <div class="container px-5 text-center footer--text">
         <img class="img-fluid mb-5" src="/view/images/cards.png"/>
         <div class="text-center">
-            <p>© 2023 JOJI ASIA Powered by MANHEAD.</p>
-            <p>953 Main Street, Nashville, TN 37206 | support@manheadmerch.com</p>
+            <p>© 2023 JOJI ASIA Powered by Team-4.</p>
+            <p>953 Main Street, Nashville, TN 37206 | support@team4.com</p>
         </div>
     </div>
 </footer>

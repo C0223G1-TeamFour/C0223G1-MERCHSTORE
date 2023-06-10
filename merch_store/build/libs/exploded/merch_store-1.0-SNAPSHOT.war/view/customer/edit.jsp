@@ -157,49 +157,7 @@
     }
 </style>
 <body>
-<div class="header">
-    <div class="message">
-        <p class="">
-            NO ADDITIONAL CUSTOM FEES OR TAXES FOR OUR ASIA CUSTOMERS
-        </p>
-    </div>
-    <!-- <div class="container-fluid">
-      <img
-        class="w-100"
-        src="https://static.vecteezy.com/system/resources/previews/002/393/980/original/corporate-banner-with-modern-design-free-vector.jpg"
-      />
-    </div> -->
-    <div class="container-fluid p-md-5 mt-1">
-        <div
-                class="row row-cols-3 justify-content-between align-items-center pt-2"
-        >
-            <div class="col col-auto d-block d-md-none">
-                <button class="hamburger" onclick="switcher()">
-                    <i class="fa fa-bars switcher-icon"></i>
-                </button>
-            </div>
-
-            <div class="row col col-md-auto align-items-center">
-                <div class="col col-auto">
-                    <img
-                            class="logo"
-                            src="https://cdn.shopify.com/s/files/1/0554/1291/6301/files/JOJI_LOGO.png?v=1661459445&width=400"
-                    />
-                </div>
-                <div class="col d-md-block d-none">
-                    <a class="links" href="">Home</a>
-                    <a class="links" href="">Product</a>
-                    <a class="links" href="">Order</a>
-                </div>
-            </div>
-
-            <div class="col col-auto">
-                <i class="far fa-user"></i>
-                <i class="fa fa-shopping-bag bag-icon"></i>
-            </div>
-        </div>
-    </div>
-</div>
+<c:import url="/view/carts/store-header.jsp"></c:import>
 <div class="row gutters-sm">
     <div class="col-md-4 mb-3">
         <div class="card">
@@ -228,11 +186,11 @@
                     </div>
                     <div class="mb-3">
                         <label for="email" class="form-label">Email :</label>
-                        <input type="email" name="email" id="email" class="form-control" placeholder="${customer.getAccountUser().getEmail()}">
+                        <input type="email" name="email" id="email" class="form-control" placeholder="${customer.getEmail()}">
                     </div>
                     <div class="mb-3">
                         <label for="phone" class="form-label">Phone :</label>
-                        <input type="text" name="phone" id="phone" class="form-control" placeholder="${customer.getPhone()}">
+                        <input type="text" name="phone" id="phone" class="form-control" placeholder="${customer.getPhoneNumber()}">
                     </div>
                     <div class="mb-3">
                         <label for="address" class="form-label">Address :</label>
