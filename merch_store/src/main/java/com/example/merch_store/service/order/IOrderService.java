@@ -17,5 +17,5 @@ public interface IOrderService {
 
     List<Order> getAllFromACustomer(int customerId);
 
-    List<Order> getOrderByNameCustomer(String name_customer);
+    List<Order> getOrderByNameCustomer(String name_customer,String status);
 }

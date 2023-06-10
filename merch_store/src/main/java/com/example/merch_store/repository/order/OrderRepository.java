@@ -11,7 +11,7 @@ public class OrderRepository implements IOrderRepository {
     private static final String SP_DELETE_ORDER = "call delete_order(?)";
     private static final String SP_TOTAL_PRICE = "call get_total_price()";
     private static final String SP_GET_DETAILS = "call get_details(?)";
-    private static final String SP_FIND_ORDER_BY_NAME = "call find_order_by_name_customer(?)";
+    private static final String SP_FIND_ORDER_BY_NAME = "call find_order_by_name_customer(?,?)";
 
     @Override
     public List<Order> getAll() {
@@ -117,20 +117,21 @@ public class OrderRepository implements IOrderRepository {
     }
 
     @Override
-    public List<Order> getOrderByNameCustomer(String name_customer) {
+    public List<Order> getOrderByNameCustomer(String name_customer,String status) {
         List<Order> list = new ArrayList<>();
         Connection connection = BaseConnection.getConnection();
         try {
             CallableStatement callableStatement = connection.prepareCall(SP_FIND_ORDER_BY_NAME);
             callableStatement.setString(1, name_customer);
+            callableStatement.setString(2, status);
             ResultSet resultSet = callableStatement.executeQuery();
             while (resultSet.next()) {
                 int id = resultSet.getInt("order_id");
                 String date = resultSet.getString("order_date");
                 String nameCustomer = resultSet.getString("customer_name");
-                String status = resultSet.getString("order_status");
+                String order_status = resultSet.getString("order_status");
                 Customer customer = new Customer(nameCustomer);
-                Order order = new Order(id, date, customer, status);
+                Order order = new Order(id, date, customer, order_status);
                 list.add(order);
             }
         } catch (SQLException e) {
