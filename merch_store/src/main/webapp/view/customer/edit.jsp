@@ -39,6 +39,14 @@
     p {
         margin: 0;
     }
+    .title{
+        color: white;
+        font-weight: bold;
+
+    }
+    .containForm{
+        background-color: black;
+    }
 
     .logo {
         width: 150px;
@@ -152,15 +160,19 @@
 <body>
 <c:import url="/view/carts/store-header.jsp"></c:import>
 <div class="row gutters-sm">
+    <div class="col-md-1 ">
+
+    </div >
     <div class="col-md-4 mb-3">
         <div class="card">
             <div class="card-body">
                 <div class="d-flex flex-column align-items-center text-center">
-                    <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Admin" class="rounded-circle"
+                    <img src="https://static2.yan.vn/YanNews/2167221/202102/facebook-cap-nhat-avatar-doi-voi-tai-khoan-khong-su-dung-anh-dai-dien-e4abd14d.jpg" alt="Admin" class="rounded-circle"
                          width="150">
                     <div class="mt-3">
                         <h4>${customer.getName()}</h4>
-                        <p class="text-muted font-size-sm">${customer.getAddress()}</p>
+                        <h5><i class="fa-solid fa-square-phone mx-2"></i>${customer.getPhoneNumber()}</h5>
+                        <h5><i class="fa-sharp fa-solid fa-location-dot mx-2"></i>${customer.getAddress()}</h5>
                         <button class="btn btn-primary">Follow</button>
                         <button class="btn btn-outline-primary">Message</button>
                     </div>
@@ -168,64 +180,66 @@
             </div>
         </div>
     </div>
-    <div class="col-md-7 ">
-        <div class="card mb-3">
-            <form method="post" action="/customer?action=edit" id="form-2">
-                <fieldset >
-                    <input type="hidden" name="account" value="${customer.getAccountUser().getId()}">
-                    <input type="hidden" name="id" value="${customer.getId()}">
-                    <legend style="text-align: center;">Change Information</legend>
-                    <div class="mb-3">
-                        <label for="name" class="form-label"><span class="text-content" >Name</span> </label>
-                        <input placeholder="${customer.getName()}" type="text" class="form-control" id="name" name="name" aria-describedby="nameHelp">
-                        <div id="nameHelp" class="form-text " style="color: black">
-                            ${map.get("name")}
-                        </div>
+    <div class="col-md-1 ">
+
+    </div >
+    <div class="col-md-5 containForm">
+        <form method="post" action="/customer?action=edit" id="form-2">
+            <fieldset >
+                <input type="hidden" name="account" value="${customer.getAccountUser().getId()}">
+                <input type="hidden" name="id" value="${customer.getId()}">
+                <legend style="text-align: center; " class="title mt-2">Change Information</legend>
+                <div class="mb-3">
+                    <label for="name" class="form-label"><span  class="title">Name</span> </label>
+                    <input placeholder="${customer.getName()}" type="text" class="form-control " id="name" name="name" aria-describedby="nameHelp">
+                    <div id="nameHelp" class="form-text " style="color: black">
+                        ${map.get("name")}
                     </div>
-                    <div class="mb-3">
-                        <label for="email" class="form-label"><span class="text-content" >Email</span> </label>
-                        <input type="text" class="form-control" id="email" name="email" readonly value="${customer.getEmail()}">
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label"><span  class="title">Email</span> </label>
+                    <input type="text" class="form-control" id="email" name="email" readonly value="${customer.getEmail()}">
+                </div>
+                <div class="mb-3">
+                    <label for="phone" class="form-label"><span  class="title">Phone</span></label>
+                    <input placeholder="${customer.getPhoneNumber()}" type="text" class="form-control" id="phone" name="phone" aria-describedby="phoneHelp">
+                    <div id="phoneHelp" class="form-text " style="color: black">
+                        ${map.get("phone")}
                     </div>
-                    <div class="mb-3">
-                        <label for="phone" class="form-label"><span class="text-content">Phone</span></label>
-                        <input placeholder="${customer.getPhoneNumber()}" type="text" class="form-control" id="phone" name="phone" aria-describedby="phoneHelp">
-                        <div id="phoneHelp" class="form-text " style="color: black">
-                            ${map.get("phone")}
-                        </div>
+                </div>
+                <div class="mb-3">
+                    <label for="address" class="form-label"><span  class="title">Address</span></label>
+                    <input placeholder="${customer.getAddress()}" type="text" class="form-control" name="address" id="address" aria-describedby="addressHelp">
+                    <div id="addressHelp" class="form-text " style="color: black">
+                        ${map.get("address")}
                     </div>
-                    <div class="mb-3">
-                        <label for="address" class="form-label"><span class="text-content">Address</span></label>
-                        <input placeholder="${customer.getAddress()}" type="text" class="form-control" name="address" id="address" aria-describedby="addressHelp">
-                        <div id="addressHelp" class="form-text " style="color: black">
-                            ${map.get("address")}
-                        </div>
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label"><span  class="title">Password</span></label>
+                    <input type="password" class="form-control" id="password" name="password" aria-describedby="passwordHelp">
+                    <div id="passwordHelp" class="form-text " style="color: black">
+                        ${map.get("password")}
                     </div>
-                    <div class="mb-3">
-                        <label for="password" class="form-label"><span class="text-content">Password</span></label>
-                        <input type="password" class="form-control" id="password" name="password" aria-describedby="passwordHelp">
-                        <div id="passwordHelp" class="form-text " style="color: black">
-                            ${map.get("password")}
-                        </div>
+                </div>
+                <div class="mb-3">
+                    <label for="repeatPassword" class="form-label"><span  class="title">Confirm Password</span></label>
+                    <input type="password" class="form-control" id="repeatPassword" name="repeatPassword"  aria-describedby="re_passwordHelp">
+                    <div id="re_passwordHelp" class="form-text " style="color: black">
+                        ${map.get("re_password")}
                     </div>
-                    <div class="mb-3">
-                        <label for="repeatPassword" class="form-label"><span class="text-content">Password</span></label>
-                        <input type="password" class="form-control" id="repeatPassword" name="repeatPassword"  aria-describedby="re_passwordHelp">
-                        <div id="re_passwordHelp" class="form-text " style="color: black">
-                            ${map.get("re_password")}
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <input type="checkbox" onclick="myFunction()">Show Password
-                    </div>
-                    <div style="text-align: center ">
-                        <button type="submit" for="form-2" onclick="giveChange('${customer.getName()}','${customer.getPhoneNumber()}','${customer.getAddress()}','${customer.getAccountUser().getUserPassword()}',)"   class="btn btn-primary " ><span style="font-weight: bold;color:black">Register</span></button>
-                    </div>
-                </fieldset>
-            </form>
-        </div>
-        <div class="col-md-1">
-        </div>
+                </div>
+                <div class="mb-3">
+                    <input type="checkbox" onclick="myFunction()"><span class="title">Show Password</span>
+                </div>
+                <div style="text-align: center " class="mb-2">
+                    <button type="submit" for="form-2" onclick="giveChange('${customer.getName()}','${customer.getPhoneNumber()}','${customer.getAddress()}','${customer.getAccountUser().getUserPassword()}',)"   class="btn btn-primary " ><span style="font-weight: bold;color:black;" class="mb-2">Save Change</span></button>
+                </div>
+            </fieldset>
+        </form>
     </div>
+    <div class="col-md-1">
+    </div>
+</div>
 </div>
 <footer>
     <div class="container p-5">

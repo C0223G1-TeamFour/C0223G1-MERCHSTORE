@@ -1,10 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: ADMIN
-  Date: 6/1/2023
-  Time: 6:42 AM
-  To change this template use File | Settings | File Templates.
---%>
 
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -45,6 +38,14 @@
 
     p {
         margin: 0;
+    }
+    .title{
+        color: white;
+        font-weight: bold;
+
+    }
+    .containForm{
+        background-color: black;
     }
 
     .logo {
@@ -159,15 +160,19 @@
 <body>
 <c:import url="/view/carts/store-header.jsp"></c:import>
 <div class="row gutters-sm">
+    <div class="col-md-1 ">
+
+    </div >
     <div class="col-md-4 mb-3">
         <div class="card">
             <div class="card-body">
                 <div class="d-flex flex-column align-items-center text-center">
-                    <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Admin" class="rounded-circle"
+                    <img src="https://static2.yan.vn/YanNews/2167221/202102/facebook-cap-nhat-avatar-doi-voi-tai-khoan-khong-su-dung-anh-dai-dien-e4abd14d.jpg" alt="Admin" class="rounded-circle"
                          width="150">
                     <div class="mt-3">
                         <h4>${customer.getName()}</h4>
-                        <p class="text-muted font-size-sm">${customer.getAddress()}</p>
+                        <h5><i class="fa-solid fa-square-phone mx-2"></i>${customer.getPhoneNumber()}</h5>
+                        <h5><i class="fa-sharp fa-solid fa-location-dot mx-2"></i>${customer.getAddress()}</h5>
                         <button class="btn btn-primary">Follow</button>
                         <button class="btn btn-outline-primary">Message</button>
                     </div>
@@ -175,34 +180,66 @@
             </div>
         </div>
     </div>
-    <div class="col-md-7 ">
-        <div class="card mb-3">
-            <form method="post" action="/customer?action=edit&id=${customer.getId()}">
-                <fieldset >
-                    <legend>Thay Đổi Thông Tin</legend>
-                    <div class="mb-3">
-                        <label for="name" class="form-label">Name :</label>
-                        <input type="text" name="name" id="name" class="form-control" placeholder="${customer.getName()}">
+    <div class="col-md-1 ">
+
+    </div >
+    <div class="col-md-5 containForm">
+        <form method="post" action="/customer?action=edit" id="form-2">
+            <fieldset >
+                <input type="hidden" name="account" value="${customer.getAccountUser().getId()}">
+                <input type="hidden" name="id" value="${customer.getId()}">
+                <legend style="text-align: center; " class="title mt-2">Change Information</legend>
+                <div class="mb-3">
+                    <label for="name" class="form-label"><span  class="title">Name</span> </label>
+                    <input placeholder="${customer.getName()}" type="text" class="form-control " id="name" name="name" aria-describedby="nameHelp">
+                    <div id="nameHelp" class="form-text " style="color: black">
+                        ${map.get("name")}
                     </div>
-                    <div class="mb-3">
-                        <label for="email" class="form-label">Email :</label>
-                        <input type="email" name="email" id="email" class="form-control" placeholder="${customer.getEmail()}">
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label"><span  class="title">Email</span> </label>
+                    <input type="text" class="form-control" id="email" name="email" readonly value="${customer.getEmail()}">
+                </div>
+                <div class="mb-3">
+                    <label for="phone" class="form-label"><span  class="title">Phone</span></label>
+                    <input placeholder="${customer.getPhoneNumber()}" type="text" class="form-control" id="phone" name="phone" aria-describedby="phoneHelp">
+                    <div id="phoneHelp" class="form-text " style="color: black">
+                        ${map.get("phone")}
                     </div>
-                    <div class="mb-3">
-                        <label for="phone" class="form-label">Phone :</label>
-                        <input type="text" name="phone" id="phone" class="form-control" placeholder="${customer.getPhoneNumber()}">
+                </div>
+                <div class="mb-3">
+                    <label for="address" class="form-label"><span  class="title">Address</span></label>
+                    <input placeholder="${customer.getAddress()}" type="text" class="form-control" name="address" id="address" aria-describedby="addressHelp">
+                    <div id="addressHelp" class="form-text " style="color: black">
+                        ${map.get("address")}
                     </div>
-                    <div class="mb-3">
-                        <label for="address" class="form-label">Address :</label>
-                        <input type="text" name="address" id="address" class="form-control" placeholder="${customer.getAddress()}">
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label"><span  class="title">Password</span></label>
+                    <input type="password" class="form-control" id="password" name="password" aria-describedby="passwordHelp">
+                    <div id="passwordHelp" class="form-text " style="color: black">
+                        ${map.get("password")}
                     </div>
-                    <button type="submit" class="btn btn-primary">Save Change</button>
-                </fieldset>
-            </form>
-        </div>
-        <div class="col-md-1">
-        </div>
+                </div>
+                <div class="mb-3">
+                    <label for="repeatPassword" class="form-label"><span  class="title">Confirm Password</span></label>
+                    <input type="password" class="form-control" id="repeatPassword" name="repeatPassword"  aria-describedby="re_passwordHelp">
+                    <div id="re_passwordHelp" class="form-text " style="color: black">
+                        ${map.get("re_password")}
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <input type="checkbox" onclick="myFunction()"><span class="title">Show Password</span>
+                </div>
+                <div style="text-align: center " class="mb-2">
+                    <button type="submit" for="form-2" onclick="giveChange('${customer.getName()}','${customer.getPhoneNumber()}','${customer.getAddress()}','${customer.getAccountUser().getUserPassword()}',)"   class="btn btn-primary " ><span style="font-weight: bold;color:black;" class="mb-2">Save Change</span></button>
+                </div>
+            </fieldset>
+        </form>
     </div>
+    <div class="col-md-1">
+    </div>
+</div>
 </div>
 <footer>
     <div class="container p-5">
@@ -231,6 +268,42 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
         crossorigin="anonymous"></script>
+<script>
+    function myFunction() {
+        var x = document.getElementById("password");
+        var y = document.getElementById("repeatPassword");
+        if (x.type === "password" && y.type === "password") {
+            x.type = "text";
+            y.type = "text";
+        } else {
+            x.type = "password";
+            y.type = "password";
+        }
+    }
+
+</script>
+<script>
+    function giveChange(x,y,z,h){
+        let repeatPassword=document.getElementById("repeatPassword").value;
+        let name=document.getElementById("name").value;
+        if(name===""){
+            document.getElementById("name").value=x;
+        }
+        let phone=document.getElementById("phone").value;
+        if(phone===""){
+            document.getElementById("phone").value=y;
+        }
+        let address=document.getElementById("address").value;
+        if(address===""){
+            document.getElementById("address").value=z;
+        }
+        let password=document.getElementById("password").value;
+        if(password==="" && repeatPassword===""){
+            document.getElementById("password").value=h;
+            document.getElementById("repeatPassword").value=h;
+        }
+    }
+</script>
 </body>
 </html>
 

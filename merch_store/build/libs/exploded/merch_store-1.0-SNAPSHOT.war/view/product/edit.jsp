@@ -36,7 +36,7 @@
     <div class="col-md-4 col-sm-0"></div>
     <div class="col-md-4 col-sm-12 ">
         <form action="/products?action=edit" method="post" class="form-1" id="form-1">
-            <h4 style="text-align: center;color:wheat ">Create Product Account </h4>
+            <h4 style="text-align: center;color:white; font-size: 30px ">Create Product Account </h4>
             <div class="mb-3">
                 <label for="id" class="form-label"><span class="text-content">ID</span></label>
                 <input type="text" class="form-control" name="id" id="id" value="${productById.id}" readonly>
@@ -65,7 +65,6 @@
             <div class="mb-3">
                 <label for="productType" class="form-label"><span class="text-content">Product Type</span></label>
                 <select name="productType" class="form-select" id="productType" aria-label="Default select example">
-                    <option value="${productById.productTypeId}">${productById.productTypeId.productTypeName}</option>
                     <c:forEach var="productType" items="${productTypeList}">
                         <option value="${productType.productTypeId}">${productType.productTypeName}</option>
                     </c:forEach>

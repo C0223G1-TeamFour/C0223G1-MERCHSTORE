@@ -42,45 +42,13 @@
         font-weight: bold;
     }
     .coler1{
-        color: wheat;
+        color: white;
         font-size: 16px;
     }
 </style>
 <body>
 <%@include file="/view/carts/store-header.jsp" %>
-<%--<h2 id="success">--%>
-<%--    <c:if test="${requestScope['message'] != null}">--%>
-<%--        <span style="color: blue"><i class="fa-solid fa-square-check"></i>${requestScope['message']}</span>--%>
-<%--    </c:if>--%>
-<%--</h2>--%>
-<!-- Modal success -->
-<%--<div class="modal fade" id="modal-success" tabindex="-1" aria-labelledby="exampleModalLabel3" aria-hidden="true">--%>
-<%--    <div class="modal-dialog">--%>
-<%--        <div class="modal-content">--%>
-<%--            <div class="modal-header">--%>
-<%--                <h4>${message}</h4>--%>
-<%--            </div>--%>
-<%--            <div class="modal-footer">--%>
-<%--                <button name="no" type="button" class="btn btn-info" data-bs-dismiss="modal">Close</button>--%>
-<%--            </div>--%>
-<%--        </div>--%>
-<%--    </div>--%>
-<%--</div>--%>
 
-
-<%--<c:if test="${message != null}">--%>
-<%--    <script>--%>
-<%--        // Get the modal element--%>
-<%--        let myModal = document.querySelector("#modal-success");--%>
-
-<%--        // Create a new Modal instance--%>
-<%--        let modal = new bootstrap.Modal(myModal);--%>
-
-<%--        // Show the modal--%>
-<%--        modal.show();--%>
-<%--    </script>--%>
-<%--  --%>
-<%--</c:if>--%>
 
 <div class="row ">
     <div class="col-md-4 col-sm-0"></div>
@@ -89,22 +57,22 @@
             <h4  style="text-align: center;color:white; font-size: 30px ">Create Product Account </h4>
             <div class="mb-3">
                 <label for="image" class="form-label " ><span class="text-content coler1">Image</span></label>
-                <input type="text" class="form-control" name="image" id="image">
+                <input type="text" class="form-control" name="image" id="image" required>
             </div>
             <div class="mb-3">
                 <label for="name" class="form-label "><span class="text-content coler1">Name</span> </label>
-                <input type="text" class="form-control" id="name" name="name">
+                <input type="text" class="form-control" id="name" name="name" required>
                 <%--                       pattern="^([\p{Lu}][\p{Ll}]{1,8})(\s([\p{Lu}]|[\p{Lu}][\p{Ll}]{1,10})){0,5}$">--%>
             </div>
             <div class="mb-3">
                 <label for="description" class="form-label "><span class="text-content coler1">Description</span></label>
                 <input type="text" class="form-control" id="description" name="description"
-                       aria-describedby="emailHelp">
+                       aria-describedby="emailHelp" required>
                 <%--                       pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$">--%>
             </div>
             <div class="mb-3">
-                <label for="price" class="form-label "><span class="text-content coler1">price</span></label>
-                <input type="number" class="form-control" id="price" name="price" aria-describedby="emailHelp">
+                <label for="price" class="form-label "><span class="text-content coler1">Price</span></label>
+                <input type="number" class="form-control" id="price" name="price" aria-describedby="emailHelp" required>
                 <%--                       pattern="^[0][0-9]{9}$">--%>
             </div>
             <div class="mb-3">

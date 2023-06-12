@@ -57,22 +57,22 @@
             <h4  style="text-align: center;color:white; font-size: 30px ">Create Product Account </h4>
             <div class="mb-3">
                 <label for="image" class="form-label " ><span class="text-content coler1">Image</span></label>
-                <input type="text" class="form-control" name="image" id="image">
+                <input type="text" class="form-control" name="image" id="image" required>
             </div>
             <div class="mb-3">
                 <label for="name" class="form-label "><span class="text-content coler1">Name</span> </label>
-                <input type="text" class="form-control" id="name" name="name">
+                <input type="text" class="form-control" id="name" name="name" required>
                 <%--                       pattern="^([\p{Lu}][\p{Ll}]{1,8})(\s([\p{Lu}]|[\p{Lu}][\p{Ll}]{1,10})){0,5}$">--%>
             </div>
             <div class="mb-3">
                 <label for="description" class="form-label "><span class="text-content coler1">Description</span></label>
                 <input type="text" class="form-control" id="description" name="description"
-                       aria-describedby="emailHelp">
+                       aria-describedby="emailHelp" required>
                 <%--                       pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$">--%>
             </div>
             <div class="mb-3">
                 <label for="price" class="form-label "><span class="text-content coler1">Price</span></label>
-                <input type="number" class="form-control" id="price" name="price" aria-describedby="emailHelp">
+                <input type="number" class="form-control" id="price" name="price" aria-describedby="emailHelp" required>
                 <%--                       pattern="^[0][0-9]{9}$">--%>
             </div>
             <div class="mb-3">

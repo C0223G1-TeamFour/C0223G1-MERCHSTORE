@@ -154,6 +154,7 @@
                 </div>
                 <div class="col-xl-4 col-md-8 m-lg-0">
                     <select name="price" class="form-select border-2 border-dark btn-primary" id="price" aria-label="Default select example">
+                        <option value="-1">All</option>
                         <option value="30">0-50 EUR</option>
                         <option value="75">51-100 EUR</option>
                         <option value="110">> 100 EUR</option>
@@ -239,9 +240,9 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <h3>Are You Sure Delete The Product With The Name:
+                <h4>Are You Sure Delete The Product With The Name:
                     <span style="color:red" id="nameDelete"></span>
-                </h3>
+                </h4>
             </div>
             <div class="modal-footer">
                 <form action="/products?action=delete" method="post">
@@ -257,7 +258,7 @@
 <div class="modal fade" id="modal-success" tabindex="-1" aria-labelledby="exampleModalLabel3" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header text-bg-primary-primary">
+            <div class="modal-header">
                 <h4><i class="fa-solid fa-square-check"></i> ${message}</h4>
             </div>
             <div class="modal-footer">

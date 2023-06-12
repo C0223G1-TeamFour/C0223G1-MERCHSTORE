@@ -137,6 +137,7 @@
             <th scope="col">STT</th>
             <th scope="col">ORDER DETAILS ID</th>
             <th scope="col">NAME PRODUCTS</th>
+            <th scope="col">PRODUCTS TYPE</th>
             <th scope="col">PRICE</th>
             <th scope="col">QUANTITY</th>
         </tr>
@@ -147,6 +148,7 @@
                 <td>${loop.count}</td>
                 <td>${orderDetails.id}</td>
                 <td>${orderDetails.product.getName()}</td>
+                <td>${orderDetails.productType}</td>
                 <td>${orderDetails.price} EUR</td>
                 <td>${orderDetails.quantity}</td>
                 </td>
