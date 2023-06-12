@@ -1,6 +1,5 @@
 package com.example.merch_store.repository.customer;
 
-
 import com.example.merch_store.base.BaseConnection;
 import com.example.merch_store.model.AccountUser;
 import com.example.merch_store.model.Customer;
@@ -59,7 +58,6 @@ public class CustomerRepository implements ICustomerRepository {
         }
         return customerList;
     }
-
 
     @Override
     public void deleteCustomer(int id) {
@@ -196,7 +194,6 @@ public class CustomerRepository implements ICustomerRepository {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return customer;
     }
 

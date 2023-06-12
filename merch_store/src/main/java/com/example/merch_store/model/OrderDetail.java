@@ -4,8 +4,26 @@ public class OrderDetail {
     private int id;
     private Order order;
     private Product product;
+    private String productType;
     private int quantity;
     private double price;
+
+    public OrderDetail(int id, Order order, Product product, String productType, int quantity, double price) {
+        this.id = id;
+        this.order = order;
+        this.product = product;
+        this.productType = productType;
+        this.quantity = quantity;
+        this.price = price;
+    }
+
+    public OrderDetail(Order order, Product product, String productType, int quantity, double price) {
+        this.order = order;
+        this.product = product;
+        this.productType = productType;
+        this.quantity = quantity;
+        this.price = price;
+    }
 
     public OrderDetail() {
     }
@@ -22,6 +40,22 @@ public class OrderDetail {
         this.product = product;
         this.quantity = quantity;
         this.price = price;
+    }
+
+    public OrderDetail(int detailsId, Product product, String type, int quantity, double price) {
+        this.id = detailsId;
+        this.product = product;
+        this.productType = type;
+        this.quantity = quantity;
+        this.price = price;
+    }
+
+    public String getProductType() {
+        return productType;
+    }
+
+    public void setProductType(String productType) {
+        this.productType = productType;
     }
 
     public Order getOrder() {

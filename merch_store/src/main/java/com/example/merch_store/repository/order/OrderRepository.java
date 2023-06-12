@@ -64,10 +64,11 @@ public class OrderRepository implements IOrderRepository {
             while (resultSet.next()) {
                 int detailsId = resultSet.getInt("order_details_id");
                 String name = resultSet.getString("product_name");
+                String type = resultSet.getString("product_type_name");
                 int quantity = resultSet.getInt("quantity");
                 double price = resultSet.getDouble("price");
                 Product product = new Product(name);
-                OrderDetail orderDetail = new OrderDetail(detailsId, product, quantity, price);
+                OrderDetail orderDetail = new OrderDetail(detailsId, product,type, quantity, price);
                 orderDetailList.add(orderDetail);
             }
         } catch (SQLException e) {

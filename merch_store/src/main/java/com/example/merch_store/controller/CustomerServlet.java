@@ -1,6 +1,5 @@
 package com.example.merch_store.controller;
 
-
 import com.example.merch_store.model.AccountUser;
 import com.example.merch_store.model.Customer;
 import com.example.merch_store.service.customer.CustomerService;
@@ -17,7 +16,7 @@ import java.util.Set;
 
 @WebServlet(name = "CustomerServlet", value = "/customer")
 public class CustomerServlet extends HttpServlet {
-    private ICustomerService customerService = new CustomerService();
+    private final ICustomerService customerService = new CustomerService();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -46,7 +45,6 @@ public class CustomerServlet extends HttpServlet {
                 showFormCustomer(request, response);
         }
     }
-
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -103,11 +101,29 @@ public class CustomerServlet extends HttpServlet {
         }
         if (flag) {
             try {
+                HttpSession session = request.getSession();
+                session.invalidate();
                 response.sendRedirect("/employee");
             } catch (IOException e) {
                 e.printStackTrace();
             }
         } else {
+            HttpSession session = request.getSession();
+            if (mapValidation.get("name").equals("")) {
+                session.setAttribute("name", name);
+            }
+            if (mapValidation.get("email").equals("")) {
+                session.setAttribute("email", email);
+            }
+            if (mapValidation.get("address").equals("")) {
+                session.setAttribute("address", address);
+            }
+            if (mapValidation.get("phone").equals("")) {
+                session.setAttribute("phone", phone);
+            }
+            if (mapValidation.get("password").equals("")) {
+                session.setAttribute("password", password);
+            }
             request.setAttribute("map", mapValidation);
             RequestDispatcher requestDispatcher = request.getRequestDispatcher("/view/customer/create.jsp");
             try {
@@ -118,7 +134,6 @@ public class CustomerServlet extends HttpServlet {
                 e.printStackTrace();
             }
         }
-
     }
 
     private void editFormCustomer(HttpServletRequest request, HttpServletResponse response) {
@@ -197,7 +212,7 @@ public class CustomerServlet extends HttpServlet {
         request.setAttribute("message", "Delete success");
         request.setAttribute("customerList", customerService.findAll());
         try {
-            request.getRequestDispatcher("/view/employee/list.jsp").forward(request,response);
+            request.getRequestDispatcher("/view/employee/list.jsp").forward(request, response);
         } catch (ServletException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -228,6 +243,13 @@ public class CustomerServlet extends HttpServlet {
         stringMap.put("address", "Please enter your phone number Example : Da Nang");
         stringMap.put("re_password", "Please enter your password again ");
         request.setAttribute("map", stringMap);
+        HttpSession session = request.getSession();
+        session.setAttribute("name", "");
+        session.setAttribute("address", "");
+        session.setAttribute("email", "");
+        session.setAttribute("address", "");
+        session.setAttribute("phone", "");
+        session.setAttribute("password", "");
         RequestDispatcher requestDispatcher = request.getRequestDispatcher("/view/customer/create.jsp");
         try {
             requestDispatcher.forward(request, response);

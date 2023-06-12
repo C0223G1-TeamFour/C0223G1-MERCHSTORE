@@ -68,35 +68,35 @@
             <h4 style="text-align: center;color: white">Create Customer Account </h4>
             <div class="mb-3">
                 <label for="name" class="form-label"><span class="text-content" >Name</span> </label>
-                <input type="text" class="form-control" id="name" name="name" aria-describedby="nameHelp">
+                <input type="text" class="form-control" id="name" name="name" aria-describedby="nameHelp" placeholder="${sessionScope.name}">
                 <div id="nameHelp" class="form-text " style="color: white">
                     ${map.get("name")}
                 </div>
             </div>
             <div class="mb-3">
                 <label for="email" class="form-label"><span class="text-content">Email Address</span></label>
-                <input type="text" class="form-control" id="email" name="email" aria-describedby="emailHelp">
+                <input type="text" class="form-control" id="email" name="email" aria-describedby="emailHelp" placeholder="${sessionScope.email}">
                 <div id="emailHelp" class="form-text " style="color: white">
                     ${map.get("email")}
                 </div>
             </div>
             <div class="mb-3">
                 <label for="phone" class="form-label"><span class="text-content">Phone</span></label>
-                <input type="text" class="form-control" id="phone" name="phone" aria-describedby="phoneHelp">
+                <input type="text" class="form-control" id="phone" name="phone" aria-describedby="phoneHelp" placeholder="${sessionScope.phone}">
                 <div id="phoneHelp" class="form-text " style="color: white">
                     ${map.get("phone")}
                 </div>
             </div>
             <div class="mb-3">
                 <label for="address" class="form-label"><span class="text-content">Address</span></label>
-                <input type="text" class="form-control" name="address" id="address" aria-describedby="addressHelp">
+                <input type="text" class="form-control" name="address" id="address" aria-describedby="addressHelp" placeholder="${sessionScope.address}">
                 <div id="addressHelp" class="form-text " style="color: white">
                     ${map.get("address")}
                 </div>
             </div>
             <div class="mb-3">
                 <label for="password" class="form-label"><span class="text-content">Password</span></label>
-                <input type="password" class="form-control" id="password" name="password" aria-describedby="passwordHelp">
+                <input type="password" class="form-control" id="password" name="password" aria-describedby="passwordHelp" placeholder="${sessionScope.password}">
                 <div id="passwordHelp" class="form-text " style="color: white">
                     ${map.get("password")}
                 </div>
@@ -108,8 +108,11 @@
                     ${map.get("re_password")}
                 </div>
             </div>
+            <div class="mb-3">
+                <input type="checkbox" onclick="myFunction()"><span style="color: white;font-weight: bold">Show Password</span>
+            </div>
             <div style="text-align: center ">
-                <button type="submit" form="form-1"  class="btn btn-primary " ><span style="font-weight: bold;color:black">Register</span></button>
+                <button type="submit" form="form-1" onclick="transferSession('${sessionScope.name}','${sessionScope.email}','${sessionScope.phone}','${sessionScope.address}','${sessionScope.password}')"  class="btn btn-primary " ><span style="font-weight: bold;color:black">Register</span></button>
             </div>
         </form>
     </div>
@@ -117,6 +120,17 @@
 </div>
 <%@include file="/view/carts/footer.jsp" %>
 <script>
+    function myFunction() {
+        var x = document.getElementById("password");
+        var y = document.getElementById("repeatPassword");
+        if (x.type === "password" && y.type === "password") {
+            x.type = "text";
+            y.type = "text";
+        } else {
+            x.type = "password";
+            y.type = "password";
+        }
+    }
     function switcher() {
         let overlayMain = document.querySelector(".overlay--main");
         if (overlayMain.style.display === "none") {
@@ -125,6 +139,30 @@
         } else {
             overlayMain.style.display = "none";
             document.body.style.overflow = "visible";
+        }
+    }
+    function transferSession(x,y,z,g,h){
+        let repeatPassword=document.getElementById("repeatPassword").value;
+        let name=document.getElementById("name").value;
+        if(name===""){
+            document.getElementById("name").value=x;
+        }
+        let email=document.getElementById("email").value;
+        if(email===""){
+            document.getElementById("email").value=y;
+        }
+        let phone=document.getElementById("phone").value;
+        if(phone===""){
+            document.getElementById("phone").value=z;
+        }
+        let address=document.getElementById("address").value;
+        if(address===""){
+            document.getElementById("address").value=g;
+        }
+        let password=document.getElementById("password").value;
+        if(password==="" && repeatPassword===""){
+            document.getElementById("password").value=h;
+            document.getElementById("repeatPassword").value=h;
         }
     }
 </script>

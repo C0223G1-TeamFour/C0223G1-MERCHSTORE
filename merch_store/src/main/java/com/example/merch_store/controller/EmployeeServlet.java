@@ -1,6 +1,5 @@
 package com.example.merch_store.controller;
 
-
 import com.example.merch_store.model.Customer;
 import com.example.merch_store.model.Employee;
 import com.example.merch_store.service.customer.CustomerService;
@@ -47,7 +46,6 @@ public class EmployeeServlet extends HttpServlet {
                 manageCustomer(request, response);
         }
     }
-
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -123,11 +121,8 @@ public class EmployeeServlet extends HttpServlet {
 
     private void manageCustomer(HttpServletRequest request, HttpServletResponse response) {
 //        int id = Integer.parseInt(request.getParameter("id"));
-        int id = 6;
-        Employee employee = employeeService.getEmployee(id);
         List<Customer> customerList = new ArrayList<>();
         customerList = customerService.findAll();
-        request.setAttribute("employee", employee);
         request.setAttribute("customerList", customerList);
         RequestDispatcher requestDispatcher = request.getRequestDispatcher("/view/employee/list.jsp");
         try {
@@ -138,5 +133,4 @@ public class EmployeeServlet extends HttpServlet {
             e.printStackTrace();
         }
     }
-
 }

@@ -144,12 +144,12 @@
                     <div class="col-sm-4"></div>
                     <div class="col-sm-4"></div>
                     <div class="col-sm-2">
-                    <a href="/customer?action=edit&id=${customer.getId()}">
-                        <button type="submit" class="btn btn-primary">CHANGE</button>
-                    </a>
+                        <a href="/customer?action=edit&id=${customer.getId()}">
+                            <button type="submit" class="btn btn-primary">CHANGE</button>
+                        </a>
                     </div>
                     <div class="col-sm-2">
-                            <button type="button" onclick="isDelete('${customer.getId()}','${customer.getName()}')"  class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#button-delete" >DELETE</button>
+                        <button type="button" onclick="isDelete('${customer.getId()}','${customer.getName()}')"  class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#button-delete" >DELETE</button>
                     </div>
                 </div>
             </div>
